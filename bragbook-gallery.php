@@ -743,11 +743,10 @@ function create_bragbook_sitemap(){
 		
 		$revXmlSitemapOutput;
 	
-		$pageURL = 'http';
- 				if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-				$pageURL .= "://";
+		$pageURL = plugins_url( 'assets/bragbook-sitemap-style.xsl', __FILE__ );
 		
-		$revXmlSitemapOutput = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="'.$pageURL.$_SERVER['HTTP_HOST'].'/wp-content/plugins/BRAGbook-gallery/assets/bragbook-sitemap-style.xsl"?>
+		
+		$revXmlSitemapOutput = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="'.$pageURL.'"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
 			//loop array of galleries - $bbCurGal[0] = $revClientId & $bbCurGal[1] = revBaseUrl

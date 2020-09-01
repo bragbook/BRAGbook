@@ -20,7 +20,6 @@ register_activation_hook(__FILE__,'bragbook_plugin_install');
  
 //SCRIPTS
  
- 
 function bragbook_plugin_scripts(){
    
 	if(get_option( 'revClickToZoomActive',0) == 1){

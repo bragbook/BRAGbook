@@ -1,10 +1,16 @@
 // JavaScript Document
 
-//BRAGbook™ 1.4.2
+//BRAGbook™ 1.4.0.3
 //© copyright 2013 Candace Crowe Design
 
 function reloadPage() {
 	location.reload();
+   // var selfUrl = unescape(window.location.pathname);
+//    location.reload(true);
+//
+//    window.location.replace(selfUrl);
+//
+//    window.location.href = selfUrl;
 }
 
 
@@ -25,23 +31,40 @@ revJquery('#revCategoryImageSets').jscroll({
     padding: 20,
     nextSelector: 'a.revJscroll-next:last'
 });
-
+var testResponse;
+	
 //create function and listener for messages from iframe       
 testResponse = function(e) {
   if(e.origin == 'https://www.bragbook.gallery') {
     //alert(e.data);
-	if(e.data == "logout"){
-	reloadPage()
-	}
-	if(e.data == "loggedin"){
-		//alert("thisok");
+	  statusVar = e.data;
+	if(statusVar.status == "logout"){
+		
+		var serializedDataExit = {"patientlogout": "TRUE"};
+				var pathname = window.location.pathname;
+	
+				requestExit = revJquery.ajax({
+					url: pathname,
+					type: "get",
+					data: serializedDataExit
+				});
+			
+				// callback handler that will be called on success
+				requestExit.done(function (response, textStatus, jqXHR){
+					// log a message to the console
+					revJquery.revColorbox.close();
+				});
+		
+	
+	}else if(statusVar.status == "loggedin"){
+		//alert(statusVar.status);
 		revJquery(document).bind('revcbox_closed', function(){
 		   //alert('x');
 		   //reloadPage();
 		   		//replace fav buttons
-		   		var serializedData = "getFavButton=TRUE";
+		   		var serializedData = {"getFavButton": "TRUE", "patientSig": statusVar.patientsig, "patientid": statusVar.patientid, "username": statusVar.username};
 				var pathname = window.location.pathname;
-    
+    //alert(serializedData);
 	
 				// fire off the request to /editnotes.php
 				request = revJquery.ajax({
@@ -53,14 +76,14 @@ testResponse = function(e) {
 				// callback handler that will be called on success
 				request.done(function (response, textStatus, jqXHR){
 					// log a message to the console
-					
+					//alert(response);
 					revJquery(".revFavLaunch ").replaceWith(response);
 					revJquery(".revFavLaunch").revColorbox({iframe:true, width:'90%', height:'90%', maxWidth:'90%', maxHeight:'90%'});					
 				});
 				
 				
 				//replace login links
-				var serializedData2 = "getLoginButton=TRUE";
+				var serializedData2 = "getLoginButton=TRUE&patientSig="+statusVar.patientsig;
     
 	
 				// fire off the request to /editnotes.php

@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.0.2
+Version: 1.4.0.3
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -12,7 +12,8 @@ License: A "Slug" license name e.g. GPL2
 //SETUP
 function bragbook_plugin_install(){
     //Do some installation work
-                          
+             
+              
 }
 register_activation_hook(__FILE__,'bragbook_plugin_install');
  
@@ -1103,6 +1104,15 @@ add_shortcode('bragbook_category', 'bragbook_category_shortcode');
 add_shortcode('bragbook_set', 'bragbook_set_shortcode');
 add_shortcode('sitemap_test', 'create_bragbook_sitemap');
 
+if( ! class_exists( 'Bragbook_Updater' ) ){
+	include_once( plugin_dir_path( __FILE__ ) . 'updater.php' );
+}
 
-
+$updater = new Bragbook_Updater( __FILE__ );
+$updater->set_username( 'bragbook' );
+$updater->set_repository( 'BRAGbook' );
+/*
+	$updater->authorize( 'abcdefghijk1234567890' ); // Your auth code goes here for private repos
+*/
+$updater->initialize();
 ?>

@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.0.5
+Version: 1.4.0.6
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -115,7 +115,10 @@ function bragbook_plugin_init(){
 	 add_option('revUrlRewrite', 1);
 	 add_option('revThumbLimit', 10);
 	  add_option('revGalNavHighlightColor', "#ffffff");
+	 add_option('revNotFound', "/404");	 
 	 
+	 //check if sitemap is enable and set a cron event to build sitemap
+	 bragbook_sitemap_toggle();
 	
 }
 
@@ -129,7 +132,7 @@ function bragbook_deactivate() {
   	$role->remove_cap( 'manage_options' ); // capability
 	
 	disable_bragbook_sitemap();
-	update_option('revEnableSitemap', 0);
+	//update_option('revEnableSitemap', 0);
 	
 	remove_filter('rewrite_rules_array', 'add_rewrite_rules');
 	//$wp_rewrite->generate_rewrite_rules();
@@ -419,7 +422,7 @@ function bragbook_start(){
               //Default page description if custom description not used
               $revGallery->defaultDescription = get_option( 'revDefaultDescription', 'Plastic surgery before and after images');
               //URL for 404 not found page
-              $revGallery->notFoundPage = get_option( 'revNotFound', '/404.php' );
+              $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
               //Number of thumbnail sets to display at one time. Leave blank if you want to show all
               $revGallery->thumbLimit = get_option( 'revThumbLimit', '20' );
               //Headline for gallery landing page
@@ -600,7 +603,7 @@ function bragbook_slider_list($catID, $limit, $start, $title, $details){
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
               //URL for 404 not found page
-              $revGallery->notFoundPage = get_option( 'revNotFound', '/404.php' );
+              $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
 			$revGallery->revisionActive = get_option( 'revRevisionActive', false);
 			  $revGallery->menActive = get_option( 'revMenActive', false);
 	
@@ -658,7 +661,7 @@ function bragbook_category_list($catID, $limit, $start, $title, $details){
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
               //URL for 404 not found page
-              $revGallery->notFoundPage = get_option( 'revNotFound', '/404.php' );
+              $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
 			$revGallery->revisionActive = get_option( 'revRevisionActive', false);
 			  $revGallery->menActive = get_option( 'revMenActive', false);
 	
@@ -698,7 +701,8 @@ function bragbook_single_set($caseid){
 
 
 function enable_bragbook_sitemap(){
-	create_bragbook_sitemap();
+	//create_bragbook_sitemap();
+	add_initial_bragbook_sitemap_cron();
 	add_bragbook_sitemap_cron();
 	
 }
@@ -741,11 +745,16 @@ function create_bragbook_sitemap(){
 	if(isset($bbGalleryList) && $bbGalleryList != ""){
 		
 		$revXmlSitemapOutput;
-	
-		$pageURL = plugins_url( 'assets/bragbook-sitemap-style.xsl', __FILE__ );
+		
+		$pageURL = 'http';
+ 				if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+				 $pageURL .= "://";
+              $revGallery->baseUrl = $pageURL.$_SERVER['HTTP_HOST']."/".get_option( 'revBaseUrl'.$galNum, 'gallery' )."/";
+		
+		$pluginURL = plugins_url( 'assets/bragbook-sitemap-style.xsl', __FILE__ );
 		
 		
-		$revXmlSitemapOutput = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="'.$pageURL.'"?>
+		$revXmlSitemapOutput = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="'.$pluginURL.'"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
 			//loop array of galleries - $bbCurGal[0] = $revClientId & $bbCurGal[1] = revBaseUrl
@@ -859,6 +868,16 @@ function remove_bragbook_sitemap_cron(){
 	wp_clear_scheduled_hook( 'bragbook_sitemap_cron_hook');
 }		
 	
+//setup cron job to generate initial sitemap
+function add_initial_bragbook_sitemap_cron(){
+	
+	if( !wp_next_scheduled( 'bragbook_initial_sitemap_cron_hook' ) ) {
+		wp_schedule_single_event( time() + 60, 'bragbook_initial_sitemap_cron_hook' );
+	}
+	
+	 
+}
+add_action( 'bragbook_initial_sitemap_cron_hook', 'create_bragbook_sitemap' );
 			
 //get XML sitemap categories
 function bragbook_get_cats_sitemap($curGallery){

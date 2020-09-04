@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.0.6
+Version: 1.4.0.7
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -116,6 +116,7 @@ function bragbook_plugin_init(){
 	 add_option('revThumbLimit', 10);
 	  add_option('revGalNavHighlightColor', "#ffffff");
 	 add_option('revNotFound', "/404");	 
+	 add_option('revEnableSitemap', 0 );
 	 
 	 //check if sitemap is enable and set a cron event to build sitemap
 	 bragbook_sitemap_toggle();
@@ -123,6 +124,13 @@ function bragbook_plugin_init(){
 }
 
 register_activation_hook( __FILE__, 'bragbook_activate' );
+
+function bragbook_upgrade() {
+	//check if sitemap is enable and set a cron event to build sitemap
+	 bragbook_sitemap_toggle();
+}
+add_action('upgrader_process_complete', 'bragbook_upgrade', 10, 2);
+
 
 
 function bragbook_deactivate() {
@@ -716,7 +724,7 @@ function disable_bragbook_sitemap(){
 add_action('update_option_revEnableSitemap', 'bragbook_sitemap_toggle', 10, 3);
 
 function bragbook_sitemap_toggle() {
-   if(get_option( 'revEnableSitemap') == 1 ){
+   if(get_option('revEnableSitemap') == 1 ){
 	   enable_bragbook_sitemap();
    } else{
    	disable_bragbook_sitemap();

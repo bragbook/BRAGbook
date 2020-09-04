@@ -118,6 +118,9 @@ function bragbook_plugin_init(){
 	 add_option('revNotFound', "/404");	 
 	 add_option('revEnableSitemap', 0 );
 	 
+	 //make sure old sitemaps have been flushed 
+	 disable_bragbook_sitemap();
+	 
 	 //check if sitemap is enable and set a cron event to build sitemap
 	 bragbook_sitemap_toggle();
 	
@@ -126,6 +129,7 @@ function bragbook_plugin_init(){
 register_activation_hook( __FILE__, 'bragbook_activate' );
 
 function bragbook_upgrade() {
+	disable_bragbook_sitemap();
 	//check if sitemap is enable and set a cron event to build sitemap
 	 bragbook_sitemap_toggle();
 }

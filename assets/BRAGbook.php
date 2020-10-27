@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.0.6
+//BRAGbook™ 1.4.0.8
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -1612,9 +1612,9 @@ $string = strtr( $string, $unwanted_array );
 						
 		if($this->baGallery['ba_set'][$this->revStart]['favadded'] == "1"){
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View Favorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
 			} else {
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View Favorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
 			}
 		} else {
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
@@ -1626,6 +1626,37 @@ $string = strtr( $string, $unwanted_array );
 		return $revFavoriteButtonOutput;
 	}
 	
+	//Create My favorites text
+	function revFavoriteText($revID){
+		$revFavoriteTextOutput;
+		
+		$this->revGetStart($revID);
+		
+		if($this->baGallery['ba_set'][$this->revStart]['favadded'] == "1"){
+			if(isset($this->groupclientid) && $this->groupclientid != ""){
+				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+			} else {
+				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+			}
+		} else {
+			if(isset($this->groupclientid) && $this->groupclientid != ""){
+				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+			}else {
+				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+			}
+		}
+		
+		if($_SESSION['patientsig'] != ""){
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">View MyFavorites</a></p></div>';
+		} else{
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">Create a MyFavorites account</a> and save any before and afters you think you might like to use as examples to show us.</p></div>';
+		}
+		
+		
+		
+		
+		return $revFavoriteTextOutput;
+	}
 	
 	//create login button
 	function revLoginButton(){
@@ -1889,7 +1920,7 @@ $string = strtr( $string, $unwanted_array );
 	
 	//create copyright notice
 	function revCopyright(){
-		return "<div class=\"revCopyright\" style=\"text-align:center; padding: 40px 0; font-size:11px\">Powered by: <img src=\"https://www.bragbook.gallery/myfavs/bragbook-logo.png\" alt=\"BRAG Book\" /> Copyright &copy; ".date("Y")." <a href=\"http://www.candacecrowe.com/\">Candace Crowe Design</a></div>";
+		return "<div class=\"revCopyright\">Before and after gallery is powered by <a href=\"http://www.candacecrowe.com/bragbook/\">BRAG book</a></div>";
 	}
 	
 	//create landing page
@@ -3111,9 +3142,11 @@ $string = strtr( $string, $unwanted_array );
 		$galleryOutput .= '<a id="ba" name="ba"></a>';
 		if(isset($this->hideJumpMenu) && $this->hideJumpMenu == 1){}else{$galleryOutput .= $this->revCategoryNavJumpMenu($revCatname);}
 		$galleryOutput .= '<div id="revGalleryHeader">';
+		if($this->myFavsActive == 1){$galleryOutput .=  $this->revFavoriteText($revID);}
 		$galleryOutput .= '<h1 id="revPatientHeadline">';
         $galleryOutput .= $this->revHeadline($revCatname, $revID);
         $galleryOutput .= ' </h1>';  		
+		
 		$galleryOutput .= $this->revImageSetNav($revCatname, $revID);
 		$galleryOutput .= '<div class="clearfixer"></div>';
 		$galleryOutput .= '</div>';
@@ -3122,6 +3155,7 @@ $string = strtr( $string, $unwanted_array );
 		if($this->thumbnailsActive == 1){
 		$galleryOutput .= $this->revThumbnailButton();
 		}
+		if($this->thumbnailsActive == 1 && $this->myFavsActive == 1){$galleryOutput .='<span class="revButtonDivide"> | </span>';}
 		if($this->myFavsActive == 1){$galleryOutput .=  $this->revFavoriteButton($revID);}
 		if($this->thumbnailsActive == 1 || $this->myFavsActive == 1){$galleryOutput .= '</div>';}
 		$galleryOutput .= $this->revImageSet($revCatname, $revID);
@@ -3129,7 +3163,9 @@ $string = strtr( $string, $unwanted_array );
 		
 		if($this->thumbnailsActive == 1 || $this->myFavsActive == 1){$galleryOutput .= '<div class="revThumbLaunchCon">';}
 		if($this->thumbnailsActive == 1){$galleryOutput .= $this->revThumbnailButton();}
+		if($this->thumbnailsActive == 1 && $this->myFavsActive == 1){$galleryOutput .='<span class="revButtonDivide"> | </span>';}
 		if($this->myFavsActive == 1){$galleryOutput .= $this->revFavoriteButton($revID);}
+		$galleryOutput .= $this->revCopyright();
 		if($this->thumbnailsActive == 1 || $this->myFavsActive == 1){$galleryOutput .= '</div>';}
 		if($this->thumbnailsActive == 1){
 			if(isset($this->thumbLimit)){
@@ -3138,7 +3174,7 @@ $string = strtr( $string, $unwanted_array );
 				$galleryOutput .= $this->revHiddenThumbnails($revCatname);	
 			}
 		}
-		$galleryOutput .= $this->revCopyright();
+		
 		$galleryOutput .= $this->imageSetWrapClose;
 			}
 		}

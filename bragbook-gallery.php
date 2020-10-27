@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.0.7
+Version: 1.4.0.8
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -403,6 +403,7 @@ function bragbook_start(){
 			  $var_favid = @$getVar['favid'];
 			  $var_getFavButton = @$getVar['getFavButton'];
 			  $var_getLoginButton = @$getVar['getLoginButton'];
+			  $var_getLoginText = @$getVar['getLoginText'];
 			  $var_getThumbnails = @$getVar['getThumbnails'];
 			  $var_thumbStart = @$getVar['thumbStart'];
 	
@@ -562,6 +563,11 @@ if($revGallery->revisionActive ==1 || $revGallery->menActive ==1){$revGallery->r
               //Get Login button (do not modify)
               if(isset($var_getLoginButton)){
                              echo $revGallery->revLoginButton($revID, $var_patientsig);
+                             exit();
+              }
+              //Get Login Text (do not modify)
+              if(isset($var_getLoginText)){
+                             echo $revGallery->revFavoriteText($revID);
                              exit();
               }
               //Get Thumbnails (do not modify)

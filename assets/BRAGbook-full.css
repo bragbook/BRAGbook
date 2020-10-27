@@ -1,12 +1,12 @@
 /* CSS Document */
 
-#revPatientHeadline{
-	float:left;
-}
 @media (max-width: 800px) {
 	#revPatientHeadline{
 		float:none;
 		text-align:center
+	}
+	.revThumbLaunchCon{
+		text-align:center;
 	}
 }
 
@@ -72,7 +72,6 @@
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	float:right;
 }
 #revThumbGalleryNav{
 	list-style:none;
@@ -86,7 +85,39 @@
 #revThumbnailConDiv{
 	text-align:center;
 }
+#myFavsHeader {
+    float: right;
+    max-width: 280px;
+    text-align: right;
+	margin-left: 40px;
+}
+
+img#myFavsLogo {
+    /* text-align: right; */
+    display: inline-block;
+    max-width: 150px;
+}
+
+#myFavsHeader p {
+    margin-top: 0;
+}
+.revThumbLaunchCon {
+    margin: 40px 0;
+}
+.revCopyright{
+	float:right;
+	font-size: 11px;
+}
 @media (max-width: 800px) {
+	.revCopyright{
+		text-align: center;
+		margin:40px 0;
+		float:none;
+		font-size: 11px;
+	}
+	#myFavsHeader {
+		display:none;
+	}
 	#revGalleryNav{
 		float:none;
 		display:inline-block;
@@ -173,85 +204,11 @@
 #revThumbnailsDiv{
 	display:none;
 }
-.revThumbLaunch{
-	position:relative;
-	font-family:Verdana, Geneva, sans-serif;
-	display:inline-block;
-	font-size:16px;
-	margin:20px 10px;
-	padding:10px 15px 10px 43px;
-	color:#fff;
-	border:solid 1px transparent;
-	text-decoration:none !important;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-	background: #68696b; /* Old browsers */
-	background: -moz-linear-gradient(left,  #68696b 0%, #a0a1a5 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#68696b), color-stop(100%,#a0a1a5)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(left,  #68696b 0%,#a0a1a5 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(left,  #68696b 0%,#a0a1a5 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(left,  #68696b 0%,#a0a1a5 100%); /* IE10+ */
-	background: linear-gradient(to right,  #68696b 0%,#a0a1a5 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#68696b', endColorstr='#a0a1a5',GradientType=1 ); /* IE6-9 */
 
 
-}
-.revThumbLaunch:before{
-	background-image: url('myfavs-thumbs.png');
-    background-size: 20px 20px;
-	content: "";
-	height:20px;
-	width:20px;
-	margin:0 10px 0 5px;
-	display:inline-block;
-	position:absolute;
-	left:10px;
-	
-	
-}
-.revThumbLaunchCon{
-	text-align:center;
-}
 
-.revFavLaunch{
-	position:relative;
-	font-family:Verdana, Geneva, sans-serif;
-	display:inline-block;
-	font-size:16px;
-	margin:20px 10px;
-	padding:10px 15px 10px 43px;
-	color:#fff;
-	border:solid 1px transparent;
-	text-decoration:none !important;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-	
-	background: #e8782d; /* Old browsers */
-	background: -moz-linear-gradient(left,  #e8782d 0%, #f79f65 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#e8782d), color-stop(100%,#f79f65)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(left,  #e8782d 0%,#f79f65 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(left,  #e8782d 0%,#f79f65 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(left,  #e8782d 0%,#f79f65 100%); /* IE10+ */
-	background: linear-gradient(to right,  #e8782d 0%,#f79f65 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8782d', endColorstr='#f79f65',GradientType=1 ); /* IE6-9 */
-	
 
-}
-.revFavLaunch:before{
-	background-image: url('heart.png');
-    background-size: 23px 23px;
-	content: "";
-	height:23px;
-	width:23px;
-	margin:0 10px 0 5px;
-	display:inline-block;
-	position:absolute;
-	left:10px;
-	top:8px;
-	
-}
+
 /* Category Landing Page */
 #revCategoryImageSets
 {
@@ -440,60 +397,552 @@ display:inline-block;
 }
 
 
-/*
-    Colorbox Core Style:
-    The following CSS is consistent between example themes and should not be altered.
-*/
-#colorbox, #revcboxOverlay, #revcboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
-#revcboxWrapper {max-width:none;}
-#revcboxOverlay{position:fixed; width:100%; height:100%;}
-#revcboxMiddleLeft, #revcboxBottomLeft{clear:left;}
-#revcboxContent{position:relative;}
-#revcboxLoadedContent{overflow:auto; -webkit-overflow-scrolling: touch;}
-#revcboxTitle{margin:0;}
-#revcboxLoadingOverlay, #revcboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
-#revcboxPrevious, #revcboxNext, #revcboxClose, #revcboxSlideshow{cursor:pointer;}
-.revcboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
-.revcboxIframe{width:100%; height:100%; display:block; border:0;}
-#colorbox, #revcboxContent, #revcboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
+/**
+ * Lightcase - jQuery Plugin
+ * The smart and flexible Lightbox Plugin.
+ *
+ * @author		Cornel Boppart <cornel@bopp-art.com>
+ * @copyright	Author
+ *
+ * @version		2.5.0 (11/03/2018)
+ */
 
-/* 
-    User Style:
-    Change the following styles to modify the appearance of Colorbox.  They are
-    ordered & tabbed in a way that represents the nesting of the generated HTML.
-*/
-#revcboxOverlay{background:url(https://www.bragbook.gallery/myfavs/images/overlay.png) repeat 0 0;}
-#colorbox{outline:0;}
-    #revcboxTopLeft{width:21px; height:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -101px 0;}
-    #revcboxTopRight{width:21px; height:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -130px 0;}
-    #revcboxBottomLeft{width:21px; height:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -101px -29px;}
-    #revcboxBottomRight{width:21px; height:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -130px -29px;}
-    #revcboxMiddleLeft{width:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) left top repeat-y;}
-    #revcboxMiddleRight{width:21px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) right top repeat-y;}
-    #revcboxTopCenter{height:21px; background:url(https://www.bragbook.gallery/myfavs/images/border.png) 0 0 repeat-x;}
-    #revcboxBottomCenter{height:21px; background:url(https://www.bragbook.gallery/myfavs/images/border.png) 0 -29px repeat-x;}
-    #revcboxContent{background:#fff; overflow:hidden;}
-        .revcboxIframe{background:#fff;}
-        #revcboxError{padding:50px; border:1px solid #ccc;}
-        #revcboxLoadedContent{margin-bottom:28px;}
-        #revcboxTitle{position:absolute; bottom:4px; left:0; text-align:center; width:100%; color:#949494;}
-        #revcboxCurrent{position:absolute; bottom:4px; left:58px; color:#949494;}
-        #revcboxLoadingOverlay{background:url(https://www.bragbook.gallery/myfavs/images/loading_background.png) no-repeat center center;}
-        #revcboxLoadingGraphic{background:url(https://www.bragbook.gallery/myfavs/images/loading.gif) no-repeat center center;}
+@font-face {
+  font-family: 'lightcase';
+  src: url("fonts/lightcase.eot?55356177");
+  src: url("fonts/lightcase.eot?55356177#iefix") format("embedded-opentype"), url("fonts/lightcase.woff?55356177") format("woff"), url("fonts/lightcase.ttf?55356177") format("truetype"), url("fonts/lightcase.svg?55356177#lightcase") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 12, ../scss/components/fonts/_font-lightcase.scss */
+[class*='revlightcase-icon-']:before {
+  font-family: 'lightcase', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  text-align: center;
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
 
-        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
-        #revcboxPrevious, #revcboxNext, #revcboxSlideshow, #revcboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
-        
-        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
-        #revcboxPrevious:active, #revcboxNext:active, #revcboxSlideshow:active, #revcboxClose:active {outline:0;}
+/* Codes */
+/* line 35, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-play:before {
+  content: '\e800';
+}
 
-        #revcboxSlideshow{position:absolute; bottom:4px; right:30px; color:#0092ef;}
-        #revcboxPrevious{position:absolute; bottom:0; left:0; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -75px 0; width:25px; height:25px; text-indent:-9999px;}
-        #revcboxPrevious:hover{background-position:-75px -25px;}
-        #revcboxNext{position:absolute; bottom:0; left:27px; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -50px 0; width:25px; height:25px; text-indent:-9999px;}
-        #revcboxNext:hover{background-position:-50px -25px;}
-        #revcboxClose{position:absolute; bottom:0; right:0; background:url(https://www.bragbook.gallery/myfavs/images/controls.png) no-repeat -25px 0; width:25px; height:25px; text-indent:-9999px;}
-        #revcboxClose:hover{background-position:-25px -25px;}
+/* line 36, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-pause:before {
+  content: '\e801';
+}
+
+/* line 37, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-close:before {
+  content: '\e802';
+}
+
+/* line 38, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-prev:before {
+  content: '\e803';
+}
+
+/* line 39, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-next:before {
+  content: '\e804';
+}
+
+/* line 40, ../scss/components/fonts/_font-lightcase.scss */
+.revlightcase-icon-spin:before {
+  content: '\e805';
+}
+
+/**
+ * Mixin providing icon defaults to be used on top of font-lightcase.
+ *
+ * Example usage:
+ * @include icon(#e9e9e9)
+ */
+/**
+ * Mixin providing icon defaults including a hover status to be used
+ * on top of font-lightcase.
+ *
+ * Example usage:
+ * @include icon-hover(#e9e9e9, #fff)
+ */
+/**
+ * Provides natural content overflow behavior and scrolling support
+ * even so for touch devices.
+ *
+ * Example usage:
+ * @include overflow()
+ */
+/**
+ * Neutralizes/resets dimensions including width, height, position as well as margins,
+ * paddings and styles. Used to enforce a neutral and unstyled look and behavoir!
+ *
+ * Example usage:
+ * @include clear(true)
+ *
+ * @param boolean $important
+ */
+@-webkit-keyframes revlightcase-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-moz-keyframes revlightcase-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-o-keyframes revlightcase-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-ms-keyframes revlightcase-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes revlightcase-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+/* line 1, ../scss/components/modules/_case.scss */
+#revlightcase-case {
+  display: none;
+  position: fixed;
+  z-index: 2002;
+  top: 50%;
+  left: 50%;
+  font-family: arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+@media screen and (max-width: 640px) {
+  /* line 16, ../scss/components/modules/_case.scss */
+  html[data-revlc-type=inline] #revlightcase-case, html[data-revlc-type=ajax] #revlightcase-case {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    padding: 55px 0 70px 0;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: auto !important;
+  }
+}
+
+@media screen and (min-width: 641px) {
+  /* line 4, ../scss/components/modules/_content.scss */
+  html:not([data-revlc-type=error]) #revlightcase-content {
+    position: relative;
+    z-index: 1;
+    text-shadow: none;
+    background-color: transparent;
+    -webkit-backface-visibility: hidden;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 23, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=image] #revlightcase-content, html[data-revlc-type=video] #revlightcase-content {
+    background-color: transparent;
+  }
+}
+/* line 31, ../scss/components/modules/_content.scss */
+html[data-revlc-type=inline] #revlightcase-content, html[data-revlc-type=ajax] #revlightcase-content, html[data-revlc-type=error] #revlightcase-content {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+}
+
+@media screen and (max-width: 640px) {
+  /* line 31, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=inline] #revlightcase-content, html[data-revlc-type=ajax] #revlightcase-content, html[data-revlc-type=error] #revlightcase-content {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+  }
+}
+/* line 43, ../scss/components/modules/_content.scss */
+html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@media screen and (max-width: 640px) {
+  /* line 43, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner {
+    padding: 15px;
+  }
+  /* line 52, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner > *, html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner > *, html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner > * {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  /* line 59, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner > *:not(iframe), html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner > *:not(iframe), html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner > *:not(iframe) {
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 70, ../scss/components/modules/_content.scss */
+  html.revlightcase-isMobileDevice[data-revlc-type=iframe] #revlightcase-content .revlightcase-contentInner iframe {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+@media screen and (max-width: 640px) and (min-width: 641px) {
+  /* line 74, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=image] #revlightcase-content .revlightcase-contentInner, html[data-revlc-type=video] #revlightcase-content .revlightcase-contentInner {
+    line-height: 0.75;
+  }
+}
+
+/* line 82, ../scss/components/modules/_content.scss */
+html[data-revlc-type=image] #revlightcase-content .revlightcase-contentInner {
+  position: relative;
+  overflow: hidden !important;
+}
+@media screen and (max-width: 640px) {
+  /* line 91, ../scss/components/modules/_content.scss */
+  html[data-revlc-type=inline] #revlightcase-content .revlightcase-contentInner .revlightcase-inlineWrap, html[data-revlc-type=ajax] #revlightcase-content .revlightcase-contentInner .revlightcase-inlineWrap, html[data-revlc-type=error] #revlightcase-content .revlightcase-contentInner .revlightcase-inlineWrap {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 100, ../scss/components/modules/_content.scss */
+  html:not([data-revlc-type=error]) #revlightcase-content .revlightcase-contentInner .revlightcase-inlineWrap {
+    padding: 30px;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 117, ../scss/components/modules/_content.scss */
+  #revlightcase-content h1, #revlightcase-content h2, #revlightcase-content h3, #revlightcase-content h4, #revlightcase-content h5, #revlightcase-content h6, #revlightcase-content p {
+    color: #aaa;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 117, ../scss/components/modules/_content.scss */
+  #revlightcase-content h1, #revlightcase-content h2, #revlightcase-content h3, #revlightcase-content h4, #revlightcase-content h5, #revlightcase-content h6, #revlightcase-content p {
+    color: #333;
+  }
+}
+
+/* line 3, ../scss/components/modules/_error.scss */
+#revlightcase-case p.revlightcase-error {
+  margin: 0;
+  font-size: 17px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #aaa;
+}
+@media screen and (max-width: 640px) {
+  /* line 3, ../scss/components/modules/_error.scss */
+  #revlightcase-case p.revlightcase-error {
+    padding: 30px 0;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 3, ../scss/components/modules/_error.scss */
+  #revlightcase-case p.revlightcase-error {
+    padding: 0;
+  }
+}
+
+/* line 4, ../scss/components/modules/_global.scss */
+.revlightcase-open body {
+  overflow: hidden;
+}
+/* line 8, ../scss/components/modules/_global.scss */
+.revlightcase-isMobileDevice .revlightcase-open body {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* line 1, ../scss/components/modules/_info.scss */
+#revlightcase-info {
+  position: absolute;
+  padding-top: 15px;
+}
+/* line 9, ../scss/components/modules/_info.scss */
+#revlightcase-info #revlightcase-title,
+#revlightcase-info #revlightcase-caption {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  font-weight: normal;
+  text-overflow: ellipsis;
+}
+/* line 19, ../scss/components/modules/_info.scss */
+#revlightcase-info #revlightcase-title {
+  font-size: 17px;
+  color: #aaa;
+}
+@media screen and (max-width: 640px) {
+  /* line 19, ../scss/components/modules/_info.scss */
+  #revlightcase-info #revlightcase-title {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    max-width: 87.5%;
+    padding: 5px 15px;
+    background: transparent;
+  }
+}
+/* line 33, ../scss/components/modules/_info.scss */
+#revlightcase-info #revlightcase-caption {
+  clear: both;
+  font-size: 13px;
+  color: #aaa;
+}
+/* line 39, ../scss/components/modules/_info.scss */
+#revlightcase-info #revlightcase-sequenceInfo {
+  font-size: 11px;
+  color: #aaa;
+}
+@media screen and (max-width: 640px) {
+  /* line 45, ../scss/components/modules/_info.scss */
+  .revlightcase-fullScreenMode #revlightcase-info {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  /* line 51, ../scss/components/modules/_info.scss */
+  html:not([data-revlc-type=image]):not([data-revlc-type=video]):not([data-revlc-type=flash]):not([data-revlc-type=error]) #revlightcase-info {
+    position: static;
+  }
+}
+
+/* line 1, ../scss/components/modules/_loading.scss */
+#revlightcase-loading {
+  position: fixed;
+  z-index: 9999;
+  width: 1.123em;
+  height: auto;
+  font-size: 38px;
+  line-height: 1;
+  text-align: center;
+  text-shadow: none;
+  position: fixed;
+  z-index: 2001;
+  top: 50%;
+  left: 50%;
+  margin-top: -0.5em;
+  margin-left: -0.5em;
+  opacity: 1;
+  font-size: 32px;
+  text-shadow: 0 0 15px #fff;
+  -moz-transform-origin: 50% 53%;
+  -webkit-animation: revlightcase-spin 0.5s infinite linear;
+  -moz-animation: revlightcase-spin 0.5s infinite linear;
+  -o-animation: revlightcase-spin 0.5s infinite linear;
+  animation: revlightcase-spin 0.5s infinite linear;
+}
+/* line 20, ../scss/components/mixins/_presets.scss */
+#revlightcase-loading, #revlightcase-loading:focus {
+  text-decoration: none;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-transition: color, opacity, ease-in-out 0.25s;
+  -moz-transition: color, opacity, ease-in-out 0.25s;
+  -o-transition: color, opacity, ease-in-out 0.25s;
+  transition: color, opacity, ease-in-out 0.25s;
+}
+/* line 32, ../scss/components/mixins/_presets.scss */
+#revlightcase-loading > span {
+  display: inline-block;
+  text-indent: -9999px;
+}
+
+/* line 2, ../scss/components/modules/_navigation.scss */
+a[class*='revlightcase-icon-'] {
+  position: fixed;
+  z-index: 9999;
+  width: 1.123em;
+  height: auto;
+  font-size: 38px;
+  line-height: 1;
+  text-align: center;
+
+  text-shadow: none;
+  outline: none;
+  cursor: pointer;
+}
+/* line 20, ../scss/components/mixins/_presets.scss */
+a[class*='revlightcase-icon-'], a[class*='revlightcase-icon-']:focus {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.6);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-transition: color, opacity, ease-in-out 0.25s;
+  -moz-transition: color, opacity, ease-in-out 0.25s;
+  -o-transition: color, opacity, ease-in-out 0.25s;
+  transition: color, opacity, ease-in-out 0.25s;
+}
+/* line 32, ../scss/components/mixins/_presets.scss */
+a[class*='revlightcase-icon-'] > span {
+  display: inline-block;
+  text-indent: -9999px;
+}
+/* line 49, ../scss/components/mixins/_presets.scss */
+a[class*='revlightcase-icon-']:hover {
+  color: white;
+  text-shadow: 0 0 15px white;
+}
+/* line 10, ../scss/components/modules/_navigation.scss */
+.revlightcase-isMobileDevice a[class*='revlightcase-icon-']:hover {
+  color: #aaa;
+  text-shadow: none;
+}
+/* line 17, ../scss/components/modules/_navigation.scss */
+a[class*='revlightcase-icon-'].revlightcase-icon-close {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  bottom: auto;
+  margin: 0;
+  opacity: 0;
+  outline: none;
+}
+/* line 28, ../scss/components/modules/_navigation.scss */
+a[class*='revlightcase-icon-'].revlightcase-icon-prev {
+  left: 15px;
+}
+/* line 33, ../scss/components/modules/_navigation.scss */
+a[class*='revlightcase-icon-'].revlightcase-icon-next {
+  right: 15px;
+}
+/* line 38, ../scss/components/modules/_navigation.scss */
+a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-icon-'].revlightcase-icon-play {
+  left: 50%;
+  margin-left: -0.5em;
+}
+@media screen and (min-width: 641px) {
+  /* line 38, ../scss/components/modules/_navigation.scss */
+  a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-icon-'].revlightcase-icon-play {
+    opacity: 0;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 2, ../scss/components/modules/_navigation.scss */
+  a[class*='revlightcase-icon-'] {
+    bottom: 15px;
+    font-size: 24px;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 2, ../scss/components/modules/_navigation.scss */
+  a[class*='revlightcase-icon-'] {
+    bottom: 50%;
+    margin-bottom: -0.5em;
+  }
+  /* line 57, ../scss/components/modules/_navigation.scss */
+  a[class*='revlightcase-icon-']:hover, #revlightcase-case:hover ~ a[class*='revlightcase-icon-'] {
+    opacity: 1;
+  }
+}
+
+/* line 1, ../scss/components/modules/_overlay.scss */
+#revlightcase-overlay {
+  display: none;
+  width: 100%;
+  min-height: 100%;
+  position: fixed;
+  z-index: 2000;
+  top: -9999px;
+  bottom: -9999px;
+  left: 0;
+  background: #fff;
+}
+@media screen and (max-width: 640px) {
+  /* line 1, ../scss/components/modules/_overlay.scss */
+  #revlightcase-overlay {
+    opacity: 1 !important;
+  }
+}
+
 
 /*
   The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
@@ -513,6 +962,7 @@ display:inline-block;
 
 
 /* Slider */
+
 .revSlick-slider
 {
     position: relative;

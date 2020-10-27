@@ -118,6 +118,21 @@ function bragbook_plugin_init(){
 	 add_option('revNotFound', "/404");	 
 	 add_option('revEnableSitemap', 0 );
 	 
+	 //delete options that are no longer used
+	 delete_option( 'revThumbButStyleBorderColor' );
+	 delete_option( 'revThumbButStyleColor' );
+	 delete_option( 'revThumbButStyleBackground' );
+	 delete_option('revThumbButStyleHoverBorderColor' );
+	 delete_option( 'revThumbButStyleHoverColor' );
+	 delete_option( 'revThumbButStyleHoverBackground' );
+ 
+	 delete_option( 'revFavButStyleBorderColor' );
+	 delete_option( 'revFavButStyleColor' );
+	 delete_option( 'revFavButStyleBackground' );
+	 delete_option( 'revFavButStyleHoverBorderColor' );
+	 delete_option( 'revFavButStyleHoverColor' );
+	 delete_option( 'revFavButStyleHoverBackground' );
+	 
 	 //make sure old sitemaps have been flushed 
 	 disable_bragbook_sitemap();
 	 
@@ -249,20 +264,6 @@ function register_mysettings() {
  register_setting( 'bragbook-settings-group', 'revGalNavHighlightBackground' );
  register_setting( 'bragbook-settings-group', 'revGalNavHighlightColor' );
  register_setting( 'bragbook-settings-group', 'revGalNavHighlightBorderColor' );
- 
- register_setting( 'bragbook-settings-group', 'revThumbButStyleBorderColor' );
- register_setting( 'bragbook-settings-group', 'revThumbButStyleColor' );
- register_setting( 'bragbook-settings-group', 'revThumbButStyleBackground' );
- register_setting( 'bragbook-settings-group', 'revThumbButStyleHoverBorderColor' );
- register_setting( 'bragbook-settings-group', 'revThumbButStyleHoverColor' );
- register_setting( 'bragbook-settings-group', 'revThumbButStyleHoverBackground' );
- 
- register_setting( 'bragbook-settings-group', 'revFavButStyleBorderColor' );
- register_setting( 'bragbook-settings-group', 'revFavButStyleColor' );
- register_setting( 'bragbook-settings-group', 'revFavButStyleBackground' );
- register_setting( 'bragbook-settings-group', 'revFavButStyleHoverBorderColor' );
- register_setting( 'bragbook-settings-group', 'revFavButStyleHoverColor' );
- register_setting( 'bragbook-settings-group', 'revFavButStyleHoverBackground' );
  
  register_setting( 'bragbook-settings-group', 'revLandingIntro2' );
  register_setting( 'bragbook-settings-group', 'revLandingDescription2' );

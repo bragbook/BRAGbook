@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.0.8
+Version: 1.4.0.9
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -40,6 +40,10 @@ function bragbook_plugin_scripts(){
 	}
 	
 	wp_register_script('bragbook_plugin_script',plugin_dir_url( __FILE__ ).'assets/BRAGbook.js',array( 'jquery' ));
+	$wp_vars = array(
+  		'ajax_url' => admin_url( 'admin-ajax.php' ) ,
+		);
+	wp_localize_script( 'bragbook_plugin_script', 'wp_vars', $wp_vars );
     wp_enqueue_script('bragbook_plugin_script');
 
              
@@ -350,18 +354,36 @@ function wpseo_129955_admin_scripts($suffix) {
     }
 }
 add_action( 'admin_enqueue_scripts', 'wpseo_129955_admin_scripts' );
- 
- 
+
+
+add_action('init', 'cyb_start_session', 1);
+add_action('wp_logout', 'cyb_end_session');
+add_action('wp_login', 'cyb_end_session');
+
+function cyb_start_session() {
+    if( ! session_id() ) {
+        session_start();
+        // now you can use $_SESSION
+       // $_SESSION['test'] = "test";
+    }
+}
+
+function cyb_end_session() {
+    session_destroy();
+}
+
+
+
+
  
 //shortcodes
 function bragbook_start(){
-	session_start();
+	//session_start();
         global $wp_query;
 		global $revTitle;
 		global $revDesc;
 		global $revCustomCSS;
 		global $revGalleryOutput;
-             
 			 $curURL = explode("/", $_SERVER['REQUEST_URI']);
               if(isset($_REQUEST['page_id'])){
                              $curPageid = $_REQUEST['page_id'];
@@ -417,12 +439,12 @@ function bragbook_start(){
               //Set Client ID
               $revGallery->clientid = get_option( 'revClientId'.$galNum, 'demo' );
 	
-	if(md5($var_patientid.$var_username.get_option( 'revSecretKey'.$galNum, 'R3v3n3zBR@Gbook57')) == $var_patientsig) {
+	//if(md5($var_patientid.$var_username.get_option( 'revSecretKey'.$galNum, 'R3v3n3zBR@Gbook57')) == $var_patientsig) {
 		
-		if(isset($patientsig)){$_SESSION['patientsig'] = $patientsig;}
+		if(isset($var_patientsig)){$_SESSION['patientsig'] = $patientsig;}
 		if(isset($patientid)){$_SESSION['patientid'] = $patientid;}
 		if(isset($username)){$_SESSION['patientUser'] = $username;}
-		}
+		//}
 
               //The directory the gallery resides at relative to the home. Be sure to include forward slash at beginning and end.
               //if (substr($_SERVER['HTTP_HOST'], 0, 4) == "www."){$addwww = "";} else {$addwww = "www.";}
@@ -521,6 +543,7 @@ $revGallery->revCategoryLandingDescription = get_option( 'revCategoryLandingDesc
              
               //check for logout request (do not modify)
               if(isset($var_patientlogout)){
+				  			
                              $revGallery->patientLogout();
 							 exit();
               }
@@ -558,12 +581,13 @@ if($revGallery->revisionActive ==1 || $revGallery->menActive ==1){$revGallery->r
              
               //Get Favorites button (do not modify)
               if(isset($var_getFavButton)){
-                             echo $revGallery->revFavoriteButton($revID, $var_patientsig, $var_patientid, $var_username, $var_patientlogout);
+				  
+                             echo $revGallery->revFavoriteButton($revID);
                              exit();
               }
               //Get Login button (do not modify)
               if(isset($var_getLoginButton)){
-                             echo $revGallery->revLoginButton($revID, $var_patientsig);
+                             echo $revGallery->revLoginButton($revIDF);
                              exit();
               }
               //Get Login Text (do not modify)
@@ -580,7 +604,264 @@ if($revGallery->revisionActive ==1 || $revGallery->menActive ==1){$revGallery->r
                           
                           
              
-$revGalleryOutput = @$revGallery->revenezBAgallery($revCatname, $revID);            
+$revGalleryOutput = @$revGallery->revenezBAgallery($revCatname, $revID);  
+$revTitle = $revGallery->revTitleReturn($revCatname,$revID);
+$revDesc = $revGallery->revDescriptionReturn($revCatname,$revID);
+$revCustomCSS = get_option( 'revCustomCSS', '');
+}
+
+//ajax calls to get thumbnails, login buttons, etc
+function bragbook_ajax_start(){
+	session_start();
+	
+	if (class_exists('revGallery')) {} else{
+			  include('assets/BRAGbook.php');
+			  }
+	
+        global $wp_query;
+		global $revTitle;
+		global $revDesc;
+		global $revCustomCSS;
+		global $revGalleryOutput;
+	
+	
+	 $queryURL = @parse_url( html_entity_decode( esc_url( add_query_arg( $arr_params ) ) ) );
+			  parse_str( @$queryURL['query'], $getVar );
+             $curURL = urldecode(@$getVar['revCurURL']);
+			 $curURL = explode("/", $curURL);
+	
+
+              if(isset($_REQUEST['page_id'])){
+                             $curPageid = $_REQUEST['page_id'];
+              } else {
+              $curPageid = "x";
+              }
+             
+              if(isset($curURL[3])){$curURL1 = $curURL[3];} else {$curURL1 = "revnone";}
+              if(isset($curURL[4])){$curURL2 = $curURL[4];} else {$curURL2 = "revnone";}
+    if (get_option( 'revBaseUrl2', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl2', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl2', 'gallery' ) || $curPageid == get_option( 'revPageId2'))){
+		$galNum = "2";
+	}else if (get_option( 'revBaseUrl3', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl3', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl3', 'gallery' ) || $curPageid == get_option( 'revPageId3'))){
+		$galNum = "3";
+	}else if(get_option( 'revBaseUrl4', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl4', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl4', 'gallery' ) || $curPageid == get_option( 'revPageId4'))){
+		$galNum = "4";
+	}else if(get_option( 'revBaseUrl5', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5'))) {
+		$galNum = "5";
+	
+	} else{
+		$galNum = "";
+	}
+	
+	
+	
+              global $wp_query;
+             
+              $revGallery = new revGallery;
+			  
+			   //get query variables
+			 
+			  $var_revCatname = @$getVar['revCatname'];
+			  $var_getCategorySets = @$getVar['getCategorySets'];
+			  $var_categorySetsStart = @$getVar['categorySetsStart'];
+			  $var_patientlogout = @$getVar['patientlogout'];
+			  $var_sig = @$getVar['sig'];
+	
+				if(isset($getVar['patientSig']) && $getVar['patientSig'] != ""){$var_patientsig = @$getVar['patientSig'];} else if(isset($_SESSION['patientsig'])){$var_patientsig = $_SESSION['patientsig'];}else{$var_patientsig = "";}
+	
+	if(isset($getVar['username']) && $getVar['username'] != ""){$var_username = @$getVar['username'];} else if(isset($_SESSION['username'])){$var_username = $_SESSION['username'];}else{$var_username = "";}
+	
+	if(isset($getVar['patientid']) && $getVar['patientid'] != ""){$var_patientid = @$getVar['patientid'];} else if(isset($_SESSION['patientid'])){$var_patientid = $_SESSION['patientid'];}else{$var_patientid = "";}
+			  
+			  
+			  $var_favid = @$getVar['favid'];
+			  $var_getFavButton = @$getVar['getFavButton'];
+			  $var_getLoginButton = @$getVar['getLoginButton'];
+			  $var_getLoginText = @$getVar['getLoginText'];
+			  $var_getThumbnails = @$getVar['getThumbnails'];
+			  $var_thumbStart = @$getVar['thumbStart'];
+	
+			
+ 
+              //Global Gallery Variables
+             
+              //Set validation key
+              $revGallery->MySecretKey = get_option( 'revSecretKey'.$galNum, 'R3v3n3zBR@Gbook57');
+              //Set Client ID
+              $revGallery->clientid = get_option( 'revClientId'.$galNum, 'demo' );
+	
+	
+	
+	//if(md5($var_patientid.$var_username.get_option( 'revSecretKey'.$galNum, 'R3v3n3zBR@Gbook57')) == $var_patientsig) {
+		
+		if(isset($var_patientsig)){$_SESSION['patientsig'] = $var_patientsig;}
+		if(isset($var_patientid)){$_SESSION['patientid'] = $var_patientid;}
+		if(isset($var_username)){$_SESSION['patientUser'] = $var_username;}
+		//}
+	
+
+              //The directory the gallery resides at relative to the home. Be sure to include forward slash at beginning and end.
+              //if (substr($_SERVER['HTTP_HOST'], 0, 4) == "www."){$addwww = "";} else {$addwww = "www.";}
+			  $pageURL = 'http';
+ 				if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+				 $pageURL .= "://";
+              $revGallery->baseUrl = $pageURL.$_SERVER['HTTP_HOST']."/".get_option( 'revBaseUrl'.$galNum, 'gallery' )."/";
+			
+              //Determines if URL rewrites are on or not. Set true or false.
+              $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
+              //Default page description if custom description not used
+              $revGallery->defaultDescription = get_option( 'revDefaultDescription', 'Plastic surgery before and after images');
+              //URL for 404 not found page
+              $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
+              //Number of thumbnail sets to display at one time. Leave blank if you want to show all
+              $revGallery->thumbLimit = get_option( 'revThumbLimit', '20' );
+              //Headline for gallery landing page
+              $revGallery->landingHeadline = get_option( 'revLandingHeadline', '' );
+              //Intro text for gallery landing page
+              $revGallery->landingIntro = wpautop(get_option( 'revLandingIntro'.$galNum, "<p>Welcome to our Before and After gallery. To improve the communication between us, we encourage you to use the MyFavorites feature to create a collection of images that reflect your surgical goals. When looking at a set of images, simply click the \"Add to Favorites\" button to begin your collection. During our consultation, we'll review this collection together so we can discuss your specific goals and concerns.</p>" ));
+              //Text for title tag on landing page
+              $revGallery->revLandingTitle = get_option( 'revLandingTitle'.$galNum, 'Plastic surgery before and after gallery');
+              //Text for description meta tag on landing page
+              $revGallery->revLandingDescription = get_option( 'revLandingDescription'.$galNum,'Plastic surgery before and after images');
+             
+              //turns on nudity warning on landing page for breast and body categories
+              $revGallery->nudityWarning = get_option( 'revNudityWarning',true);
+              //Sets variable to remove sets with revision option selected from the main categories so they can be placed in revision categories
+			  $revGallery->myFavsActive = get_option( 'revMyFavsActive',1);
+			  $revGallery->clickToZoomActive = get_option( 'revClickToZoomActive',1);
+			  $revGallery->thumbnailsActive = get_option( 'revThumbnailsActive',1);
+              $revGallery->revisionActive = get_option( 'revRevisionActive', false);
+			  $revGallery->menActive = get_option( 'revMenActive', false);
+				$revGallery->showCatSetDetails = get_option( 'revShowCatSetDetails', false);
+             
+			 
+              $revGallery->faceMenuLabel = get_option( 'revFaceMenuLabel'.$galNum, ''); //change the h2 text label on the landing page menu for face procedures column
+              $revGallery->breastMenuLabel = get_option( 'revBreastMenuLabel'.$galNum, ''); //change the h2 text label on the landing page menu for breast procedures column
+              $revGallery->bodyMenuLabel = get_option( 'revBodyMenuLabel'.$galNum, ''); //change the h2 text label on the landing page menu for body procedures column
+              $revGallery->skinMenuLabel = get_option( 'revSkinMenuLabel'.$galNum, ''); //change the h2 text label on the landing page menu for non-surgical procedures column
+              $revGallery->imageSetWrapOpen = get_option( 'revImageSetWrapOpen', ''); //html tags to place before the image set pages 
+              $revGallery->imageSetWrapClose = get_option( 'revImageSetWrapClose', ''); //html tags to place after the image set pages  
+              
+			  $fourColMenu = get_option( 'revFourCol', '' );
+			  if($fourColMenu == 1){
+				  
+				  $faceMenuImage = get_option( 'revFaceMenuImage', '');
+				  $breastMenuImage = get_option( 'revBreastMenuImage', '');
+				  $bodyMenuImage = get_option( 'revBodyMenuImage', '');
+				  $skinMenuImage = get_option( 'revSkinMenuImage', '');
+				  
+				  if(isset($faceMenuImage) && $faceMenuImage != ''){$faceMenuImage = '<img src="'.$faceMenuImage.'" />';}
+				  if(isset($breastMenuImage) && $breastMenuImage != ''){$breastMenuImage = '<img src="'.$breastMenuImage.'" />';}
+				  if(isset($bodyMenuImage) && $bodyMenuImage != ''){$bodyMenuImage = '<img src="'.$bodyMenuImage.'" />';}
+				  if(isset($skinMenuImage) && $skinMenuImage != ''){$skinMenuImage = '<img src="'.$skinMenuImage.'" />';}
+				  
+				  
+              $revGallery->landingMenuWrapOpen = '<div id="bbmenu">'; //html tags to place before the landing page menu on the landing page
+              $revGallery->landingMenuWrapClose = '</div>'; //html tags to place after the landing page menu on the landing page
+              $revGallery->faceMenuWrapOpen = '<div id="bbface">'.$faceMenuImage; //html tags to place before the face category menu on the landing page
+              $revGallery->faceMenuWrapClose = '</div>'; //html tags to place after the face category menu on the landing page
+              $revGallery->breastMenuWrapOpen = '<div id="bbbreast">'.$breastMenuImage; //html tags to place before the breast category menu on the landing page
+              $revGallery->breastMenuWrapClose = '</div>'; //html tags to place after the breast category menu on the landing page
+              $revGallery->bodyMenuWrapOpen = '<div id="bbbody">'.$bodyMenuImage; //html tags to place before the body category menu on the landing page
+              $revGallery->bodyMenuWrapClose = '</div>'; //html tags to place after the body category menu on the landing page
+              $revGallery->skinMenuWrapOpen = '<div id="bbskin">'.$skinMenuImage; //html tags to place before the skin / non-surgical category menu on the landing page
+              $revGallery->skinMenuWrapClose = '</div>'; //html tags to place after the skin / non-surgical category menu on the landing page
+				  
+			  } else{
+			  
+			  $revGallery->landingMenuWrapOpen = get_option( 'revLandingMenuWrapOpen', '<div id="revFullMenu">' ); //html tags to place before the landing page menu on the landing page
+              $revGallery->landingMenuWrapClose = get_option( 'revLandingMenuWrapClose', '</div>'); //html tags to place after the landing page menu on the landing page
+              $revGallery->faceMenuWrapOpen = get_option( 'revFaceMenuWrapOpen', ''); //html tags to place before the face category menu on the landing page
+              $revGallery->faceMenuWrapClose = get_option( 'revFaceMenuWrapClose', ''); //html tags to place after the face category menu on the landing page
+              $revGallery->breastMenuWrapOpen = get_option( 'revBreastMenuWrapOpen', ''); //html tags to place before the breast category menu on the landing page
+              $revGallery->breastMenuWrapClose = get_option( 'revBreastMenuWrapClose', ''); //html tags to place after the breast category menu on the landing page
+              $revGallery->bodyMenuWrapOpen = get_option( 'revBodyMenuWrapOpen', ''); //html tags to place before the body category menu on the landing page
+              $revGallery->bodyMenuWrapClose = get_option( 'revBodyMenuWrapClose', ''); //html tags to place after the body category menu on the landing page
+              $revGallery->skinMenuWrapOpen = get_option( 'revSkinMenuWrapOpen', ''); //html tags to place before the skin / non-surgical category menu on the landing page
+              $revGallery->skinMenuWrapClose = get_option( 'revSkinMenuWrapClose', ''); //html tags to place after the skin / non-surgical category menu on the landing page
+			  
+			  }
+			  
+              $revGallery->categoryLandingPageWrapOpen = get_option( 'revCategoryLandingPageWrapOpen', ''); //html tags to place after the category landing page
+              $revGallery->categoryLandingPageWrapClose = get_option( 'revCategoryLandingPageWrapClose', ''); //html tags to place after the category landing page
+              $revGallery->setDetails = get_option( 'revSetDetails', ''); //Choose the details field used for image sets that have information specific to this website in the bragbook dashboard. By default the basic details field will be used for all sets if this is not defined. Enter "1" if you used "details for website 1", "2" if you used "details for website 2", etc.
+              $revGallery->hideJumpMenu = get_option( 'revHideJumpMenu', ''); //variable to hide jump menu
+              $revGallery->hideMainMenu = get_option( 'revHideMainMenu', ''); //variable to hide main menu
+             
+              $revGallery->categoryLandingPageIntro = wpautop(get_option( 'revCategoryLandingPageIntro'.$galNum, '<p>Click on the before and after sets below to get more details on each case.</p>'));
+//Adds text to the beginning of auto-generated category landing titles
+$revGallery->revCategoryLandingTitle = get_option( 'revCategoryLandingTitle'.$galNum, '');
+//Adds text after auto-generated category landing descriptions
+$revGallery->revCategoryLandingDescription = get_option( 'revCategoryLandingDescription'.$galNum, '');
+	
+             
+              //check for logout request (do not modify)
+              if(isset($var_patientlogout)){
+				  			$_SESSION['patientsig'] = "";
+							$_SESSION['patientid'] = "";
+							$_SESSION['patientUser'] = "";
+                             //$revGallery->patientLogout();
+							 exit();
+              }
+             
+              //set login information for MyFavs (do not modify)
+              if(isset($var_sig)){
+                             $revGallery->patientLogin($var_sig,$var_patientid,$var_username,$var_favid);
+							 exit();
+              }
+             
+             //Get Image Sets for Category Landing Page (do not modify)
+			  if(isset($var_getCategorySets) && $var_getCategorySets == "1"){
+					$revGallery->getCatFeed();
+					$revGallery->revDefaultSection();
+					$var_revCatname = ucwords(str_replace('-', ' ', $var_revCatname));
+					$revGallery->revSetProcedureID($var_revCatname);
+					$revGallery->getImageFeed();
+					echo $revGallery->revCategoryLandingPageImageSets($var_revCatname, $var_categorySetsStart);
+					exit();
+			  }
+              
+             
+              //URL Variables (do not modify)
+              $revGallery->getCatFeed();
+$revGallery->revDefaultSection();
+	
+	//count exploded url array to find cat name and start
+	$urlCount = count($curURL);
+	
+$revCatname = $curURL[$urlCount - 3];
+$revID = $curURL[$urlCount - 2];
+$revGallery->revDefaultProcedureName();
+$revCatname = ucwords(str_replace('-', ' ', $revCatname));
+$revGallery->revSetProcedureID($revCatname);
+if($revCatname == "Home" && $revGallery->revisionActive == 0 && $revGallery->menActive == 0){}else{$revGallery->getImageFeed();}
+if($revGallery->revisionActive ==1 || $revGallery->menActive ==1){$revGallery->revCheckRevision();}
+             
+             
+              //Get Favorites button (do not modify)
+              if(isset($var_getFavButton)){
+                            echo $revGallery->revFavoriteButton($revID);
+                             exit();
+              }
+              //Get Login button (do not modify)
+              if(isset($var_getLoginButton)){
+                             echo $revGallery->revLoginButton($revID);
+                             exit();
+              }
+              //Get Login Text (do not modify)
+              if(isset($var_getLoginText)){
+                             echo $revGallery->revFavoriteText($revID);
+                             exit();
+              }
+              //Get Thumbnails (do not modify)
+              if(isset($var_getThumbnails)){
+                             if(isset($var_thumbStart)){$thumbStart = $var_thumbStart;} else {$thumbStart = 0;}
+                             echo $revGallery->revThumbnails($var_revCatname, $thumbStart);
+                             exit();
+              }
+                          
+                          
+             
+$revGalleryOutput = @$revGallery->revenezBAgallery($revCatname, $revID); 
 $revTitle = $revGallery->revTitleReturn($revCatname,$revID);
 $revDesc = $revGallery->revDescriptionReturn($revCatname,$revID);
 $revCustomCSS = get_option( 'revCustomCSS', '');
@@ -953,6 +1234,28 @@ function bragbook_get_cat_sets_sitemap($catID, $curGallery){
 
 
 
+//add actions to make ajax calls for thumbnails and my favs
+add_action( 'wp_ajax_bragbook_ajax_start', 'bragbook_ajax_start' );
+add_action( 'wp_ajax_nopriv_bragbook_ajax_start', 'bragbook_ajax_start' );
+add_action( 'wp_ajax_bragbook_test', 'bragbook_test' );
+add_action( 'wp_ajax_nopriv_bragbook_test', 'bragbook_test' );
+function bragbook_test(){
+	global $wpdb;
+	$whatever = intval( $_POST['whatever'] );
+	$whatever = "this works";
+        echo $whatever;
+	wp_die();
+}
+
+//add_action( 'wp_ajax_my_action', 'my_action' );
+//function my_action() {
+//	global $wpdb;
+//	$whatever = intval( $_POST['whatever'] );
+//	$whatever += 10;
+//        echo $whatever;
+//	wp_die();
+//}
+
 //check to make sure this is the gallery page
 add_action('init', 'plugin_is_page');
 function plugin_is_page() {
@@ -968,6 +1271,8 @@ function plugin_is_page() {
     if ($curURL1 == get_option( 'revBaseUrl', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl', 'gallery' ) || $curPageid == get_option( 'revPageId')|| $curURL1 == get_option( 'revBaseUrl2', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl2', 'gallery' ) || $curPageid == get_option( 'revPageId2') ||  $curURL1 == get_option( 'revBaseUrl3', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl3', 'gallery' ) || $curPageid == get_option( 'revPageId3') || $curURL1 == get_option( 'revBaseUrl4', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl4', 'gallery' ) || $curPageid == get_option( 'revPageId4') || $curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5')) {
              add_action('wp', 'bragbook_start');
 			  add_action('wp_loaded', 'bragbook_SEO');
+		
+		
     } 
              
 }

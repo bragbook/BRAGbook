@@ -1,6 +1,6 @@
 // JavaScript Document
 
-//BRAGbook™ 1.4.0.8
+//BRAGbook™ 1.4.0.9
 //© copyright 2013 Candace Crowe Design
 
 function reloadPage() {
@@ -21,8 +21,9 @@ function reloadPage() {
 var revJquery = jQuery.noConflict();
 
 revJquery(document).ready(function(){
-
 	
+	//change out login buttons
+	bbButtonExchange2();
 
 //Initialize infinite scroll on category landing page
 revJquery('#revCategoryImageSets').jscroll({
@@ -40,8 +41,9 @@ testResponse = function(e) {
 	  statusVar = e.data;
 	if(statusVar.status == "logout"){
 		//alert("logout");
-		var serializedDataExit = {"patientlogout": "TRUE"};
-				var pathname = window.location.pathname;
+		var serializedDataExit = {"action": "bragbook_ajax_start", "patientlogout": "TRUE"};
+				var ajax_url = wp_vars.ajax_url;
+				var pathname = ajax_url;
 	
 				requestExit = revJquery.ajax({
 					url: pathname,
@@ -59,16 +61,32 @@ testResponse = function(e) {
 		
 	}else if(statusVar.status == "loggedin"){
 		//alert(statusVar.status);
+		//alert(statusVar.patientsig);
+		
+		
+		revJquery(document).off('click', '#revlightcase-overlay');
+		revJquery(document).on('click', '#revlightcase-overlay', function(){bbButtonExchange(statusVar.patientsig,statusVar.patientid,statusVar.username)});	
+		
+		revJquery(document).off('click', '.revlightcase-icon-close');
+		revJquery(document).on('click', '.revlightcase-icon-close', function(){bbButtonExchange(statusVar.patientsig,statusVar.patientid,statusVar.username)});	
 		
 		
 		
-		revJquery(document).off('click', '#revlightcase-overlay, .revlightcase-icon-close');
-		revJquery(document).on('click', '#revlightcase-overlay, .revlightcase-icon-close', function(){
-		 // alert('x2');
+		
+	}
+  }
+}
+window.addEventListener('message', testResponse, false);	
+	
+	
+	 function bbButtonExchange(patientsig,patientid,username){
+		  //alert(patientsig);
+		 var ajax_url = wp_vars.ajax_url;
 		  
 		   		//replace fav buttons
-		   		var serializedData = {"getFavButton": "TRUE", "patientSig": statusVar.patientsig, "patientid": statusVar.patientid, "username": statusVar.username};
-				var pathname = window.location.pathname;
+		   		var serializedData = {"action": "bragbook_ajax_start", "getFavButton": "TRUE", "patientSig": patientsig, "patientid": patientid, "username": username, "revCurURL": window.location.href};
+				//var pathname = window.location;
+		 		var pathname = ajax_url;
 				//alert(serializedData);
 	
 				// fire off the request to /editnotes.php
@@ -84,6 +102,7 @@ testResponse = function(e) {
 					//alert(response);
 					revJquery(".revFavLaunch ").replaceWith(response);
 										
+					revJquery('body').off('click', '.revFavLaunch');
 					revJquery('body').on('click', '.revFavLaunch', function(e){
 				e.preventDefault();
 
@@ -106,8 +125,10 @@ testResponse = function(e) {
 				
 			
 			//replace login buttons
-		   		var serializedData = {"getLoginText": "TRUE", "patientSig": statusVar.patientsig, "patientid": statusVar.patientid, "username": statusVar.username};
-				var pathname = window.location.pathname;
+		   		var serializedData = {"action": "bragbook_ajax_start","getLoginText": "TRUE", "patientSig": patientsig, "patientid": patientid, "username": username, "revCurURL": window.location.href};
+		  var ajax_url = wp_vars.ajax_url;
+				//var pathname = window.location.pathname;
+		 		var pathname = ajax_url;
 				//alert(serializedData);
 	
 				// fire off the request to /editnotes.php
@@ -146,16 +167,7 @@ testResponse = function(e) {
 				
 						
 		   
-		});	
-		
-		
-		
-		
-	}
-  }
-}
-window.addEventListener('message', testResponse, false);	
-	
+		};
 	
 	revJquery('body').on('click', '.revLoginLaunch', function(e){
 				e.preventDefault();
@@ -176,7 +188,138 @@ window.addEventListener('message', testResponse, false);
 							 }
 				});
 			});
+	revJquery('body').off('click', '.revFavLaunch');
+	revJquery('body').on('click', '.revFavLaunch', function(e){
+				e.preventDefault();
+
+			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
+        width : '100%',
+        height : '100%'
+    }, onCleanup : {
+		quux: function() {
+			revJquery('#revlightcase-case').remove();
+			revJquery('#revlightcase-overlay').remove();
+			revJquery('#revlightcase-loading').remove();
+			revJquery('#revlightcase-nav').remove();
+			}
+				},
+							 onClose : {
+								 
+							 }
+				});
+			});
 	
+	//function to exchange buttons after page load
+	function bbButtonExchange2(){
+		 // alert('x2');
+		 var ajax_url = wp_vars.ajax_url;
+		  
+		   		//replace fav buttons
+		   		var serializedData = {"action": "bragbook_ajax_start", "getFavButton": "TRUE", "patientSig": "", "patientid": "", "username": "", "revCurURL": window.location.href};
+				//var pathname = window.location;
+		 		var pathname = ajax_url;
+				//alert(serializedData);
+	
+				// fire off the request to /editnotes.php
+				request = revJquery.ajax({
+					url: pathname,
+					type: "get",
+					data: serializedData
+				});
+			
+				// callback handler that will be called on success
+				request.done(function (response, textStatus, jqXHR){
+					// log a message to the console
+					//alert(response);
+					revJquery(".revFavLaunch ").replaceWith(response);
+										
+					revJquery('body').off('click', '.revFavLaunch');
+					revJquery('body').on('click', '.revFavLaunch', function(e){
+				e.preventDefault();
+
+			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
+        width : '100%',
+        height : '100%'
+    }, onCleanup : {
+		quux: function() {
+			revJquery('#revlightcase-case').remove();
+			revJquery('#revlightcase-overlay').remove();
+			revJquery('#revlightcase-loading').remove();
+			revJquery('#revlightcase-nav').remove();
+			}
+				}
+				});
+			});
+					
+										
+				});
+				
+			
+			//replace login buttons
+		   		var serializedData = {"action": "bragbook_ajax_start","getLoginText": "TRUE", "patientSig": "", "patientid": "", "username": "", "revCurURL": window.location.href};
+		  var ajax_url = wp_vars.ajax_url;
+				//var pathname = window.location.pathname;
+		 		var pathname = ajax_url;
+				//alert(serializedData);
+	
+				// fire off the request to /editnotes.php
+				request = revJquery.ajax({
+					url: pathname,
+					type: "get",
+					data: serializedData
+				});
+			
+				// callback handler that will be called on success
+				request.done(function (response, textStatus, jqXHR){
+					// log a message to the console
+					//alert(response);
+					revJquery("#myFavsHeader ").replaceWith(response);
+										
+					revJquery('body').on('click', '.revLoginLaunch', function(e){
+				e.preventDefault();
+
+			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
+        width : '100%',
+        height : '100%'
+    }, onCleanup : {
+		quux: function() {
+			revJquery('#revlightcase-case').remove();
+			revJquery('#revlightcase-overlay').remove();
+			revJquery('#revlightcase-loading').remove();
+			revJquery('#revlightcase-nav').remove();
+			}
+				}
+				});
+			});
+					
+										
+				});
+				
+				
+						
+		   
+		};
+	
+	revJquery('body').on('click', '.revLoginLaunch', function(e){
+				e.preventDefault();
+
+			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
+        width : '100%',
+        height : '100%'
+    }, onCleanup : {
+		quux: function() {
+			revJquery('#revlightcase-case').remove();
+			revJquery('#revlightcase-overlay').remove();
+			revJquery('#revlightcase-loading').remove();
+			revJquery('#revlightcase-nav').remove();
+			}
+				},
+							 onClose : {
+								 
+							 }
+				});
+			});
+	revJquery('body').off('click', '.revFavLaunch');
 	revJquery('body').on('click', '.revFavLaunch', function(e){
 				e.preventDefault();
 
@@ -200,11 +343,13 @@ window.addEventListener('message', testResponse, false);
 	
 	revJquery('body').on('click', '.revThumbLaunch', function(e){
 				e.preventDefault();
+		
 
 			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', inline : {
         width : '100%',
         height : '100%'
-    }, onCleanup : {
+    }, 
+								onCleanup : {
 		quux: function() {
 			revJquery('#revlightcase-case').remove();
 			revJquery('#revlightcase-overlay').remove();
@@ -223,7 +368,7 @@ window.addEventListener('message', testResponse, false);
 			
 			
 // bind to the click event for thumbnail navigation
-revJquery( "#revThumbnailConDiv" ).on( "click", ".thumbNavLink" ,  function(event) {
+revJquery( "body" ).on( "click", ".thumbNavLink" ,  function(event) {
 	 // prevent default posting of form
     event.preventDefault();
 	var request;
@@ -236,13 +381,14 @@ revJquery( "#revThumbnailConDiv" ).on( "click", ".thumbNavLink" ,  function(even
 	//var mySplitResult = splitVal.split("|");
 	var revCatname = revJquery(this).data('revcatname');
 	var thumbStart = revJquery(this).data('thumbstart');
-	
+	var revURL = window.location.href;
+	 var ajax_url = wp_vars.ajax_url;
     
-   var serializedData = "revCatname="+revCatname+"&getThumbnails=1&thumbStart="+thumbStart;
+   var serializedData = "revCatname="+revCatname+"&getThumbnails=1&action=bragbook_ajax_start&thumbStart="+thumbStart+"&revCurURL="+revURL;
 	
     // fire off the request to /editnotes.php
     request = revJquery.ajax({
-        url: window.location.pathname,
+        url: ajax_url,
         type: "get",
         data: serializedData
     });
@@ -1547,6 +1693,7 @@ function revenez_jump_menu_procedure_norewrite(){
 			 */
 			scroll: function ($object, type, speed, callback) {
 				var isInTransition = type === 'in',
+
 					transition = isInTransition ? _self.settings.transitionIn : _self.settings.transitionOut,
 					direction = 'left',
 					startTransition = {},

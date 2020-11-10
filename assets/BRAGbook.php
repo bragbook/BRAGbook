@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.0.8
+//BRAGbook™ 1.4.0.9
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -1854,9 +1854,9 @@ $string = strtr( $string, $unwanted_array );
 					}
 					
 					
-					$revThumbnailsOutput .=  '<li class="thumbSet"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span><img  alt="Before" src="'.$this->baGallery['ba_set'][$x]['image_before_tn'].'"></span>';
+					$revThumbnailsOutput .=  '<li class="thumbSet"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span><img class="skip-lazy" alt="Before" src="'.$this->baGallery['ba_set'][$x]['image_before_tn'].'"></span>';
 					if(isset($this->baGallery['ba_set'][$x]['image_after_xl'])){
-					$revThumbnailsOutput .=  '<span><img alt="After" src="'.$this->baGallery['ba_set'][$x]['image_after_tn'].'"></span>';
+					$revThumbnailsOutput .=  '<span><img class="skip-lazy" alt="After" src="'.$this->baGallery['ba_set'][$x]['image_after_tn'].'"></span>';
 					}
 					$revThumbnailsOutput .=  '</a></li>';
 					} else {
@@ -1866,9 +1866,9 @@ $string = strtr( $string, $unwanted_array );
 						$revLink = $this->baGallery['ba_set'][$x]['oid'];
 					}
 						
-						$revThumbnailsOutput .=  '<li class="thumbSet"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span><img alt="Before" src="'.$this->baGallery['ba_set'][$x]['image_before_tn'].'"></span>';
+						$revThumbnailsOutput .=  '<li class="thumbSet"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span><img class="skip-lazy" alt="Before" src="'.$this->baGallery['ba_set'][$x]['image_before_tn'].'"></span>';
 						if(isset($this->baGallery['ba_set'][$x]['image_after_xl'])){
-						$revThumbnailsOutput .=  '<span><img alt="After" src="'.$this->baGallery['ba_set'][$x]['image_after_tn'].'"></span>';
+						$revThumbnailsOutput .=  '<span><img class="skip-lazy" alt="After" src="'.$this->baGallery['ba_set'][$x]['image_after_tn'].'"></span>';
 						}
 						$revThumbnailsOutput .=  '</a></li>';
 					}

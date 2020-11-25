@@ -1195,6 +1195,8 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
     content: '→';
 }
 [dir='rtl'] .revSlick-next:before
+
+
 {
     content: '←';
 }
@@ -1289,7 +1291,7 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
     color: black;
 }
 @media  (max-width : 800px) {
-	.revSlick-dot{display: none;}
+	.revSlick-dot{display: none !important;}
 	.revSlideImageSetRight{width:90%;margin:0 5%;}
 	.revSlideImageSetLeft{width:90%;margin:0 5%;}
 	.revSlick-prev{left:-15px;}

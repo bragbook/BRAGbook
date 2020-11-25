@@ -109,14 +109,13 @@ img#myFavsLogo {
 	font-size: 11px;
 }
 @media (max-width: 800px) {
+	#myFavsHeader{float: none; text-align: center; max-width: 100%; margin-left: 0;}
+	
 	.revCopyright{
 		text-align: center;
 		margin:40px 0;
 		float:none;
 		font-size: 11px;
-	}
-	#myFavsHeader {
-		display:none;
 	}
 	#revGalleryNav{
 		float:none;
@@ -1289,7 +1288,14 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
     opacity: .75;
     color: black;
 }
-
+@media  (max-width : 800px) {
+	.revSlick-dot{display: none;}
+	.revSlideImageSetRight{width:90%;margin:0 5%;}
+	.revSlideImageSetLeft{width:90%;margin:0 5%;}
+	.revSlick-prev{left:-15px;}
+	.revSlick-next{right: -15px;}
+	
+}
 
 /* //////////// Four Column Display Styles /////////////// */
 #bbmenu h2 {padding-top:0 !important;}

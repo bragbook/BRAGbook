@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.1.2
+Version: 1.4.1.3
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -870,7 +870,7 @@ $revCustomCSS = get_option( 'revCustomCSS', '');
 	
 function bragbook_slider_list($catID, $limit, $start, $title, $details){
 	
-	if( $curGallery > "1" ) {
+	if( isset($curGallery) && $curGallery > "1" ) {
 		$galNum = $curGallery;
 	
 	} else{
@@ -928,7 +928,7 @@ function bragbook_slider_list($catID, $limit, $start, $title, $details){
 
 function bragbook_category_list($catID, $limit, $start, $title, $details){
 	
-	if( $curGallery > "1" ) {
+	if( isset($curGallery) && $curGallery > "1" ) {
 		$galNum = $curGallery;
 	
 	} else{

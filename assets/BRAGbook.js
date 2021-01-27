@@ -1,6 +1,6 @@
 // JavaScript Document
 
-//BRAGbook™ 1.4.1.3
+//BRAGbook™ 1.4.1.4
 //© copyright 2013 Candace Crowe Design
 
 function reloadPage() {

@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.1.4
+//BRAGbook™ 1.4.1.5
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -924,13 +924,42 @@ $string = strtr( $string, $unwanted_array );
 				return $revCategoryLandingPageImageSetsOutput;
 		}
 	
+	//create random name sequence
+	function create_random_name($len){
+			$s="";
+			$i=0;
+			do {
+				switch(mt_rand(1,3)) {
+					// get number - ASCII characters (0:48 through 9:57)
+					case 1:
+						$s .= chr(mt_rand(48,57));
+						$i++;
+						break;
+		
+					// get uppercase letter - ASCII characters (a:65 through z:90)
+					case 2:
+						$s .= chr(mt_rand(65,90));
+						$i++;
+						break;
+		
+					// get lowercase letter - ASCII characters (A:97 through Z:122)
+					case 3:
+						$s .= chr(mt_rand(97,122));
+						$i++;
+						break;
+				}
+			} while ($i<$len);
+			return $s;
+		}
 	
 	//get first set of each set from a category as a list
 	function revCategorySliderOutput($revCatname, $categorySetsStart, $revTitle){
 		$revCatname = $this->cleanCat($revCatname);
 		$catStart = $categorySetsStart +1;
 		
-		$revCategoryLandingPageImageSetsOutput = "<div class='bragbookSlider'>";
+		$randomName= $this->create_random_name(6);
+		
+		$revCategoryLandingPageImageSetsOutput = "<div id='bragbookSlider".$randomName."'>";
 		
 				if(isset($categorySetsStart) && $categorySetsStart != "" && isset($this->categoryImageSetLimit) && $this->categoryImageSetLimit != 0 && $this->categoryImageSetLimit != "" ){
 			$categorySetsStart = $this->categoryImageSetLimit*$categorySetsStart;
@@ -1042,7 +1071,7 @@ $string = strtr( $string, $unwanted_array );
 				}
 				
 		
-				$revCategoryLandingPageImageSetsOutput .= "</div><script type='text/javascript'> jQuery('.bragbookSlider').revSlick({
+				$revCategoryLandingPageImageSetsOutput .= "</div><script type='text/javascript'> jQuery('#bragbookSlider".$randomName."').revSlick({
     dots: true,
 	arrows: true,
   infinite: true,

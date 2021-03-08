@@ -566,7 +566,7 @@ display:inline-block;
 #revlightcase-case {
   display: none;
   position: fixed;
-  z-index: 2002;
+  z-index: 100005;
   top: 50%;
   left: 50%;
   font-family: arial, sans-serif;
@@ -798,7 +798,7 @@ html[data-revlc-type=image] #revlightcase-content .revlightcase-contentInner {
 /* line 1, ../scss/components/modules/_loading.scss */
 #revlightcase-loading {
   position: fixed;
-  z-index: 9999;
+  z-index: 100006;
   width: 1.123em;
   height: auto;
   font-size: 38px;
@@ -806,7 +806,7 @@ html[data-revlc-type=image] #revlightcase-content .revlightcase-contentInner {
   text-align: center;
   text-shadow: none;
   position: fixed;
-  z-index: 2001;
+  z-index: 100006;
   top: 50%;
   left: 50%;
   margin-top: -0.5em;
@@ -839,7 +839,7 @@ html[data-revlc-type=image] #revlightcase-content .revlightcase-contentInner {
 /* line 2, ../scss/components/modules/_navigation.scss */
 a[class*='revlightcase-icon-'] {
   position: fixed;
-  z-index: 9999;
+  z-index: 100006;
   width: 1.123em;
   height: auto;
   font-size: 38px;
@@ -929,7 +929,7 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
   width: 100%;
   min-height: 100%;
   position: fixed;
-  z-index: 2000;
+  z-index: 100000;
   top: -9999px;
   bottom: -9999px;
   left: 0;

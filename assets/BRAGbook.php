@@ -1,10 +1,9 @@
 <?php
-//BRAGbook™ 1.4.1.6
+//BRAGbook™ 1.4.1.7
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
 
-date_default_timezone_set('America/New_York');
 	
 //session_start();
 class revGallery{
@@ -959,7 +958,7 @@ $string = strtr( $string, $unwanted_array );
 		
 		$randomName= $this->create_random_name(6);
 		
-		$revCategoryLandingPageImageSetsOutput = "<div id='bragbookSlider".$randomName."'>";
+		$revCategoryLandingPageImageSetsOutput = "<div id='bragbookSlider".$randomName."' class='bragSlider'>";
 		
 				if(isset($categorySetsStart) && $categorySetsStart != "" && isset($this->categoryImageSetLimit) && $this->categoryImageSetLimit != 0 && $this->categoryImageSetLimit != "" ){
 			$categorySetsStart = $this->categoryImageSetLimit*$categorySetsStart;
@@ -1071,32 +1070,7 @@ $string = strtr( $string, $unwanted_array );
 				}
 				
 		
-				$revCategoryLandingPageImageSetsOutput .= "</div><script type='text/javascript'> jQuery('#bragbookSlider".$randomName."').revSlick({
-    dots: true,
-	arrows: true,
-  infinite: true,
-  speed: 300,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        infinite: true,
-        dots: true
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
-  }); </script>";
+				$revCategoryLandingPageImageSetsOutput .= "</div>";
 
 				return $revCategoryLandingPageImageSetsOutput;
 		}

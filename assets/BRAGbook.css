@@ -1298,6 +1298,9 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
 	
 }
 
+.bragSlider{ display: none; }
+.bragSlider.revSlick-initialized { display: block; }
+
 /* //////////// Four Column Display Styles /////////////// */
 #bbmenu h2 {padding-top:0 !important;}
 #bbmenu img{width:100%;}

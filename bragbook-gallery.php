@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.1.6
+Version: 1.4.1.7
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -20,6 +20,19 @@ register_activation_hook(__FILE__,'bragbook_plugin_install');
  
 //SCRIPTS
  
+function bragbook_plugin_styles(){
+
+             
+     wp_register_style('bragbook_plugin_style',plugin_dir_url( __FILE__ ).'assets/BRAGbook.css');
+     wp_enqueue_style('bragbook_plugin_style');
+	
+			
+	
+}
+add_action('wp_enqueue_scripts','bragbook_plugin_styles');
+
+
+
 function bragbook_plugin_scripts(){
    
 	if(get_option( 'revClickToZoomActive',0) == 1){
@@ -46,14 +59,12 @@ function bragbook_plugin_scripts(){
 	wp_localize_script( 'bragbook_plugin_script', 'wp_vars', $wp_vars );
     wp_enqueue_script('bragbook_plugin_script');
 
-             
-     wp_register_style('bragbook_plugin_style',plugin_dir_url( __FILE__ ).'assets/BRAGbook.css');
-     wp_enqueue_style('bragbook_plugin_style');
+           
 	
 			
 	
 }
-add_action('wp_enqueue_scripts','bragbook_plugin_scripts');
+
 
 //add color picker scripts
 function wpse_80236_Colorpicker(){
@@ -99,6 +110,8 @@ function bragbook_plugin_init(){
              if (class_exists('revGallery')) {} else{
 			  include('assets/BRAGbook.php');
 			  }
+	
+
 }
  
  function bragbook_activate() {
@@ -361,8 +374,8 @@ add_action('wp_logout', 'cyb_end_session');
 add_action('wp_login', 'cyb_end_session');
 
 function cyb_start_session() {
-    if( ! session_id() ) {
-        session_start();
+    if( !session_id() ) {
+        session_start(['read_and_close' => true]);
         // now you can use $_SESSION
        // $_SESSION['test'] = "test";
     }
@@ -379,11 +392,15 @@ function cyb_end_session() {
 //shortcodes
 function bragbook_start(){
 	//session_start();
+	
         global $wp_query;
 		global $revTitle;
 		global $revDesc;
 		global $revCustomCSS;
 		global $revGalleryOutput;
+	
+	bragbook_plugin_scripts();
+	
 			 $curURL = explode("/", $_SERVER['REQUEST_URI']);
               if(isset($_REQUEST['page_id'])){
                              $curPageid = $_REQUEST['page_id'];
@@ -612,7 +629,7 @@ $revCustomCSS = get_option( 'revCustomCSS', '');
 
 //ajax calls to get thumbnails, login buttons, etc
 function bragbook_ajax_start(){
-	session_start();
+	//session_start();
 	
 	if (class_exists('revGallery')) {} else{
 			  include('assets/BRAGbook.php');
@@ -1374,7 +1391,7 @@ function printCustomBragbookDescription(){
 }
  
 function bragbook_process_shortcode($atts){
-	
+	bragbook_plugin_scripts();
 	$a = shortcode_atts( array(
         'lang' => 'en',
         'gallery' => '',
@@ -1391,7 +1408,7 @@ function bragbook_process_shortcode($atts){
 }
 
 function bragbook_carousel_shortcode($atts){
-	
+	bragbook_plugin_scripts();
 	$a = shortcode_atts( array(
         'category' => '',
         'limit' => '10',
@@ -1411,7 +1428,7 @@ function bragbook_carousel_shortcode($atts){
 }
 
 function bragbook_category_shortcode($atts){
-	
+	bragbook_plugin_scripts();
 	$a = shortcode_atts( array(
         'category' => '',
         'limit' => '10',
@@ -1427,7 +1444,7 @@ function bragbook_category_shortcode($atts){
 }
 
 function bragbook_set_shortcode($atts){
-	
+	bragbook_plugin_scripts();
 	$a = shortcode_atts( array(
         'caseid' => '',
     ), $atts, 'bragbook_set' );

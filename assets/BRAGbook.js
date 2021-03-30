@@ -1,443 +1,552 @@
 // JavaScript Document
 
-//BRAGbook™ 1.4.1.6
+//BRAGbook™ 1.4.1.7
 //© copyright 2013 Candace Crowe Design
 
 function reloadPage() {
 	location.reload();
-   // var selfUrl = unescape(window.location.pathname);
-//    location.reload(true);
-//
-//    window.location.replace(selfUrl);
-//
-//    window.location.href = selfUrl;
+	// var selfUrl = unescape(window.location.pathname);
+	//    location.reload(true);
+	//
+	//    window.location.replace(selfUrl);
+	//
+	//    window.location.href = selfUrl;
 }
-
-
-
-
 
 
 var revJquery = jQuery.noConflict();
 
-revJquery(document).ready(function(){
-	
-	//change out login buttons
-	bbButtonExchange2();
+revJquery(document).ready(function () {
+
+	// load sliders
+
+
+	//loop to find all instances
+	//var bragSliders = revJquery(document).find('.bragSlider');
+
+	//$.each(bragSliders, function( index, value ) {
+	// alert( index + ": " + value );
+	//});
+
+	revJquery('.bragSlider').each(function(){
+			  var curSlider = "#"+revJquery(this).attr('id');
+			console.log(curSlider);
+			revJquery(curSlider).revSlick({
+				dots: true,
+				arrows: true,
+				infinite: true,
+				speed: 300,
+				slidesToShow: 3,
+				slidesToScroll: 3,
+				responsive: [{
+						breakpoint: 1024,
+						settings: {
+							slidesToShow: 2,
+							slidesToScroll: 2,
+							infinite: true,
+							dots: true
+						}
+					},
+					{
+						breakpoint: 600,
+						settings: {
+							slidesToShow: 1,
+							slidesToScroll: 1
+						}
+					}
+				]
+			});
+
+		});
+
+
+
+//change out login buttons
+bbButtonExchange2();
 
 //Initialize infinite scroll on category landing page
 revJquery('#revCategoryImageSets').jscroll({
 	autoTrigger: true,
-    loadingHtml: '<li>Loading...</li>',
-    padding: 20,
-    nextSelector: 'a.revJscroll-next:last'
+	loadingHtml: '<li>Loading...</li>',
+	padding: 20,
+	nextSelector: 'a.revJscroll-next:last'
 });
 var testResponse;
-	
+
 //create function and listener for messages from iframe       
-testResponse = function(e) {
-  if(e.origin == 'https://www.bragbook.gallery') {
-    //alert(e.data);
-	  statusVar = e.data;
-	if(statusVar.status == "logout"){
-		//alert("logout");
-		var serializedDataExit = {"action": "bragbook_ajax_start", "patientlogout": "TRUE"};
-				var ajax_url = wp_vars.ajax_url;
-				var pathname = ajax_url;
-	
-				requestExit = revJquery.ajax({
-					url: pathname,
-					type: "get",
-					data: serializedDataExit
-				});
-			
-				// callback handler that will be called on success
-				requestExit.done(function (response, textStatus, jqXHR){
-					// log a message to the console
-					//alert("logged out");
-					window.location.reload();
-				});
-		
-		
-	}else if(statusVar.status == "loggedin"){
-		//alert(statusVar.status);
-		//alert(statusVar.patientsig);
-		
-		
-		revJquery(document).off('click', '#revlightcase-overlay');
-		revJquery(document).on('click', '#revlightcase-overlay', function(){bbButtonExchange(statusVar.patientsig,statusVar.patientid,statusVar.username)});	
-		
-		revJquery(document).off('click', '.revlightcase-icon-close');
-		revJquery(document).on('click', '.revlightcase-icon-close', function(){bbButtonExchange(statusVar.patientsig,statusVar.patientid,statusVar.username)});	
-		
-		
-		
-		
+testResponse = function (e) {
+	if (e.origin == 'https://www.bragbook.gallery') {
+		//alert(e.data);
+		statusVar = e.data;
+		if (statusVar.status == "logout") {
+			//alert("logout");
+			var serializedDataExit = {
+				"action": "bragbook_ajax_start",
+				"patientlogout": "TRUE"
+			};
+			var ajax_url = wp_vars.ajax_url;
+			var pathname = ajax_url;
+
+			requestExit = revJquery.ajax({
+				url: pathname,
+				type: "get",
+				data: serializedDataExit
+			});
+
+			// callback handler that will be called on success
+			requestExit.done(function (response, textStatus, jqXHR) {
+				// log a message to the console
+				//alert("logged out");
+				window.location.reload();
+			});
+
+
+		} else if (statusVar.status == "loggedin") {
+			//alert(statusVar.status);
+			//alert(statusVar.patientsig);
+
+
+			revJquery(document).off('click', '#revlightcase-overlay');
+			revJquery(document).on('click', '#revlightcase-overlay', function () {
+				bbButtonExchange(statusVar.patientsig, statusVar.patientid, statusVar.username)
+			});
+
+			revJquery(document).off('click', '.revlightcase-icon-close');
+			revJquery(document).on('click', '.revlightcase-icon-close', function () {
+				bbButtonExchange(statusVar.patientsig, statusVar.patientid, statusVar.username)
+			});
+
+
+		}
 	}
-  }
 }
-window.addEventListener('message', testResponse, false);	
-	
-	
-	 function bbButtonExchange(patientsig,patientid,username){
-		  //alert(patientsig);
-		 var ajax_url = wp_vars.ajax_url;
-		  
-		   		//replace fav buttons
-		   		var serializedData = {"action": "bragbook_ajax_start", "getFavButton": "TRUE", "patientSig": patientsig, "patientid": patientid, "username": username, "revCurURL": window.location.href};
-				//var pathname = window.location;
-		 		var pathname = ajax_url;
-				//alert(serializedData);
-	
-				// fire off the request to /editnotes.php
-				request = revJquery.ajax({
-					url: pathname,
-					type: "get",
-					data: serializedData
-				});
-			
-				// callback handler that will be called on success
-				request.done(function (response, textStatus, jqXHR){
-					// log a message to the console
-					//alert(response);
-					revJquery(".revFavLaunch ").replaceWith(response);
-										
-					revJquery('body').off('click', '.revFavLaunch');
-					revJquery('body').on('click', '.revFavLaunch', function(e){
-				e.preventDefault();
+window.addEventListener('message', testResponse, false);
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
+
+function bbButtonExchange(patientsig, patientid, username) {
+	//alert(patientsig);
+	var ajax_url = wp_vars.ajax_url;
+
+	//replace fav buttons
+	var serializedData = {
+		"action": "bragbook_ajax_start",
+		"getFavButton": "TRUE",
+		"patientSig": patientsig,
+		"patientid": patientid,
+		"username": username,
+		"revCurURL": window.location.href
+	};
+	//var pathname = window.location;
+	var pathname = ajax_url;
+	//alert(serializedData);
+
+	// fire off the request to /editnotes.php
+	request = revJquery.ajax({
+		url: pathname,
+		type: "get",
+		data: serializedData
+	});
+
+	// callback handler that will be called on success
+	request.done(function (response, textStatus, jqXHR) {
+		// log a message to the console
+		//alert(response);
+		revJquery(".revFavLaunch ").replaceWith(response);
+
+		revJquery('body').off('click', '.revFavLaunch');
+		revJquery('body').on('click', '.revFavLaunch', function (e) {
+			e.preventDefault();
+
+			revlightcase.start({
+				href: revJquery(this).attr('href'),
+				shrinkFactor: 0.9,
+				maxWidth: '100%',
+				maxHeight: '100%',
+				iframe: {
+					width: '100%',
+					height: '100%'
+				},
+				onCleanup: {
+					quux: function () {
+						revJquery('#revlightcase-case').remove();
+						revJquery('#revlightcase-overlay').remove();
+						revJquery('#revlightcase-loading').remove();
+						revJquery('#revlightcase-nav').remove();
+					}
 				}
-				});
 			});
-					
-										
-				});
-				
-			
-			//replace login buttons
-		   		var serializedData = {"action": "bragbook_ajax_start","getLoginText": "TRUE", "patientSig": patientsig, "patientid": patientid, "username": username, "revCurURL": window.location.href};
-		  var ajax_url = wp_vars.ajax_url;
-				//var pathname = window.location.pathname;
-		 		var pathname = ajax_url;
-				//alert(serializedData);
-	
-				// fire off the request to /editnotes.php
-				request = revJquery.ajax({
-					url: pathname,
-					type: "get",
-					data: serializedData
-				});
-			
-				// callback handler that will be called on success
-				request.done(function (response, textStatus, jqXHR){
-					// log a message to the console
-					//alert(response);
-					revJquery("#myFavsHeader ").replaceWith(response);
-										
-					revJquery('body').on('click', '.revLoginLaunch', function(e){
-				e.preventDefault();
+		});
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
+
+	});
+
+
+	//replace login buttons
+	var serializedData = {
+		"action": "bragbook_ajax_start",
+		"getLoginText": "TRUE",
+		"patientSig": patientsig,
+		"patientid": patientid,
+		"username": username,
+		"revCurURL": window.location.href
+	};
+	var ajax_url = wp_vars.ajax_url;
+	//var pathname = window.location.pathname;
+	var pathname = ajax_url;
+	//alert(serializedData);
+
+	// fire off the request to /editnotes.php
+	request = revJquery.ajax({
+		url: pathname,
+		type: "get",
+		data: serializedData
+	});
+
+	// callback handler that will be called on success
+	request.done(function (response, textStatus, jqXHR) {
+		// log a message to the console
+		//alert(response);
+		revJquery("#myFavsHeader ").replaceWith(response);
+
+		revJquery('body').on('click', '.revLoginLaunch', function (e) {
+			e.preventDefault();
+
+			revlightcase.start({
+				href: revJquery(this).attr('href'),
+				shrinkFactor: 0.9,
+				maxWidth: '100%',
+				maxHeight: '100%',
+				iframe: {
+					width: '100%',
+					height: '100%'
+				},
+				onCleanup: {
+					quux: function () {
+						revJquery('#revlightcase-case').remove();
+						revJquery('#revlightcase-overlay').remove();
+						revJquery('#revlightcase-loading').remove();
+						revJquery('#revlightcase-nav').remove();
+					}
 				}
-				});
 			});
-					
-										
-				});
-				
-				
-						
-		   
-		};
-	
-	revJquery('body').on('click', '.revLoginLaunch', function(e){
-				e.preventDefault();
+		});
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
+
+	});
+
+
+};
+
+revJquery('body').on('click', '.revLoginLaunch', function (e) {
+	e.preventDefault();
+
+	revlightcase.start({
+		href: revJquery(this).attr('href'),
+		shrinkFactor: 0.9,
+		maxWidth: '100%',
+		maxHeight: '100%',
+		iframe: {
+			width: '100%',
+			height: '100%'
+		},
+		onCleanup: {
+			quux: function () {
+				revJquery('#revlightcase-case').remove();
+				revJquery('#revlightcase-overlay').remove();
+				revJquery('#revlightcase-loading').remove();
+				revJquery('#revlightcase-nav').remove();
 			}
+		},
+		onClose: {
+
+		}
+	});
+}); revJquery('body').off('click', '.revFavLaunch'); revJquery('body').on('click', '.revFavLaunch', function (e) {
+	e.preventDefault();
+
+	revlightcase.start({
+		href: revJquery(this).attr('href'),
+		shrinkFactor: 0.9,
+		maxWidth: '100%',
+		maxHeight: '100%',
+		iframe: {
+			width: '100%',
+			height: '100%'
+		},
+		onCleanup: {
+			quux: function () {
+				revJquery('#revlightcase-case').remove();
+				revJquery('#revlightcase-overlay').remove();
+				revJquery('#revlightcase-loading').remove();
+				revJquery('#revlightcase-nav').remove();
+			}
+		},
+		onClose: {
+
+		}
+	});
+});
+
+//function to exchange buttons after page load
+function bbButtonExchange2() {
+	// alert('x2');
+	var ajax_url = wp_vars.ajax_url;
+
+	//replace fav buttons
+	var serializedData = {
+		"action": "bragbook_ajax_start",
+		"getFavButton": "TRUE",
+		"patientSig": "",
+		"patientid": "",
+		"username": "",
+		"revCurURL": window.location.href
+	};
+	//var pathname = window.location;
+	var pathname = ajax_url;
+	//alert(serializedData);
+
+	// fire off the request to /editnotes.php
+	request = revJquery.ajax({
+		url: pathname,
+		type: "get",
+		data: serializedData
+	});
+
+	// callback handler that will be called on success
+	request.done(function (response, textStatus, jqXHR) {
+		// log a message to the console
+		//alert(response);
+		revJquery(".revFavLaunch ").replaceWith(response);
+
+		revJquery('body').off('click', '.revFavLaunch');
+		revJquery('body').on('click', '.revFavLaunch', function (e) {
+			e.preventDefault();
+
+			revlightcase.start({
+				href: revJquery(this).attr('href'),
+				shrinkFactor: 0.9,
+				maxWidth: '100%',
+				maxHeight: '100%',
+				iframe: {
+					width: '100%',
+					height: '100%'
 				},
-							 onClose : {
-								 
-							 }
-				});
-			});
-	revJquery('body').off('click', '.revFavLaunch');
-	revJquery('body').on('click', '.revFavLaunch', function(e){
-				e.preventDefault();
-
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
-				},
-							 onClose : {
-								 
-							 }
-				});
-			});
-	
-	//function to exchange buttons after page load
-	function bbButtonExchange2(){
-		 // alert('x2');
-		 var ajax_url = wp_vars.ajax_url;
-		  
-		   		//replace fav buttons
-		   		var serializedData = {"action": "bragbook_ajax_start", "getFavButton": "TRUE", "patientSig": "", "patientid": "", "username": "", "revCurURL": window.location.href};
-				//var pathname = window.location;
-		 		var pathname = ajax_url;
-				//alert(serializedData);
-	
-				// fire off the request to /editnotes.php
-				request = revJquery.ajax({
-					url: pathname,
-					type: "get",
-					data: serializedData
-				});
-			
-				// callback handler that will be called on success
-				request.done(function (response, textStatus, jqXHR){
-					// log a message to the console
-					//alert(response);
-					revJquery(".revFavLaunch ").replaceWith(response);
-										
-					revJquery('body').off('click', '.revFavLaunch');
-					revJquery('body').on('click', '.revFavLaunch', function(e){
-				e.preventDefault();
-
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
+				onCleanup: {
+					quux: function () {
+						revJquery('#revlightcase-case').remove();
+						revJquery('#revlightcase-overlay').remove();
+						revJquery('#revlightcase-loading').remove();
+						revJquery('#revlightcase-nav').remove();
+					}
 				}
-				});
 			});
-					
-										
-				});
-				
-			
-			//replace login buttons
-		   		var serializedData = {"action": "bragbook_ajax_start","getLoginText": "TRUE", "patientSig": "", "patientid": "", "username": "", "revCurURL": window.location.href};
-		  var ajax_url = wp_vars.ajax_url;
-				//var pathname = window.location.pathname;
-		 		var pathname = ajax_url;
-				//alert(serializedData);
-	
-				// fire off the request to /editnotes.php
-				request = revJquery.ajax({
-					url: pathname,
-					type: "get",
-					data: serializedData
-				});
-			
-				// callback handler that will be called on success
-				request.done(function (response, textStatus, jqXHR){
-					// log a message to the console
-					//alert(response);
-					revJquery("#myFavsHeader ").replaceWith(response);
-										
-					revJquery('body').on('click', '.revLoginLaunch', function(e){
-				e.preventDefault();
+		});
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
+
+	});
+
+
+	//replace login buttons
+	var serializedData = {
+		"action": "bragbook_ajax_start",
+		"getLoginText": "TRUE",
+		"patientSig": "",
+		"patientid": "",
+		"username": "",
+		"revCurURL": window.location.href
+	};
+	var ajax_url = wp_vars.ajax_url;
+	//var pathname = window.location.pathname;
+	var pathname = ajax_url;
+	//alert(serializedData);
+
+	// fire off the request to /editnotes.php
+	request = revJquery.ajax({
+		url: pathname,
+		type: "get",
+		data: serializedData
+	});
+
+	// callback handler that will be called on success
+	request.done(function (response, textStatus, jqXHR) {
+		// log a message to the console
+		//alert(response);
+		revJquery("#myFavsHeader ").replaceWith(response);
+
+		revJquery('body').on('click', '.revLoginLaunch', function (e) {
+			e.preventDefault();
+
+			revlightcase.start({
+				href: revJquery(this).attr('href'),
+				shrinkFactor: 0.9,
+				maxWidth: '100%',
+				maxHeight: '100%',
+				iframe: {
+					width: '100%',
+					height: '100%'
+				},
+				onCleanup: {
+					quux: function () {
+						revJquery('#revlightcase-case').remove();
+						revJquery('#revlightcase-overlay').remove();
+						revJquery('#revlightcase-loading').remove();
+						revJquery('#revlightcase-nav').remove();
+					}
 				}
-				});
 			});
-					
-										
-				});
-				
-				
-						
-		   
-		};
-	
-	revJquery('body').on('click', '.revLoginLaunch', function(e){
-				e.preventDefault();
+		});
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
-				},
-							 onClose : {
-								 
-							 }
-				});
-			});
-	revJquery('body').off('click', '.revFavLaunch');
-	revJquery('body').on('click', '.revFavLaunch', function(e){
-				e.preventDefault();
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', iframe : {
-        width : '100%',
-        height : '100%'
-    }, onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
-			}
-				},
-							 onClose : {
-								 
-							 }
-				});
-			});
-	
-	
-	revJquery('body').on('click', '.revThumbLaunch', function(e){
-				e.preventDefault();
-		
+	});
 
-			revlightcase.start({href: revJquery(this).attr('href'),shrinkFactor : 0.9, maxWidth: '100%', maxHeight: '100%', inline : {
-        width : '100%',
-        height : '100%'
-    }, 
-								onCleanup : {
-		quux: function() {
-			revJquery('#revlightcase-case').remove();
-			revJquery('#revlightcase-overlay').remove();
-			revJquery('#revlightcase-loading').remove();
-			revJquery('#revlightcase-nav').remove();
+
+};
+
+revJquery('body').on('click', '.revLoginLaunch', function (e) {
+	e.preventDefault();
+
+	revlightcase.start({
+		href: revJquery(this).attr('href'),
+		shrinkFactor: 0.9,
+		maxWidth: '100%',
+		maxHeight: '100%',
+		iframe: {
+			width: '100%',
+			height: '100%'
+		},
+		onCleanup: {
+			quux: function () {
+				revJquery('#revlightcase-case').remove();
+				revJquery('#revlightcase-overlay').remove();
+				revJquery('#revlightcase-loading').remove();
+				revJquery('#revlightcase-nav').remove();
 			}
-				},
-							 onClose : {
-								 
-							 }
-				});
-			});
-	
-	
-	
-			
-			
+		},
+		onClose: {
+
+		}
+	});
+}); revJquery('body').off('click', '.revFavLaunch'); revJquery('body').on('click', '.revFavLaunch', function (e) {
+	e.preventDefault();
+
+	revlightcase.start({
+		href: revJquery(this).attr('href'),
+		shrinkFactor: 0.9,
+		maxWidth: '100%',
+		maxHeight: '100%',
+		iframe: {
+			width: '100%',
+			height: '100%'
+		},
+		onCleanup: {
+			quux: function () {
+				revJquery('#revlightcase-case').remove();
+				revJquery('#revlightcase-overlay').remove();
+				revJquery('#revlightcase-loading').remove();
+				revJquery('#revlightcase-nav').remove();
+			}
+		},
+		onClose: {
+
+		}
+	});
+});
+
+
+revJquery('body').on('click', '.revThumbLaunch', function (e) {
+	e.preventDefault();
+
+
+	revlightcase.start({
+		href: revJquery(this).attr('href'),
+		shrinkFactor: 0.9,
+		maxWidth: '100%',
+		maxHeight: '100%',
+		inline: {
+			width: '100%',
+			height: '100%'
+		},
+		onCleanup: {
+			quux: function () {
+				revJquery('#revlightcase-case').remove();
+				revJquery('#revlightcase-overlay').remove();
+				revJquery('#revlightcase-loading').remove();
+				revJquery('#revlightcase-nav').remove();
+			}
+		},
+		onClose: {
+
+		}
+	});
+});
+
+
 // bind to the click event for thumbnail navigation
-revJquery( "body" ).on( "click", ".thumbNavLink" ,  function(event) {
-	 // prevent default posting of form
-    event.preventDefault();
+revJquery("body").on("click", ".thumbNavLink", function (event) {
+	// prevent default posting of form
+	event.preventDefault();
 	var request;
-    if (request) {
-        request.abort();
-    }
-	
+	if (request) {
+		request.abort();
+	}
+
 	//var splitVal = revJquery(this).attr('alt');
 
 	//var mySplitResult = splitVal.split("|");
 	var revCatname = revJquery(this).data('revcatname');
 	var thumbStart = revJquery(this).data('thumbstart');
 	var revURL = window.location.href;
-	 var ajax_url = wp_vars.ajax_url;
-    
-   var serializedData = "revCatname="+revCatname+"&getThumbnails=1&action=bragbook_ajax_start&thumbStart="+thumbStart+"&revCurURL="+revURL;
-	
-    // fire off the request to /editnotes.php
-    request = revJquery.ajax({
-        url: ajax_url,
-        type: "get",
-        data: serializedData
-    });
+	var ajax_url = wp_vars.ajax_url;
 
-    // callback handler that will be called on success
-    request.done(function (response, textStatus, jqXHR){
-        // log a message to the console
-        revJquery("#revThumbnailConDiv").html(response); 
-    });
+	var serializedData = "revCatname=" + revCatname + "&getThumbnails=1&action=bragbook_ajax_start&thumbStart=" + thumbStart + "&revCurURL=" + revURL;
 
-    // callback handler that will be called on failure
-    request.fail(function (jqXHR, textStatus, errorThrown){
-        // log the error to the console
-        console.error(
-            "The following error occured: "+
-            textStatus, errorThrown
-        );
-    });
+	// fire off the request to /editnotes.php
+	request = revJquery.ajax({
+		url: ajax_url,
+		type: "get",
+		data: serializedData
+	});
 
-    // callback handler that will be called regardless
-    // if the request failed or succeeded
-    request.always(function () {
-        // reenable the inputs
-    });
+	// callback handler that will be called on success
+	request.done(function (response, textStatus, jqXHR) {
+		// log a message to the console
+		revJquery("#revThumbnailConDiv").html(response);
+	});
 
-   
+	// callback handler that will be called on failure
+	request.fail(function (jqXHR, textStatus, errorThrown) {
+		// log the error to the console
+		console.error(
+			"The following error occured: "
+			+ textStatus, errorThrown
+		);
+	});
+
+	// callback handler that will be called regardless
+	// if the request failed or succeeded
+	request.always(function () {
+		// reenable the inputs
+	});
+
 
 });
 
 
-
-
-			
 });
 
 
 //Jump Menu Functions
-function revenez_jump_menu_procedure(){
+function revenez_jump_menu_procedure() {
 	var baseURL = revJquery('#revCatname').children('option:selected').data('baseurl');
 	var sectionvar = revJquery('#revCatname').children('option:selected').data('sectionvar');
-	window.location = baseURL+sectionvar+"/";
-	}
-function revenez_jump_menu_procedure_norewrite(){
-	var baseURL = revJquery('#revCatname').children('option:selected').data('baseurl');
-	var sectionvar = revJquery('#revCatname').children('option:selected').data('sectionvar');
-	window.location = baseURL + "?revCatname="+sectionvar;
-	}
-	
+	window.location = baseURL + sectionvar + "/";
+}
 
+function revenez_jump_menu_procedure_norewrite() {
+	var baseURL = revJquery('#revCatname').children('option:selected').data('baseurl');
+	var sectionvar = revJquery('#revCatname').children('option:selected').data('sectionvar');
+	window.location = baseURL + "?revCatname=" + sectionvar;
+}
 
 
 /*
@@ -450,7 +559,8 @@ function revenez_jump_menu_procedure_norewrite(){
  * @version		2.3.6 (20/12/2016)
  */
 
-;(function ($) {
+;
+(function ($) {
 
 	'use strict';
 
@@ -486,131 +596,131 @@ function revenez_jump_menu_procedure_norewrite(){
 			_self.origin = revlightcase.origin = this;
 
 			_self.settings = revlightcase.settings = $.extend(true, {
-				idPrefix: 'revlightcase-',
-				classPrefix: 'revlightcase-',
-				attrPrefix: 'revlc-',
-				transition: 'elastic',
-				transitionIn: null,
-				transitionOut: null,
-				cssTransitions: true,
-				speedIn: 250,
-				speedOut: 250,
-				maxWidth: 800,
-				maxHeight: 500,
-				forceWidth: false,
-				forceHeight: false,
-				liveResize: true,
-				fullScreenModeForMobile: true,
-				mobileMatchExpression: /(iphone|ipod|ipad|android|blackberry|symbian)/,
-				disableShrink: false,
-				shrinkFactor: .75,
-				overlayOpacity: .9,
-				slideshow: false,
-				slideshowAutoStart: true,
-				timeout: 5000,
-				swipe: true,
-				useKeys: true,
-				useCategories: true,
-				navigateEndless: true,
-				closeOnOverlayClick: true,
-				title: null,
-				caption: null,
-				showTitle: true,
-				showCaption: true,
-				showSequenceInfo: true,
-				inline: {
-					width: 'auto',
-					height: 'auto'
+					idPrefix: 'revlightcase-',
+					classPrefix: 'revlightcase-',
+					attrPrefix: 'revlc-',
+					transition: 'elastic',
+					transitionIn: null,
+					transitionOut: null,
+					cssTransitions: true,
+					speedIn: 250,
+					speedOut: 250,
+					maxWidth: 800,
+					maxHeight: 500,
+					forceWidth: false,
+					forceHeight: false,
+					liveResize: true,
+					fullScreenModeForMobile: true,
+					mobileMatchExpression: /(iphone|ipod|ipad|android|blackberry|symbian)/,
+					disableShrink: false,
+					shrinkFactor: .75,
+					overlayOpacity: .9,
+					slideshow: false,
+					slideshowAutoStart: true,
+					timeout: 5000,
+					swipe: true,
+					useKeys: true,
+					useCategories: true,
+					navigateEndless: true,
+					closeOnOverlayClick: true,
+					title: null,
+					caption: null,
+					showTitle: true,
+					showCaption: true,
+					showSequenceInfo: true,
+					inline: {
+						width: 'auto',
+						height: 'auto'
+					},
+					ajax: {
+						width: 'auto',
+						height: 'auto',
+						type: 'get',
+						dataType: 'html',
+						data: {}
+					},
+					iframe: {
+						width: 800,
+						height: 500,
+						frameborder: 0,
+						allowtransparency: true
+					},
+					flash: {
+						width: 400,
+						height: 205,
+						wmode: 'transparent'
+					},
+					video: {
+						width: 400,
+						height: 225,
+						poster: '',
+						preload: 'auto',
+						controls: true,
+						autobuffer: true,
+						autoplay: true,
+						loop: false
+					},
+					attr: 'data-rel',
+					href: null,
+					type: null,
+					typeMapping: {
+						'image': 'jpg,jpeg,gif,png,bmp',
+						'flash': 'swf',
+						'video': 'mp4,mov,ogv,ogg,webm',
+						'iframe': 'html,php',
+						'ajax': 'json,txt',
+						'inline': '#'
+					},
+					errorMessage: function () {
+						return '<p class="' + _self.settings.classPrefix + 'error">' + _self.settings.labels['errorMessage'] + '</p>';
+					},
+					labels: {
+						'errorMessage': 'Source could not be found...',
+						'sequenceInfo.of': ' of ',
+						'close': 'Close',
+						'navigator.prev': 'Prev',
+						'navigator.next': 'Next',
+						'navigator.play': 'Play',
+						'navigator.pause': 'Pause'
+					},
+					markup: function () {
+						$('body').append(
+							_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
+							_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
+							_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
+						);
+						_self.objects.case.after(
+							_self.objects.nav = $('<div id="' + _self.settings.idPrefix + 'nav"></div>')
+						);
+						_self.objects.nav.append(
+							_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.settings.labels['close'] + '</span></a>'),
+							_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.settings.labels['navigator.prev'] + '</span></a>').hide(),
+							_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.settings.labels['navigator.next'] + '</span></a>').hide(),
+							_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.settings.labels['navigator.play'] + '</span></a>').hide(),
+							_self.objects.pause = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-pause"><span>' + _self.settings.labels['navigator.pause'] + '</span></a>').hide()
+						);
+						_self.objects.case.append(
+							_self.objects.content = $('<div id="' + _self.settings.idPrefix + 'content"></div>'),
+							_self.objects.info = $('<div id="' + _self.settings.idPrefix + 'info"></div>')
+						);
+						_self.objects.content.append(
+							_self.objects.contentInner = $('<div class="' + _self.settings.classPrefix + 'contentInner"></div>')
+						);
+						_self.objects.info.append(
+							_self.objects.sequenceInfo = $('<div id="' + _self.settings.idPrefix + 'sequenceInfo"></div>'),
+							_self.objects.title = $('<h4 id="' + _self.settings.idPrefix + 'title"></h4>'),
+							_self.objects.caption = $('<p id="' + _self.settings.idPrefix + 'caption"></p>')
+						);
+					},
+					onInit: {},
+					onStart: {},
+					onFinish: {},
+					onClose: {},
+					onCleanup: {}
 				},
-				ajax: {
-					width: 'auto',
-					height: 'auto',
-					type: 'get',
-					dataType: 'html',
-					data: {}
-				},
-				iframe: {
-					width: 800,
-					height: 500,
-					frameborder: 0,
-					allowtransparency: true
-				},
-				flash: {
-					width: 400,
-					height: 205,
-					wmode: 'transparent'
-				},
-				video: {
-					width: 400,
-					height: 225,
-					poster: '',
-					preload: 'auto',
-					controls: true,
-					autobuffer: true,
-					autoplay: true,
-					loop: false
-				},
-				attr: 'data-rel',
-				href: null,
-				type: null,
-				typeMapping: {
-					'image': 'jpg,jpeg,gif,png,bmp',
-					'flash': 'swf',
-					'video': 'mp4,mov,ogv,ogg,webm',
-					'iframe': 'html,php',
-					'ajax': 'json,txt',
-					'inline': '#'
-				},
-				errorMessage: function () {
-					return '<p class="' + _self.settings.classPrefix + 'error">' + _self.settings.labels['errorMessage'] + '</p>';
-				},
-				labels: {
-					'errorMessage': 'Source could not be found...',
-					'sequenceInfo.of': ' of ',
-					'close': 'Close',
-					'navigator.prev': 'Prev',
-					'navigator.next': 'Next',
- 					'navigator.play': 'Play',
-					'navigator.pause': 'Pause'
-				},
-				markup: function () {
-					$('body').append(
-						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
-						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
-						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
-					);
-					_self.objects.case.after(
-						_self.objects.nav = $('<div id="' + _self.settings.idPrefix + 'nav"></div>')
-					);
-					_self.objects.nav.append(
-						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.settings.labels['close'] + '</span></a>'),
-						_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.settings.labels['navigator.prev'] + '</span></a>').hide(),
-						_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.settings.labels['navigator.next'] + '</span></a>').hide(),
-						_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.settings.labels['navigator.play'] + '</span></a>').hide(),
-						_self.objects.pause = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-pause"><span>' + _self.settings.labels['navigator.pause'] + '</span></a>').hide()
-					);
-					_self.objects.case.append(
-						_self.objects.content = $('<div id="' + _self.settings.idPrefix + 'content"></div>'),
-						_self.objects.info = $('<div id="' + _self.settings.idPrefix + 'info"></div>')
-					);
-					_self.objects.content.append(
-						_self.objects.contentInner = $('<div class="' + _self.settings.classPrefix + 'contentInner"></div>')
-					);
-					_self.objects.info.append(
-						_self.objects.sequenceInfo = $('<div id="' + _self.settings.idPrefix + 'sequenceInfo"></div>'),
-						_self.objects.title = $('<h4 id="' + _self.settings.idPrefix + 'title"></h4>'),
-						_self.objects.caption = $('<p id="' + _self.settings.idPrefix + 'caption"></p>')
-					);
-				},
-				onInit: {},
-				onStart: {},
-				onFinish: {},
-				onClose: {},
-				onCleanup: {}
-			}, 
-			options,
-			// Load options from data-lc-options attribute
-			_self.origin.data ? _self.origin.data('lc-options') : {});
+				options,
+				// Load options from data-lc-options attribute
+				_self.origin.data ? _self.origin.data('lc-options') : {});
 
 			// Call onInit hook functions
 			_self._callHooks(_self.settings.onInit);
@@ -652,21 +762,21 @@ function revenez_jump_menu_procedure_norewrite(){
 		 * @return	{object}	objectData
 		 */
 		_setObjectData: function (object) {
-		 	var $object = $(object),
+			var $object = $(object),
 				objectData = {
-				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
-				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
-				url: _self._determineUrl(),
-				requestType: _self.settings.ajax.type,
-				requestData: _self.settings.ajax.data,
-				requestDataType: _self.settings.ajax.dataType,
-				rel: $object.attr(_self._determineAttributeSelector()),
-				type: _self.settings.type || _self._verifyDataType(_self._determineUrl()),
-				isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
-				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
-				currentIndex: $(_self._determineAttributeSelector()).index($object),
-				sequenceLength: $(_self._determineAttributeSelector()).length
-			};
+					title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
+					caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
+					url: _self._determineUrl(),
+					requestType: _self.settings.ajax.type,
+					requestData: _self.settings.ajax.data,
+					requestDataType: _self.settings.ajax.dataType,
+					rel: $object.attr(_self._determineAttributeSelector()),
+					type: _self.settings.type || _self._verifyDataType(_self._determineUrl()),
+					isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
+					isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
+					currentIndex: $(_self._determineAttributeSelector()).index($object),
+					sequenceLength: $(_self._determineAttributeSelector()).length
+				};
 
 			// Add sequence info to objectData
 			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.settings.labels['sequenceInfo.of'] + objectData.sequenceLength;
@@ -706,13 +816,13 @@ function revenez_jump_menu_procedure_norewrite(){
 		 * @return	{string}	selector
 		 */
 		_determineAttributeSelector: function () {
-			var	$origin = $(_self.origin),
+			var $origin = $(_self.origin),
 				selector = '';
 
 			if (typeof _self.cache.selector !== 'undefined') {
 				selector = _self.cache.selector;
 			} else if (_self.settings.useCategories === true && $origin.attr(_self._prefixAttributeName('categories'))) {
-				var	categories = $origin.attr(_self._prefixAttributeName('categories')).split(' ');
+				var categories = $origin.attr(_self._prefixAttributeName('categories')).split(' ');
 
 				$.each(categories, function (index, category) {
 					if (index > 0) {
@@ -744,11 +854,12 @@ function revenez_jump_menu_procedure_norewrite(){
 			$.each(dataUrl, function (index, src) {
 				if (
 					// Check density
-					_self._devicePixelRatio() >= src.density &&
-					src.density >= density &&
+					_self._devicePixelRatio() >= src.density
+					&& src.density >= density
+					&&
 					// Check viewport width
-					_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
-					src.width >= width
+					_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches
+					&& src.width >= width
 				) {
 					width = src.width;
 					density = src.density;
@@ -887,7 +998,7 @@ function revenez_jump_menu_procedure_norewrite(){
 						$object.attr(name, value);
 					});
 					break;
-				default :
+				default:
 					$object = $('<iframe></iframe>');
 					$object.attr({
 						'src': _self.objectData.url
@@ -988,7 +1099,7 @@ function revenez_jump_menu_procedure_norewrite(){
 					_self._showContent($object);
 					break;
 				case 'video':
-					if (typeof($object.get(0).canPlayType) === 'function' || _self.objects.case.find('video').length === 0) {
+					if (typeof ($object.get(0).canPlayType) === 'function' || _self.objects.case.find('video').length === 0) {
 						_self._showContent($object);
 					} else {
 						_self.error();
@@ -1092,13 +1203,13 @@ function revenez_jump_menu_procedure_norewrite(){
 			if (_self.settings.forceWidth) {
 				dimensions.maxWidth = dimensions.objectWidth;
 			} else if ($object.attr(_self._prefixAttributeName('max-width'))) {
-				dimensions.maxWidth =  $object.attr(_self._prefixAttributeName('max-width'));
+				dimensions.maxWidth = $object.attr(_self._prefixAttributeName('max-width'));
 			}
 
 			if (_self.settings.forceHeight) {
 				dimensions.maxHeight = dimensions.objectHeight;
 			} else if ($object.attr(_self._prefixAttributeName('max-height'))) {
-				dimensions.maxHeight =  $object.attr(_self._prefixAttributeName('max-height'));
+				dimensions.maxHeight = $object.attr(_self._prefixAttributeName('max-height'));
 			}
 
 			_self._adjustDimensions($object, dimensions);
@@ -1352,8 +1463,8 @@ function revenez_jump_menu_procedure_norewrite(){
 			if (_self.isSlideshowEnabled()) {
 				// Only start the timeout if slideshow autostart is enabled and slideshow is not pausing
 				if (
-					(_self.settings.slideshowAutoStart === true || _self.isSlideshowStarted) &&
-					!_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')
+					(_self.settings.slideshowAutoStart === true || _self.isSlideshowStarted)
+					&& !_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')
 				) {
 					_self._startTimeout();
 				} else {
@@ -1466,13 +1577,13 @@ function revenez_jump_menu_procedure_norewrite(){
 					case 27:
 						_self.objects.close.click();
 						break;
-					// Backward key
+						// Backward key
 					case 37:
 						if (_self.objectData.isPartOfSequence) {
 							_self.objects.prev.click();
 						}
 						break;
-					// Forward key
+						// Forward key
 					case 39:
 						if (_self.objectData.isPartOfSequence) {
 							_self.objects.next.click();
@@ -1651,7 +1762,7 @@ function revenez_jump_menu_procedure_norewrite(){
 					startTransition = {},
 					startOpacity = $object.css('opacity'),
 					endTransition = {},
-					endOpacity = opacity ? opacity: isInTransition ? 1 : 0;
+					endOpacity = opacity ? opacity : isInTransition ? 1 : 0;
 
 				if (!_self.isOpen && isInTransition) return;
 
@@ -1831,9 +1942,9 @@ function revenez_jump_menu_procedure_norewrite(){
 		 * @return	{void}
 		 */
 		_callHooks: function (hooks) {
-			if (typeof(hooks) === 'object') {
-				$.each(hooks, function(index, hook) {
-					if (typeof(hook) === 'function') {
+			if (typeof (hooks) === 'object') {
+				$.each(hooks, function (index, hook) {
+					if (typeof (hook) === 'function') {
 						hook.call(_self.origin);
 					}
 				});
@@ -1890,23 +2001,21 @@ function revenez_jump_menu_procedure_norewrite(){
 		 * @return	{void}
 		 */
 		_cacheScrollPosition: function () {
-			var	$window = $(window),
+			var $window = $(window),
 				$document = $(document),
 				offset = {
 					'top': $window.scrollTop(),
-					'left':  $window.scrollLeft()
+					'left': $window.scrollLeft()
 				};
 
 			_self.cache.scrollPosition = _self.cache.scrollPosition || {};
 
 			if (!_self._assertContentInvisible()) {
 				_self.cache.cacheScrollPositionSkipped = true;
-			}
-			else if (_self.cache.cacheScrollPositionSkipped) {
+			} else if (_self.cache.cacheScrollPositionSkipped) {
 				delete _self.cache.cacheScrollPositionSkipped;
 				_self._restoreScrollPosition();
-			}
-			else {
+			} else {
 				if ($document.width() > $window.width()) {
 					_self.cache.scrollPosition.left = offset.left;
 				}
@@ -2261,200 +2370,208 @@ function revenez_jump_menu_procedure_norewrite(){
  * @author Philip Klauzinski
  * @requires jQuery v1.4.3+
  */
-(function($) {
+(function ($) {
 
-    // Define the jscroll namespace and default settings
-    $.jscroll = {
-        defaults: {
-            debug: false,
-            autoTrigger: true,
-            autoTriggerUntil: false,
-            loadingHtml: '<small>Loading...</small>',
-            padding: 0,
-            nextSelector: 'a:last',
-            contentSelector: '',
-            pagingSelector: '',
-            callback: false
-        }
-    };
+	// Define the jscroll namespace and default settings
+	$.jscroll = {
+		defaults: {
+			debug: false,
+			autoTrigger: true,
+			autoTriggerUntil: false,
+			loadingHtml: '<small>Loading...</small>',
+			padding: 0,
+			nextSelector: 'a:last',
+			contentSelector: '',
+			pagingSelector: '',
+			callback: false
+		}
+	};
 
-    // Constructor
-    var jScroll = function($e, options) {
+	// Constructor
+	var jScroll = function ($e, options) {
 
-        // Private vars
-        var _data = $e.data('jscroll'),
-            _userOptions = (typeof options === 'function') ? { callback: options } : options,
-            _options = $.extend({}, $.jscroll.defaults, _userOptions, _data || {}),
-            _isWindow = ($e.css('overflow-y') === 'visible'),
-            _$next = $e.find(_options.nextSelector).first(),
-            _$window = $(window),
-            _$body = $('body'),
-            _$scroll = _isWindow ? _$window : $e,
-            _nextHref = $.trim(_$next.attr('href') + ' ' + _options.contentSelector);
+		// Private vars
+		var _data = $e.data('jscroll'),
+			_userOptions = (typeof options === 'function') ? {
+				callback: options
+			} : options,
+			_options = $.extend({}, $.jscroll.defaults, _userOptions, _data || {}),
+			_isWindow = ($e.css('overflow-y') === 'visible'),
+			_$next = $e.find(_options.nextSelector).first(),
+			_$window = $(window),
+			_$body = $('body'),
+			_$scroll = _isWindow ? _$window : $e,
+			_nextHref = $.trim(_$next.attr('href') + ' ' + _options.contentSelector);
 
-        // Initialization
-        $e.data('jscroll', $.extend({}, _data, {initialized: true, waiting: false, nextHref: _nextHref}));
-        _wrapInnerContent();
-        _preloadImage();
-        _setBindings();
+		// Initialization
+		$e.data('jscroll', $.extend({}, _data, {
+			initialized: true,
+			waiting: false,
+			nextHref: _nextHref
+		}));
+		_wrapInnerContent();
+		_preloadImage();
+		_setBindings();
 
-        // Private methods
+		// Private methods
 
-        // Check if a loading image is defined and preload
-        function _preloadImage() {
-            var src = $(_options.loadingHtml).filter('img').attr('src');
-            if (src) {
-                var image = new Image();
-                image.src = src;
-            }
-        }
+		// Check if a loading image is defined and preload
+		function _preloadImage() {
+			var src = $(_options.loadingHtml).filter('img').attr('src');
+			if (src) {
+				var image = new Image();
+				image.src = src;
+			}
+		}
 
-        // Wrapper inner content, if it isn't already
-        function _wrapInnerContent() {
-            if (!$e.find('.jscroll-inner').length) {
-                $e.contents().wrapAll('<div class="jscroll-inner" />');
-            }
-        }
+		// Wrapper inner content, if it isn't already
+		function _wrapInnerContent() {
+			if (!$e.find('.jscroll-inner').length) {
+				$e.contents().wrapAll('<div class="jscroll-inner" />');
+			}
+		}
 
-        // Find the next link's parent, or add one, and hide it
-        function _nextWrap($next) {
-            if (_options.pagingSelector) {
-                var $parent = $next.closest(_options.pagingSelector).hide();
-            } else {
-                var $parent = $next.parent().not('.jscroll-inner,.jscroll-added').addClass('jscroll-next-parent').hide();
-                if (!$parent.length) {
-                    $next.wrap('<div class="jscroll-next-parent" />').parent().hide();
-                }
-            }
-        }
+		// Find the next link's parent, or add one, and hide it
+		function _nextWrap($next) {
+			if (_options.pagingSelector) {
+				var $parent = $next.closest(_options.pagingSelector).hide();
+			} else {
+				var $parent = $next.parent().not('.jscroll-inner,.jscroll-added').addClass('jscroll-next-parent').hide();
+				if (!$parent.length) {
+					$next.wrap('<div class="jscroll-next-parent" />').parent().hide();
+				}
+			}
+		}
 
-        // Remove the jscroll behavior and data from an element
-        function _destroy() {
-            return _$scroll.unbind('.jscroll')
-                .removeData('jscroll')
-                .find('.jscroll-inner').children().unwrap()
-                .filter('.jscroll-added').children().unwrap();
-        }
+		// Remove the jscroll behavior and data from an element
+		function _destroy() {
+			return _$scroll.unbind('.jscroll')
+				.removeData('jscroll')
+				.find('.jscroll-inner').children().unwrap()
+				.filter('.jscroll-added').children().unwrap();
+		}
 
-        // Observe the scroll event for when to trigger the next load
-        function _observe() {
-            _wrapInnerContent();
-            var $inner = $e.find('div.jscroll-inner').first(),
-                data = $e.data('jscroll'),
-                borderTopWidth = parseInt($e.css('borderTopWidth')),
-                borderTopWidthInt = isNaN(borderTopWidth) ? 0 : borderTopWidth,
-                iContainerTop = parseInt($e.css('paddingTop')) + borderTopWidthInt,
-                iTopHeight = _isWindow ? _$scroll.scrollTop() : $e.offset().top,
-                innerTop = $inner.length ? $inner.offset().top : 0,
-                iTotalHeight = Math.ceil(iTopHeight - innerTop + _$scroll.height() + iContainerTop);
+		// Observe the scroll event for when to trigger the next load
+		function _observe() {
+			_wrapInnerContent();
+			var $inner = $e.find('div.jscroll-inner').first(),
+				data = $e.data('jscroll'),
+				borderTopWidth = parseInt($e.css('borderTopWidth')),
+				borderTopWidthInt = isNaN(borderTopWidth) ? 0 : borderTopWidth,
+				iContainerTop = parseInt($e.css('paddingTop')) + borderTopWidthInt,
+				iTopHeight = _isWindow ? _$scroll.scrollTop() : $e.offset().top,
+				innerTop = $inner.length ? $inner.offset().top : 0,
+				iTotalHeight = Math.ceil(iTopHeight - innerTop + _$scroll.height() + iContainerTop);
 
-            if (!data.waiting && iTotalHeight + _options.padding >= $inner.outerHeight()) {
-                //data.nextHref = $.trim(data.nextHref + ' ' + _options.contentSelector);
-                _debug('info', 'jScroll:', $inner.outerHeight() - iTotalHeight, 'from bottom. Loading next request...');
-                return _load();
-            }
-        }
+			if (!data.waiting && iTotalHeight + _options.padding >= $inner.outerHeight()) {
+				//data.nextHref = $.trim(data.nextHref + ' ' + _options.contentSelector);
+				_debug('info', 'jScroll:', $inner.outerHeight() - iTotalHeight, 'from bottom. Loading next request...');
+				return _load();
+			}
+		}
 
-        // Check if the href for the next set of content has been set
-        function _checkNextHref(data) {
-            data = data || $e.data('jscroll');
-            if (!data || !data.nextHref) {
-                _debug('warn', 'jScroll: nextSelector not found - destroying');
-                _destroy();
-                return false;
-            } else {
-                _setBindings();
-                return true;
-            }
-        }
+		// Check if the href for the next set of content has been set
+		function _checkNextHref(data) {
+			data = data || $e.data('jscroll');
+			if (!data || !data.nextHref) {
+				_debug('warn', 'jScroll: nextSelector not found - destroying');
+				_destroy();
+				return false;
+			} else {
+				_setBindings();
+				return true;
+			}
+		}
 
-        function _setBindings() {
-            var $next = $e.find(_options.nextSelector).first();
-            if (_options.autoTrigger && (_options.autoTriggerUntil === false || _options.autoTriggerUntil > 0)) {
-                _nextWrap($next);
-                if (_$body.height() <= _$window.height()) {
-                    _observe();
-                }
-                _$scroll.unbind('.jscroll').bind('scroll.jscroll', function() {
-                    return _observe();
-                });
-                if (_options.autoTriggerUntil > 0) {
-                    _options.autoTriggerUntil--;
-                }
-            } else {
-                _$scroll.unbind('.jscroll');
-                $next.bind('click.jscroll', function() {
-                    _nextWrap($next);
-                    _load();
-                    return false;
-                });
-            }
-        }
+		function _setBindings() {
+			var $next = $e.find(_options.nextSelector).first();
+			if (_options.autoTrigger && (_options.autoTriggerUntil === false || _options.autoTriggerUntil > 0)) {
+				_nextWrap($next);
+				if (_$body.height() <= _$window.height()) {
+					_observe();
+				}
+				_$scroll.unbind('.jscroll').bind('scroll.jscroll', function () {
+					return _observe();
+				});
+				if (_options.autoTriggerUntil > 0) {
+					_options.autoTriggerUntil--;
+				}
+			} else {
+				_$scroll.unbind('.jscroll');
+				$next.bind('click.jscroll', function () {
+					_nextWrap($next);
+					_load();
+					return false;
+				});
+			}
+		}
 
-        // Load the next set of content, if available
-        function _load() {
-            var $inner = $e.find('div.jscroll-inner').first(),
-                data = $e.data('jscroll');
+		// Load the next set of content, if available
+		function _load() {
+			var $inner = $e.find('div.jscroll-inner').first(),
+				data = $e.data('jscroll');
 
-            data.waiting = true;
-            $inner.append('<div class="jscroll-added" />')
-                .children('.jscroll-added').last()
-                .html('<div class="jscroll-loading">' + _options.loadingHtml + '</div>');
+			data.waiting = true;
+			$inner.append('<div class="jscroll-added" />')
+				.children('.jscroll-added').last()
+				.html('<div class="jscroll-loading">' + _options.loadingHtml + '</div>');
 
-            return $e.animate({scrollTop: $inner.outerHeight()}, 0, function() {
-                $inner.find('div.jscroll-added').last().load(data.nextHref, function(r, status, xhr) {
-                    if (status === 'error') {
-                        return _destroy();
-                    }
-                    var $next = $(this).find(_options.nextSelector).first();
-                    data.waiting = false;
-                    data.nextHref = $next.attr('href') ? $.trim($next.attr('href') + ' ' + _options.contentSelector) : false;
-                    $('.jscroll-next-parent', $e).remove(); // Remove the previous next link now that we have a new one
-                    _checkNextHref();
-                    if (_options.callback) {
-                        _options.callback.call(this);
-                    }
-                    _debug('dir', data);
-                });
-            });
-        }
+			return $e.animate({
+				scrollTop: $inner.outerHeight()
+			}, 0, function () {
+				$inner.find('div.jscroll-added').last().load(data.nextHref, function (r, status, xhr) {
+					if (status === 'error') {
+						return _destroy();
+					}
+					var $next = $(this).find(_options.nextSelector).first();
+					data.waiting = false;
+					data.nextHref = $next.attr('href') ? $.trim($next.attr('href') + ' ' + _options.contentSelector) : false;
+					$('.jscroll-next-parent', $e).remove(); // Remove the previous next link now that we have a new one
+					_checkNextHref();
+					if (_options.callback) {
+						_options.callback.call(this);
+					}
+					_debug('dir', data);
+				});
+			});
+		}
 
-        // Safe console debug - http://klauzinski.com/javascript/safe-firebug-console-in-javascript
-        function _debug(m) {
-            if (_options.debug && typeof console === 'object' && (typeof m === 'object' || typeof console[m] === 'function')) {
-                if (typeof m === 'object') {
-                    var args = [];
-                    for (var sMethod in m) {
-                        if (typeof console[sMethod] === 'function') {
-                            args = (m[sMethod].length) ? m[sMethod] : [m[sMethod]];
-                            console[sMethod].apply(console, args);
-                        } else {
-                            console.log.apply(console, args);
-                        }
-                    }
-                } else {
-                    console[m].apply(console, Array.prototype.slice.call(arguments, 1));
-                }
-            }
-        }
+		// Safe console debug - http://klauzinski.com/javascript/safe-firebug-console-in-javascript
+		function _debug(m) {
+			if (_options.debug && typeof console === 'object' && (typeof m === 'object' || typeof console[m] === 'function')) {
+				if (typeof m === 'object') {
+					var args = [];
+					for (var sMethod in m) {
+						if (typeof console[sMethod] === 'function') {
+							args = (m[sMethod].length) ? m[sMethod] : [m[sMethod]];
+							console[sMethod].apply(console, args);
+						} else {
+							console.log.apply(console, args);
+						}
+					}
+				} else {
+					console[m].apply(console, Array.prototype.slice.call(arguments, 1));
+				}
+			}
+		}
 
-        // Expose API methods via the jQuery.jscroll namespace, e.g. $('sel').jscroll.method()
-        $.extend($e.jscroll, {
-            destroy: _destroy
-        });
-        return $e;
-    };
+		// Expose API methods via the jQuery.jscroll namespace, e.g. $('sel').jscroll.method()
+		$.extend($e.jscroll, {
+			destroy: _destroy
+		});
+		return $e;
+	};
 
-    // Define the jscroll plugin method and loop
-    $.fn.jscroll = function(m) {
-        return this.each(function() {
-            var $this = $(this),
-                data = $this.data('jscroll');
-            // Instantiate jScroll on this element if it hasn't been already
-            if (data && data.initialized) return;
-            var jscroll = new jScroll($this, m);
-        });
-    };
+	// Define the jscroll plugin method and loop
+	$.fn.jscroll = function (m) {
+		return this.each(function () {
+			var $this = $(this),
+				data = $this.data('jscroll');
+			// Instantiate jScroll on this element if it hasn't been already
+			if (data && data.initialized) return;
+			var jscroll = new jScroll($this, m);
+		});
+	};
 })(jQuery);
 
 
@@ -2475,2998 +2592,3014 @@ function revenez_jump_menu_procedure_norewrite(){
 
  */
 /* global window, document, define, jQuery, setInterval, clearInterval */
-;(function(factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
-    } else {
-        factory(jQuery);
-    }
-
-}(function($) {
-    'use strict';
-    var revSlick = window.revSlick || {};
-
-    revSlick = (function() {
-
-        var instanceUid = 0;
-
-        function revSlick(element, settings) {
-
-            var _ = this, dataSettings;
-
-            _.defaults = {
-                accessibility: true,
-                adaptiveHeight: false,
-                appendArrows: $(element),
-                appendDots: $(element),
-                arrows: true,
-                asNavFor: null,
-                prevArrow: '<button class="revSlick-prev" aria-label="Previous" type="button">Previous</button>',
-                nextArrow: '<button class="revSlick-next" aria-label="Next" type="button">Next</button>',
-                autoplay: false,
-                autoplaySpeed: 3000,
-                centerMode: false,
-                centerPadding: '50px',
-                cssEase: 'ease',
-                customPaging: function(slider, i) {
-                    return $('<button type="button" />').text(i + 1);
-                },
-                dots: false,
-                dotsClass: 'revSlick-dots',
-                draggable: true,
-                easing: 'linear',
-                edgeFriction: 0.35,
-                fade: false,
-                focusOnSelect: false,
-                focusOnChange: false,
-                infinite: true,
-                initialSlide: 0,
-                lazyLoad: 'ondemand',
-                mobileFirst: false,
-                pauseOnHover: true,
-                pauseOnFocus: true,
-                pauseOnDotsHover: false,
-                respondTo: 'window',
-                responsive: null,
-                rows: 1,
-                rtl: false,
-                slide: '',
-                slidesPerRow: 1,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                speed: 500,
-                swipe: true,
-                swipeToSlide: false,
-                touchMove: true,
-                touchThreshold: 5,
-                useCSS: true,
-                useTransform: true,
-                variableWidth: false,
-                vertical: false,
-                verticalSwiping: false,
-                waitForAnimate: true,
-                zIndex: 1000
-            };
-
-            _.initials = {
-                animating: false,
-                dragging: false,
-                autoPlayTimer: null,
-                currentDirection: 0,
-                currentLeft: null,
-                currentSlide: 0,
-                direction: 1,
-                $dots: null,
-                listWidth: null,
-                listHeight: null,
-                loadIndex: 0,
-                $nextArrow: null,
-                $prevArrow: null,
-                scrolling: false,
-                slideCount: null,
-                slideWidth: null,
-                $slideTrack: null,
-                $slides: null,
-                sliding: false,
-                slideOffset: 0,
-                swipeLeft: null,
-                swiping: false,
-                $list: null,
-                touchObject: {},
-                transformsEnabled: false,
-                unrevSlicked: false
-            };
-
-            $.extend(_, _.initials);
-
-            _.activeBreakpoint = null;
-            _.animType = null;
-            _.animProp = null;
-            _.breakpoints = [];
-            _.breakpointSettings = [];
-            _.cssTransitions = false;
-            _.focussed = false;
-            _.interrupted = false;
-            _.hidden = 'hidden';
-            _.paused = true;
-            _.positionProp = null;
-            _.respondTo = null;
-            _.rowCount = 1;
-            _.shouldClick = true;
-            _.$slider = $(element);
-            _.$slidesCache = null;
-            _.transformType = null;
-            _.transitionType = null;
-            _.visibilityChange = 'visibilitychange';
-            _.windowWidth = 0;
-            _.windowTimer = null;
-
-            dataSettings = $(element).data('revSlick') || {};
-
-            _.options = $.extend({}, _.defaults, settings, dataSettings);
-
-            _.currentSlide = _.options.initialSlide;
-
-            _.originalSettings = _.options;
-
-            if (typeof document.mozHidden !== 'undefined') {
-                _.hidden = 'mozHidden';
-                _.visibilityChange = 'mozvisibilitychange';
-            } else if (typeof document.webkitHidden !== 'undefined') {
-                _.hidden = 'webkitHidden';
-                _.visibilityChange = 'webkitvisibilitychange';
-            }
-
-            _.autoPlay = $.proxy(_.autoPlay, _);
-            _.autoPlayClear = $.proxy(_.autoPlayClear, _);
-            _.autoPlayIterator = $.proxy(_.autoPlayIterator, _);
-            _.changeSlide = $.proxy(_.changeSlide, _);
-            _.clickHandler = $.proxy(_.clickHandler, _);
-            _.selectHandler = $.proxy(_.selectHandler, _);
-            _.setPosition = $.proxy(_.setPosition, _);
-            _.swipeHandler = $.proxy(_.swipeHandler, _);
-            _.dragHandler = $.proxy(_.dragHandler, _);
-            _.keyHandler = $.proxy(_.keyHandler, _);
-
-            _.instanceUid = instanceUid++;
-
-            // A simple way to check for HTML strings
-            // Strict HTML recognition (must start with <)
-            // Extracted from jQuery v1.11 source
-            _.htmlExpr = /^(?:\s*(<[\w\W]+>)[^>]*)$/;
-
-
-            _.registerBreakpoints();
-            _.init(true);
-
-        }
-
-        return revSlick;
-
-    }());
-
-    revSlick.prototype.activateADA = function() {
-        var _ = this;
-
-        _.$slideTrack.find('.revSlick-active').attr({
-            'aria-hidden': 'false'
-        }).find('a, input, button, select').attr({
-            'tabindex': '0'
-        });
-
-    };
-
-    revSlick.prototype.addSlide = revSlick.prototype.revSlickAdd = function(markup, index, addBefore) {
-
-        var _ = this;
-
-        if (typeof(index) === 'boolean') {
-            addBefore = index;
-            index = null;
-        } else if (index < 0 || (index >= _.slideCount)) {
-            return false;
-        }
-
-        _.unload();
-
-        if (typeof(index) === 'number') {
-            if (index === 0 && _.$slides.length === 0) {
-                $(markup).appendTo(_.$slideTrack);
-            } else if (addBefore) {
-                $(markup).insertBefore(_.$slides.eq(index));
-            } else {
-                $(markup).insertAfter(_.$slides.eq(index));
-            }
-        } else {
-            if (addBefore === true) {
-                $(markup).prependTo(_.$slideTrack);
-            } else {
-                $(markup).appendTo(_.$slideTrack);
-            }
-        }
-
-        _.$slides = _.$slideTrack.children(this.options.slide);
-
-        _.$slideTrack.children(this.options.slide).detach();
-
-        _.$slideTrack.append(_.$slides);
-
-        _.$slides.each(function(index, element) {
-            $(element).attr('data-revSlick-index', index);
-        });
-
-        _.$slidesCache = _.$slides;
-
-        _.reinit();
-
-    };
-
-    revSlick.prototype.animateHeight = function() {
-        var _ = this;
-        if (_.options.slidesToShow === 1 && _.options.adaptiveHeight === true && _.options.vertical === false) {
-            var targetHeight = _.$slides.eq(_.currentSlide).outerHeight(true);
-            _.$list.animate({
-                height: targetHeight
-            }, _.options.speed);
-        }
-    };
-
-    revSlick.prototype.animateSlide = function(targetLeft, callback) {
-
-        var animProps = {},
-            _ = this;
-
-        _.animateHeight();
-
-        if (_.options.rtl === true && _.options.vertical === false) {
-            targetLeft = -targetLeft;
-        }
-        if (_.transformsEnabled === false) {
-            if (_.options.vertical === false) {
-                _.$slideTrack.animate({
-                    left: targetLeft
-                }, _.options.speed, _.options.easing, callback);
-            } else {
-                _.$slideTrack.animate({
-                    top: targetLeft
-                }, _.options.speed, _.options.easing, callback);
-            }
-
-        } else {
-
-            if (_.cssTransitions === false) {
-                if (_.options.rtl === true) {
-                    _.currentLeft = -(_.currentLeft);
-                }
-                $({
-                    animStart: _.currentLeft
-                }).animate({
-                    animStart: targetLeft
-                }, {
-                    duration: _.options.speed,
-                    easing: _.options.easing,
-                    step: function(now) {
-                        now = Math.ceil(now);
-                        if (_.options.vertical === false) {
-                            animProps[_.animType] = 'translate(' +
-                                now + 'px, 0px)';
-                            _.$slideTrack.css(animProps);
-                        } else {
-                            animProps[_.animType] = 'translate(0px,' +
-                                now + 'px)';
-                            _.$slideTrack.css(animProps);
-                        }
-                    },
-                    complete: function() {
-                        if (callback) {
-                            callback.call();
-                        }
-                    }
-                });
-
-            } else {
-
-                _.applyTransition();
-                targetLeft = Math.ceil(targetLeft);
-
-                if (_.options.vertical === false) {
-                    animProps[_.animType] = 'translate3d(' + targetLeft + 'px, 0px, 0px)';
-                } else {
-                    animProps[_.animType] = 'translate3d(0px,' + targetLeft + 'px, 0px)';
-                }
-                _.$slideTrack.css(animProps);
-
-                if (callback) {
-                    setTimeout(function() {
+;
+(function (factory) {
+	'use strict';
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	} else if (typeof exports !== 'undefined') {
+		module.exports = factory(require('jquery'));
+	} else {
+		factory(jQuery);
+	}
+
+}(function ($) {
+	'use strict';
+	var revSlick = window.revSlick || {};
+
+	revSlick = (function () {
+
+		var instanceUid = 0;
+
+		function revSlick(element, settings) {
+
+			var _ = this,
+				dataSettings;
+
+			_.defaults = {
+				accessibility: true,
+				adaptiveHeight: false,
+				appendArrows: $(element),
+				appendDots: $(element),
+				arrows: true,
+				asNavFor: null,
+				prevArrow: '<button class="revSlick-prev" aria-label="Previous" type="button">Previous</button>',
+				nextArrow: '<button class="revSlick-next" aria-label="Next" type="button">Next</button>',
+				autoplay: false,
+				autoplaySpeed: 3000,
+				centerMode: false,
+				centerPadding: '50px',
+				cssEase: 'ease',
+				customPaging: function (slider, i) {
+					return $('<button type="button" />').text(i + 1);
+				},
+				dots: false,
+				dotsClass: 'revSlick-dots',
+				draggable: true,
+				easing: 'linear',
+				edgeFriction: 0.35,
+				fade: false,
+				focusOnSelect: false,
+				focusOnChange: false,
+				infinite: true,
+				initialSlide: 0,
+				lazyLoad: 'ondemand',
+				mobileFirst: false,
+				pauseOnHover: true,
+				pauseOnFocus: true,
+				pauseOnDotsHover: false,
+				respondTo: 'window',
+				responsive: null,
+				rows: 1,
+				rtl: false,
+				slide: '',
+				slidesPerRow: 1,
+				slidesToShow: 1,
+				slidesToScroll: 1,
+				speed: 500,
+				swipe: true,
+				swipeToSlide: false,
+				touchMove: true,
+				touchThreshold: 5,
+				useCSS: true,
+				useTransform: true,
+				variableWidth: false,
+				vertical: false,
+				verticalSwiping: false,
+				waitForAnimate: true,
+				zIndex: 1000
+			};
+
+			_.initials = {
+				animating: false,
+				dragging: false,
+				autoPlayTimer: null,
+				currentDirection: 0,
+				currentLeft: null,
+				currentSlide: 0,
+				direction: 1,
+				$dots: null,
+				listWidth: null,
+				listHeight: null,
+				loadIndex: 0,
+				$nextArrow: null,
+				$prevArrow: null,
+				scrolling: false,
+				slideCount: null,
+				slideWidth: null,
+				$slideTrack: null,
+				$slides: null,
+				sliding: false,
+				slideOffset: 0,
+				swipeLeft: null,
+				swiping: false,
+				$list: null,
+				touchObject: {},
+				transformsEnabled: false,
+				unrevSlicked: false
+			};
+
+			$.extend(_, _.initials);
+
+			_.activeBreakpoint = null;
+			_.animType = null;
+			_.animProp = null;
+			_.breakpoints = [];
+			_.breakpointSettings = [];
+			_.cssTransitions = false;
+			_.focussed = false;
+			_.interrupted = false;
+			_.hidden = 'hidden';
+			_.paused = true;
+			_.positionProp = null;
+			_.respondTo = null;
+			_.rowCount = 1;
+			_.shouldClick = true;
+			_.$slider = $(element);
+			_.$slidesCache = null;
+			_.transformType = null;
+			_.transitionType = null;
+			_.visibilityChange = 'visibilitychange';
+			_.windowWidth = 0;
+			_.windowTimer = null;
+
+			dataSettings = $(element).data('revSlick') || {};
+
+			_.options = $.extend({}, _.defaults, settings, dataSettings);
+
+			_.currentSlide = _.options.initialSlide;
+
+			_.originalSettings = _.options;
+
+			if (typeof document.mozHidden !== 'undefined') {
+				_.hidden = 'mozHidden';
+				_.visibilityChange = 'mozvisibilitychange';
+			} else if (typeof document.webkitHidden !== 'undefined') {
+				_.hidden = 'webkitHidden';
+				_.visibilityChange = 'webkitvisibilitychange';
+			}
+
+			_.autoPlay = $.proxy(_.autoPlay, _);
+			_.autoPlayClear = $.proxy(_.autoPlayClear, _);
+			_.autoPlayIterator = $.proxy(_.autoPlayIterator, _);
+			_.changeSlide = $.proxy(_.changeSlide, _);
+			_.clickHandler = $.proxy(_.clickHandler, _);
+			_.selectHandler = $.proxy(_.selectHandler, _);
+			_.setPosition = $.proxy(_.setPosition, _);
+			_.swipeHandler = $.proxy(_.swipeHandler, _);
+			_.dragHandler = $.proxy(_.dragHandler, _);
+			_.keyHandler = $.proxy(_.keyHandler, _);
+
+			_.instanceUid = instanceUid++;
+
+			// A simple way to check for HTML strings
+			// Strict HTML recognition (must start with <)
+			// Extracted from jQuery v1.11 source
+			_.htmlExpr = /^(?:\s*(<[\w\W]+>)[^>]*)$/;
+
+
+			_.registerBreakpoints();
+			_.init(true);
+
+		}
+
+		return revSlick;
+
+	}());
+
+	revSlick.prototype.activateADA = function () {
+		var _ = this;
+
+		_.$slideTrack.find('.revSlick-active').attr({
+			'aria-hidden': 'false'
+		}).find('a, input, button, select').attr({
+			'tabindex': '0'
+		});
+
+	};
+
+	revSlick.prototype.addSlide = revSlick.prototype.revSlickAdd = function (markup, index, addBefore) {
+
+		var _ = this;
+
+		if (typeof (index) === 'boolean') {
+			addBefore = index;
+			index = null;
+		} else if (index < 0 || (index >= _.slideCount)) {
+			return false;
+		}
+
+		_.unload();
+
+		if (typeof (index) === 'number') {
+			if (index === 0 && _.$slides.length === 0) {
+				$(markup).appendTo(_.$slideTrack);
+			} else if (addBefore) {
+				$(markup).insertBefore(_.$slides.eq(index));
+			} else {
+				$(markup).insertAfter(_.$slides.eq(index));
+			}
+		} else {
+			if (addBefore === true) {
+				$(markup).prependTo(_.$slideTrack);
+			} else {
+				$(markup).appendTo(_.$slideTrack);
+			}
+		}
+
+		_.$slides = _.$slideTrack.children(this.options.slide);
+
+		_.$slideTrack.children(this.options.slide).detach();
+
+		_.$slideTrack.append(_.$slides);
+
+		_.$slides.each(function (index, element) {
+			$(element).attr('data-revSlick-index', index);
+		});
+
+		_.$slidesCache = _.$slides;
+
+		_.reinit();
+
+	};
+
+	revSlick.prototype.animateHeight = function () {
+		var _ = this;
+		if (_.options.slidesToShow === 1 && _.options.adaptiveHeight === true && _.options.vertical === false) {
+			var targetHeight = _.$slides.eq(_.currentSlide).outerHeight(true);
+			_.$list.animate({
+				height: targetHeight
+			}, _.options.speed);
+		}
+	};
+
+	revSlick.prototype.animateSlide = function (targetLeft, callback) {
+
+		var animProps = {},
+			_ = this;
+
+		_.animateHeight();
+
+		if (_.options.rtl === true && _.options.vertical === false) {
+			targetLeft = -targetLeft;
+		}
+		if (_.transformsEnabled === false) {
+			if (_.options.vertical === false) {
+				_.$slideTrack.animate({
+					left: targetLeft
+				}, _.options.speed, _.options.easing, callback);
+			} else {
+				_.$slideTrack.animate({
+					top: targetLeft
+				}, _.options.speed, _.options.easing, callback);
+			}
+
+		} else {
+
+			if (_.cssTransitions === false) {
+				if (_.options.rtl === true) {
+					_.currentLeft = -(_.currentLeft);
+				}
+				$({
+					animStart: _.currentLeft
+				}).animate({
+					animStart: targetLeft
+				}, {
+					duration: _.options.speed,
+					easing: _.options.easing,
+					step: function (now) {
+						now = Math.ceil(now);
+						if (_.options.vertical === false) {
+							animProps[_.animType] = 'translate('
+								+ now + 'px, 0px)';
+							_.$slideTrack.css(animProps);
+						} else {
+							animProps[_.animType] = 'translate(0px,'
+								+ now + 'px)';
+							_.$slideTrack.css(animProps);
+						}
+					},
+					complete: function () {
+						if (callback) {
+							callback.call();
+						}
+					}
+				});
+
+			} else {
+
+				_.applyTransition();
+				targetLeft = Math.ceil(targetLeft);
+
+				if (_.options.vertical === false) {
+					animProps[_.animType] = 'translate3d(' + targetLeft + 'px, 0px, 0px)';
+				} else {
+					animProps[_.animType] = 'translate3d(0px,' + targetLeft + 'px, 0px)';
+				}
+				_.$slideTrack.css(animProps);
+
+				if (callback) {
+					setTimeout(function () {
+
+						_.disableTransition();
+
+						callback.call();
+					}, _.options.speed);
+				}
 
-                        _.disableTransition();
+			}
 
-                        callback.call();
-                    }, _.options.speed);
-                }
+		}
 
-            }
+	};
 
-        }
+	revSlick.prototype.getNavTarget = function () {
 
-    };
+		var _ = this,
+			asNavFor = _.options.asNavFor;
 
-    revSlick.prototype.getNavTarget = function() {
+		if (asNavFor && asNavFor !== null) {
+			asNavFor = $(asNavFor).not(_.$slider);
+		}
 
-        var _ = this,
-            asNavFor = _.options.asNavFor;
+		return asNavFor;
 
-        if ( asNavFor && asNavFor !== null ) {
-            asNavFor = $(asNavFor).not(_.$slider);
-        }
+	};
 
-        return asNavFor;
+	revSlick.prototype.asNavFor = function (index) {
 
-    };
+		var _ = this,
+			asNavFor = _.getNavTarget();
 
-    revSlick.prototype.asNavFor = function(index) {
+		if (asNavFor !== null && typeof asNavFor === 'object') {
+			asNavFor.each(function () {
+				var target = $(this).revSlick('getrevSlick');
+				if (!target.unrevSlicked) {
+					target.slideHandler(index, true);
+				}
+			});
+		}
 
-        var _ = this,
-            asNavFor = _.getNavTarget();
+	};
 
-        if ( asNavFor !== null && typeof asNavFor === 'object' ) {
-            asNavFor.each(function() {
-                var target = $(this).revSlick('getrevSlick');
-                if(!target.unrevSlicked) {
-                    target.slideHandler(index, true);
-                }
-            });
-        }
+	revSlick.prototype.applyTransition = function (slide) {
 
-    };
+		var _ = this,
+			transition = {};
 
-    revSlick.prototype.applyTransition = function(slide) {
+		if (_.options.fade === false) {
+			transition[_.transitionType] = _.transformType + ' ' + _.options.speed + 'ms ' + _.options.cssEase;
+		} else {
+			transition[_.transitionType] = 'opacity ' + _.options.speed + 'ms ' + _.options.cssEase;
+		}
 
-        var _ = this,
-            transition = {};
+		if (_.options.fade === false) {
+			_.$slideTrack.css(transition);
+		} else {
+			_.$slides.eq(slide).css(transition);
+		}
 
-        if (_.options.fade === false) {
-            transition[_.transitionType] = _.transformType + ' ' + _.options.speed + 'ms ' + _.options.cssEase;
-        } else {
-            transition[_.transitionType] = 'opacity ' + _.options.speed + 'ms ' + _.options.cssEase;
-        }
+	};
 
-        if (_.options.fade === false) {
-            _.$slideTrack.css(transition);
-        } else {
-            _.$slides.eq(slide).css(transition);
-        }
+	revSlick.prototype.autoPlay = function () {
 
-    };
+		var _ = this;
 
-    revSlick.prototype.autoPlay = function() {
+		_.autoPlayClear();
 
-        var _ = this;
+		if (_.slideCount > _.options.slidesToShow) {
+			_.autoPlayTimer = setInterval(_.autoPlayIterator, _.options.autoplaySpeed);
+		}
 
-        _.autoPlayClear();
+	};
 
-        if ( _.slideCount > _.options.slidesToShow ) {
-            _.autoPlayTimer = setInterval( _.autoPlayIterator, _.options.autoplaySpeed );
-        }
+	revSlick.prototype.autoPlayClear = function () {
 
-    };
+		var _ = this;
 
-    revSlick.prototype.autoPlayClear = function() {
+		if (_.autoPlayTimer) {
+			clearInterval(_.autoPlayTimer);
+		}
 
-        var _ = this;
+	};
 
-        if (_.autoPlayTimer) {
-            clearInterval(_.autoPlayTimer);
-        }
+	revSlick.prototype.autoPlayIterator = function () {
 
-    };
+		var _ = this,
+			slideTo = _.currentSlide + _.options.slidesToScroll;
 
-    revSlick.prototype.autoPlayIterator = function() {
+		if (!_.paused && !_.interrupted && !_.focussed) {
 
-        var _ = this,
-            slideTo = _.currentSlide + _.options.slidesToScroll;
+			if (_.options.infinite === false) {
 
-        if ( !_.paused && !_.interrupted && !_.focussed ) {
+				if (_.direction === 1 && (_.currentSlide + 1) === (_.slideCount - 1)) {
+					_.direction = 0;
+				} else if (_.direction === 0) {
 
-            if ( _.options.infinite === false ) {
+					slideTo = _.currentSlide - _.options.slidesToScroll;
 
-                if ( _.direction === 1 && ( _.currentSlide + 1 ) === ( _.slideCount - 1 )) {
-                    _.direction = 0;
-                }
+					if (_.currentSlide - 1 === 0) {
+						_.direction = 1;
+					}
 
-                else if ( _.direction === 0 ) {
+				}
 
-                    slideTo = _.currentSlide - _.options.slidesToScroll;
+			}
 
-                    if ( _.currentSlide - 1 === 0 ) {
-                        _.direction = 1;
-                    }
+			_.slideHandler(slideTo);
 
-                }
+		}
 
-            }
+	};
 
-            _.slideHandler( slideTo );
+	revSlick.prototype.buildArrows = function () {
 
-        }
+		var _ = this;
 
-    };
+		if (_.options.arrows === true) {
 
-    revSlick.prototype.buildArrows = function() {
+			_.$prevArrow = $(_.options.prevArrow).addClass('revSlick-arrow');
+			_.$nextArrow = $(_.options.nextArrow).addClass('revSlick-arrow');
 
-        var _ = this;
+			if (_.slideCount > _.options.slidesToShow) {
 
-        if (_.options.arrows === true ) {
+				_.$prevArrow.removeClass('revSlick-hidden').removeAttr('aria-hidden tabindex');
+				_.$nextArrow.removeClass('revSlick-hidden').removeAttr('aria-hidden tabindex');
 
-            _.$prevArrow = $(_.options.prevArrow).addClass('revSlick-arrow');
-            _.$nextArrow = $(_.options.nextArrow).addClass('revSlick-arrow');
+				if (_.htmlExpr.test(_.options.prevArrow)) {
+					_.$prevArrow.prependTo(_.options.appendArrows);
+				}
 
-            if( _.slideCount > _.options.slidesToShow ) {
+				if (_.htmlExpr.test(_.options.nextArrow)) {
+					_.$nextArrow.appendTo(_.options.appendArrows);
+				}
 
-                _.$prevArrow.removeClass('revSlick-hidden').removeAttr('aria-hidden tabindex');
-                _.$nextArrow.removeClass('revSlick-hidden').removeAttr('aria-hidden tabindex');
+				if (_.options.infinite !== true) {
+					_.$prevArrow
+						.addClass('revSlick-disabled')
+						.attr('aria-disabled', 'true');
+				}
 
-                if (_.htmlExpr.test(_.options.prevArrow)) {
-                    _.$prevArrow.prependTo(_.options.appendArrows);
-                }
+			} else {
 
-                if (_.htmlExpr.test(_.options.nextArrow)) {
-                    _.$nextArrow.appendTo(_.options.appendArrows);
-                }
+				_.$prevArrow.add(_.$nextArrow)
 
-                if (_.options.infinite !== true) {
-                    _.$prevArrow
-                        .addClass('revSlick-disabled')
-                        .attr('aria-disabled', 'true');
-                }
+					.addClass('revSlick-hidden')
+					.attr({
+						'aria-disabled': 'true',
+						'tabindex': '-1'
+					});
 
-            } else {
+			}
 
-                _.$prevArrow.add( _.$nextArrow )
+		}
 
-                    .addClass('revSlick-hidden')
-                    .attr({
-                        'aria-disabled': 'true',
-                        'tabindex': '-1'
-                    });
+	};
 
-            }
+	revSlick.prototype.buildDots = function () {
 
-        }
+		var _ = this,
+			i, dot;
 
-    };
+		if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
 
-    revSlick.prototype.buildDots = function() {
+			_.$slider.addClass('revSlick-dotted');
 
-        var _ = this,
-            i, dot;
+			dot = $('<ul />').addClass(_.options.dotsClass);
 
-        if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
+			for (i = 0; i <= _.getDotCount(); i += 1) {
+				dot.append($('<li />').append(_.options.customPaging.call(this, _, i)));
+			}
 
-            _.$slider.addClass('revSlick-dotted');
+			_.$dots = dot.appendTo(_.options.appendDots);
 
-            dot = $('<ul />').addClass(_.options.dotsClass);
+			_.$dots.find('li').first().addClass('revSlick-active');
 
-            for (i = 0; i <= _.getDotCount(); i += 1) {
-                dot.append($('<li />').append(_.options.customPaging.call(this, _, i)));
-            }
+		}
 
-            _.$dots = dot.appendTo(_.options.appendDots);
+	};
 
-            _.$dots.find('li').first().addClass('revSlick-active');
+	revSlick.prototype.buildOut = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.$slides =
+			_.$slider
+			.children(_.options.slide + ':not(.revSlick-cloned)')
+			.addClass('revSlick-slide');
 
-    revSlick.prototype.buildOut = function() {
+		_.slideCount = _.$slides.length;
 
-        var _ = this;
+		_.$slides.each(function (index, element) {
+			$(element)
+				.attr('data-revSlick-index', index)
+				.data('originalStyling', $(element).attr('style') || '');
+		});
 
-        _.$slides =
-            _.$slider
-                .children( _.options.slide + ':not(.revSlick-cloned)')
-                .addClass('revSlick-slide');
+		_.$slider.addClass('revSlick-slider');
 
-        _.slideCount = _.$slides.length;
+		_.$slideTrack = (_.slideCount === 0)
+			? $('<div class="revSlick-track"/>').appendTo(_.$slider)
+			: _.$slides.wrapAll('<div class="revSlick-track"/>').parent();
 
-        _.$slides.each(function(index, element) {
-            $(element)
-                .attr('data-revSlick-index', index)
-                .data('originalStyling', $(element).attr('style') || '');
-        });
+		_.$list = _.$slideTrack.wrap(
+			'<div class="revSlick-list"/>').parent();
+		_.$slideTrack.css('opacity', 0);
 
-        _.$slider.addClass('revSlick-slider');
+		if (_.options.centerMode === true || _.options.swipeToSlide === true) {
+			_.options.slidesToScroll = 1;
+		}
 
-        _.$slideTrack = (_.slideCount === 0) ?
-            $('<div class="revSlick-track"/>').appendTo(_.$slider) :
-            _.$slides.wrapAll('<div class="revSlick-track"/>').parent();
+		$('img[data-lazy]', _.$slider).not('[src]').addClass('revSlick-loading');
 
-        _.$list = _.$slideTrack.wrap(
-            '<div class="revSlick-list"/>').parent();
-        _.$slideTrack.css('opacity', 0);
+		_.setupInfinite();
 
-        if (_.options.centerMode === true || _.options.swipeToSlide === true) {
-            _.options.slidesToScroll = 1;
-        }
+		_.buildArrows();
 
-        $('img[data-lazy]', _.$slider).not('[src]').addClass('revSlick-loading');
+		_.buildDots();
 
-        _.setupInfinite();
+		_.updateDots();
 
-        _.buildArrows();
 
-        _.buildDots();
+		_.setSlideClasses(typeof _.currentSlide === 'number' ? _.currentSlide : 0);
 
-        _.updateDots();
+		if (_.options.draggable === true) {
+			_.$list.addClass('draggable');
+		}
 
+	};
 
-        _.setSlideClasses(typeof _.currentSlide === 'number' ? _.currentSlide : 0);
+	revSlick.prototype.buildRows = function () {
 
-        if (_.options.draggable === true) {
-            _.$list.addClass('draggable');
-        }
+		var _ = this,
+			a, b, c, newSlides, numOfSlides, originalSlides, slidesPerSection;
 
-    };
+		newSlides = document.createDocumentFragment();
+		originalSlides = _.$slider.children();
 
-    revSlick.prototype.buildRows = function() {
+		if (_.options.rows > 0) {
 
-        var _ = this, a, b, c, newSlides, numOfSlides, originalSlides,slidesPerSection;
+			slidesPerSection = _.options.slidesPerRow * _.options.rows;
+			numOfSlides = Math.ceil(
+				originalSlides.length / slidesPerSection
+			);
 
-        newSlides = document.createDocumentFragment();
-        originalSlides = _.$slider.children();
+			for (a = 0; a < numOfSlides; a++) {
+				var slide = document.createElement('div');
+				for (b = 0; b < _.options.rows; b++) {
+					var row = document.createElement('div');
+					for (c = 0; c < _.options.slidesPerRow; c++) {
+						var target = (a * slidesPerSection + ((b * _.options.slidesPerRow) + c));
+						if (originalSlides.get(target)) {
+							row.appendChild(originalSlides.get(target));
+						}
+					}
+					slide.appendChild(row);
+				}
+				newSlides.appendChild(slide);
+			}
 
-        if(_.options.rows > 0) {
+			_.$slider.empty().append(newSlides);
+			_.$slider.children().children().children()
+				.css({
+					'width': (100 / _.options.slidesPerRow) + '%',
+					'display': 'inline-block'
+				});
 
-            slidesPerSection = _.options.slidesPerRow * _.options.rows;
-            numOfSlides = Math.ceil(
-                originalSlides.length / slidesPerSection
-            );
+		}
 
-            for(a = 0; a < numOfSlides; a++){
-                var slide = document.createElement('div');
-                for(b = 0; b < _.options.rows; b++) {
-                    var row = document.createElement('div');
-                    for(c = 0; c < _.options.slidesPerRow; c++) {
-                        var target = (a * slidesPerSection + ((b * _.options.slidesPerRow) + c));
-                        if (originalSlides.get(target)) {
-                            row.appendChild(originalSlides.get(target));
-                        }
-                    }
-                    slide.appendChild(row);
-                }
-                newSlides.appendChild(slide);
-            }
+	};
 
-            _.$slider.empty().append(newSlides);
-            _.$slider.children().children().children()
-                .css({
-                    'width':(100 / _.options.slidesPerRow) + '%',
-                    'display': 'inline-block'
-                });
+	revSlick.prototype.checkResponsive = function (initial, forceUpdate) {
 
-        }
+		var _ = this,
+			breakpoint, targetBreakpoint, respondToWidth, triggerBreakpoint = false;
+		var sliderWidth = _.$slider.width();
+		var windowWidth = window.innerWidth || $(window).width();
 
-    };
+		if (_.respondTo === 'window') {
+			respondToWidth = windowWidth;
+		} else if (_.respondTo === 'slider') {
+			respondToWidth = sliderWidth;
+		} else if (_.respondTo === 'min') {
+			respondToWidth = Math.min(windowWidth, sliderWidth);
+		}
 
-    revSlick.prototype.checkResponsive = function(initial, forceUpdate) {
+		if (_.options.responsive
+			&& _.options.responsive.length
+			&& _.options.responsive !== null) {
 
-        var _ = this,
-            breakpoint, targetBreakpoint, respondToWidth, triggerBreakpoint = false;
-        var sliderWidth = _.$slider.width();
-        var windowWidth = window.innerWidth || $(window).width();
+			targetBreakpoint = null;
 
-        if (_.respondTo === 'window') {
-            respondToWidth = windowWidth;
-        } else if (_.respondTo === 'slider') {
-            respondToWidth = sliderWidth;
-        } else if (_.respondTo === 'min') {
-            respondToWidth = Math.min(windowWidth, sliderWidth);
-        }
+			for (breakpoint in _.breakpoints) {
+				if (_.breakpoints.hasOwnProperty(breakpoint)) {
+					if (_.originalSettings.mobileFirst === false) {
+						if (respondToWidth < _.breakpoints[breakpoint]) {
+							targetBreakpoint = _.breakpoints[breakpoint];
+						}
+					} else {
+						if (respondToWidth > _.breakpoints[breakpoint]) {
+							targetBreakpoint = _.breakpoints[breakpoint];
+						}
+					}
+				}
+			}
 
-        if ( _.options.responsive &&
-            _.options.responsive.length &&
-            _.options.responsive !== null) {
+			if (targetBreakpoint !== null) {
+				if (_.activeBreakpoint !== null) {
+					if (targetBreakpoint !== _.activeBreakpoint || forceUpdate) {
+						_.activeBreakpoint =
+							targetBreakpoint;
+						if (_.breakpointSettings[targetBreakpoint] === 'unrevSlick') {
+							_.unrevSlick(targetBreakpoint);
+						} else {
+							_.options = $.extend({}, _.originalSettings,
+								_.breakpointSettings[
+									targetBreakpoint]);
+							if (initial === true) {
+								_.currentSlide = _.options.initialSlide;
+							}
+							_.refresh(initial);
+						}
+						triggerBreakpoint = targetBreakpoint;
+					}
+				} else {
+					_.activeBreakpoint = targetBreakpoint;
+					if (_.breakpointSettings[targetBreakpoint] === 'unrevSlick') {
+						_.unrevSlick(targetBreakpoint);
+					} else {
+						_.options = $.extend({}, _.originalSettings,
+							_.breakpointSettings[
+								targetBreakpoint]);
+						if (initial === true) {
+							_.currentSlide = _.options.initialSlide;
+						}
+						_.refresh(initial);
+					}
+					triggerBreakpoint = targetBreakpoint;
+				}
+			} else {
+				if (_.activeBreakpoint !== null) {
+					_.activeBreakpoint = null;
+					_.options = _.originalSettings;
+					if (initial === true) {
+						_.currentSlide = _.options.initialSlide;
+					}
+					_.refresh(initial);
+					triggerBreakpoint = targetBreakpoint;
+				}
+			}
 
-            targetBreakpoint = null;
+			// only trigger breakpoints during an actual break. not on initialize.
+			if (!initial && triggerBreakpoint !== false) {
+				_.$slider.trigger('breakpoint', [_, triggerBreakpoint]);
+			}
+		}
 
-            for (breakpoint in _.breakpoints) {
-                if (_.breakpoints.hasOwnProperty(breakpoint)) {
-                    if (_.originalSettings.mobileFirst === false) {
-                        if (respondToWidth < _.breakpoints[breakpoint]) {
-                            targetBreakpoint = _.breakpoints[breakpoint];
-                        }
-                    } else {
-                        if (respondToWidth > _.breakpoints[breakpoint]) {
-                            targetBreakpoint = _.breakpoints[breakpoint];
-                        }
-                    }
-                }
-            }
+	};
 
-            if (targetBreakpoint !== null) {
-                if (_.activeBreakpoint !== null) {
-                    if (targetBreakpoint !== _.activeBreakpoint || forceUpdate) {
-                        _.activeBreakpoint =
-                            targetBreakpoint;
-                        if (_.breakpointSettings[targetBreakpoint] === 'unrevSlick') {
-                            _.unrevSlick(targetBreakpoint);
-                        } else {
-                            _.options = $.extend({}, _.originalSettings,
-                                _.breakpointSettings[
-                                    targetBreakpoint]);
-                            if (initial === true) {
-                                _.currentSlide = _.options.initialSlide;
-                            }
-                            _.refresh(initial);
-                        }
-                        triggerBreakpoint = targetBreakpoint;
-                    }
-                } else {
-                    _.activeBreakpoint = targetBreakpoint;
-                    if (_.breakpointSettings[targetBreakpoint] === 'unrevSlick') {
-                        _.unrevSlick(targetBreakpoint);
-                    } else {
-                        _.options = $.extend({}, _.originalSettings,
-                            _.breakpointSettings[
-                                targetBreakpoint]);
-                        if (initial === true) {
-                            _.currentSlide = _.options.initialSlide;
-                        }
-                        _.refresh(initial);
-                    }
-                    triggerBreakpoint = targetBreakpoint;
-                }
-            } else {
-                if (_.activeBreakpoint !== null) {
-                    _.activeBreakpoint = null;
-                    _.options = _.originalSettings;
-                    if (initial === true) {
-                        _.currentSlide = _.options.initialSlide;
-                    }
-                    _.refresh(initial);
-                    triggerBreakpoint = targetBreakpoint;
-                }
-            }
+	revSlick.prototype.changeSlide = function (event, dontAnimate) {
 
-            // only trigger breakpoints during an actual break. not on initialize.
-            if( !initial && triggerBreakpoint !== false ) {
-                _.$slider.trigger('breakpoint', [_, triggerBreakpoint]);
-            }
-        }
+		var _ = this,
+			$target = $(event.currentTarget),
+			indexOffset, slideOffset, unevenOffset;
 
-    };
+		// If target is a link, prevent default action.
+		if ($target.is('a')) {
+			event.preventDefault();
+		}
 
-    revSlick.prototype.changeSlide = function(event, dontAnimate) {
+		// If target is not the <li> element (ie: a child), find the <li>.
+		if (!$target.is('li')) {
+			$target = $target.closest('li');
+		}
 
-        var _ = this,
-            $target = $(event.currentTarget),
-            indexOffset, slideOffset, unevenOffset;
+		unevenOffset = (_.slideCount % _.options.slidesToScroll !== 0);
+		indexOffset = unevenOffset ? 0 : (_.slideCount - _.currentSlide) % _.options.slidesToScroll;
 
-        // If target is a link, prevent default action.
-        if($target.is('a')) {
-            event.preventDefault();
-        }
+		switch (event.data.message) {
 
-        // If target is not the <li> element (ie: a child), find the <li>.
-        if(!$target.is('li')) {
-            $target = $target.closest('li');
-        }
+			case 'previous':
+				slideOffset = indexOffset === 0 ? _.options.slidesToScroll : _.options.slidesToShow - indexOffset;
+				if (_.slideCount > _.options.slidesToShow) {
+					_.slideHandler(_.currentSlide - slideOffset, false, dontAnimate);
+				}
+				break;
 
-        unevenOffset = (_.slideCount % _.options.slidesToScroll !== 0);
-        indexOffset = unevenOffset ? 0 : (_.slideCount - _.currentSlide) % _.options.slidesToScroll;
+			case 'next':
+				slideOffset = indexOffset === 0 ? _.options.slidesToScroll : indexOffset;
+				if (_.slideCount > _.options.slidesToShow) {
+					_.slideHandler(_.currentSlide + slideOffset, false, dontAnimate);
+				}
+				break;
 
-        switch (event.data.message) {
+			case 'index':
+				var index = event.data.index === 0 ? 0
+					: event.data.index || $target.index() * _.options.slidesToScroll;
 
-            case 'previous':
-                slideOffset = indexOffset === 0 ? _.options.slidesToScroll : _.options.slidesToShow - indexOffset;
-                if (_.slideCount > _.options.slidesToShow) {
-                    _.slideHandler(_.currentSlide - slideOffset, false, dontAnimate);
-                }
-                break;
+				_.slideHandler(_.checkNavigable(index), false, dontAnimate);
+				$target.children().trigger('focus');
+				break;
 
-            case 'next':
-                slideOffset = indexOffset === 0 ? _.options.slidesToScroll : indexOffset;
-                if (_.slideCount > _.options.slidesToShow) {
-                    _.slideHandler(_.currentSlide + slideOffset, false, dontAnimate);
-                }
-                break;
+			default:
+				return;
+		}
 
-            case 'index':
-                var index = event.data.index === 0 ? 0 :
-                    event.data.index || $target.index() * _.options.slidesToScroll;
+	};
 
-                _.slideHandler(_.checkNavigable(index), false, dontAnimate);
-                $target.children().trigger('focus');
-                break;
+	revSlick.prototype.checkNavigable = function (index) {
 
-            default:
-                return;
-        }
+		var _ = this,
+			navigables, prevNavigable;
 
-    };
+		navigables = _.getNavigableIndexes();
+		prevNavigable = 0;
+		if (index > navigables[navigables.length - 1]) {
+			index = navigables[navigables.length - 1];
+		} else {
+			for (var n in navigables) {
+				if (index < navigables[n]) {
+					index = prevNavigable;
+					break;
+				}
+				prevNavigable = navigables[n];
+			}
+		}
 
-    revSlick.prototype.checkNavigable = function(index) {
+		return index;
+	};
 
-        var _ = this,
-            navigables, prevNavigable;
+	revSlick.prototype.cleanUpEvents = function () {
 
-        navigables = _.getNavigableIndexes();
-        prevNavigable = 0;
-        if (index > navigables[navigables.length - 1]) {
-            index = navigables[navigables.length - 1];
-        } else {
-            for (var n in navigables) {
-                if (index < navigables[n]) {
-                    index = prevNavigable;
-                    break;
-                }
-                prevNavigable = navigables[n];
-            }
-        }
+		var _ = this;
 
-        return index;
-    };
+		if (_.options.dots && _.$dots !== null) {
 
-    revSlick.prototype.cleanUpEvents = function() {
+			$('li', _.$dots)
+				.off('click.revSlick', _.changeSlide)
+				.off('mouseenter.revSlick', $.proxy(_.interrupt, _, true))
+				.off('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
 
-        var _ = this;
+			if (_.options.accessibility === true) {
+				_.$dots.off('keydown.revSlick', _.keyHandler);
+			}
+		}
 
-        if (_.options.dots && _.$dots !== null) {
+		_.$slider.off('focus.revSlick blur.revSlick');
 
-            $('li', _.$dots)
-                .off('click.revSlick', _.changeSlide)
-                .off('mouseenter.revSlick', $.proxy(_.interrupt, _, true))
-                .off('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
+		if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
+			_.$prevArrow && _.$prevArrow.off('click.revSlick', _.changeSlide);
+			_.$nextArrow && _.$nextArrow.off('click.revSlick', _.changeSlide);
 
-            if (_.options.accessibility === true) {
-                _.$dots.off('keydown.revSlick', _.keyHandler);
-            }
-        }
+			if (_.options.accessibility === true) {
+				_.$prevArrow && _.$prevArrow.off('keydown.revSlick', _.keyHandler);
+				_.$nextArrow && _.$nextArrow.off('keydown.revSlick', _.keyHandler);
+			}
+		}
 
-        _.$slider.off('focus.revSlick blur.revSlick');
+		_.$list.off('touchstart.revSlick mousedown.revSlick', _.swipeHandler);
+		_.$list.off('touchmove.revSlick mousemove.revSlick', _.swipeHandler);
+		_.$list.off('touchend.revSlick mouseup.revSlick', _.swipeHandler);
+		_.$list.off('touchcancel.revSlick mouseleave.revSlick', _.swipeHandler);
 
-        if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
-            _.$prevArrow && _.$prevArrow.off('click.revSlick', _.changeSlide);
-            _.$nextArrow && _.$nextArrow.off('click.revSlick', _.changeSlide);
+		_.$list.off('click.revSlick', _.clickHandler);
 
-            if (_.options.accessibility === true) {
-                _.$prevArrow && _.$prevArrow.off('keydown.revSlick', _.keyHandler);
-                _.$nextArrow && _.$nextArrow.off('keydown.revSlick', _.keyHandler);
-            }
-        }
+		$(document).off(_.visibilityChange, _.visibility);
 
-        _.$list.off('touchstart.revSlick mousedown.revSlick', _.swipeHandler);
-        _.$list.off('touchmove.revSlick mousemove.revSlick', _.swipeHandler);
-        _.$list.off('touchend.revSlick mouseup.revSlick', _.swipeHandler);
-        _.$list.off('touchcancel.revSlick mouseleave.revSlick', _.swipeHandler);
+		_.cleanUpSlideEvents();
 
-        _.$list.off('click.revSlick', _.clickHandler);
+		if (_.options.accessibility === true) {
+			_.$list.off('keydown.revSlick', _.keyHandler);
+		}
 
-        $(document).off(_.visibilityChange, _.visibility);
+		if (_.options.focusOnSelect === true) {
+			$(_.$slideTrack).children().off('click.revSlick', _.selectHandler);
+		}
 
-        _.cleanUpSlideEvents();
+		$(window).off('orientationchange.revSlick.revSlick-' + _.instanceUid, _.orientationChange);
 
-        if (_.options.accessibility === true) {
-            _.$list.off('keydown.revSlick', _.keyHandler);
-        }
+		$(window).off('resize.revSlick.revSlick-' + _.instanceUid, _.resize);
 
-        if (_.options.focusOnSelect === true) {
-            $(_.$slideTrack).children().off('click.revSlick', _.selectHandler);
-        }
+		$('[draggable!=true]', _.$slideTrack).off('dragstart', _.preventDefault);
 
-        $(window).off('orientationchange.revSlick.revSlick-' + _.instanceUid, _.orientationChange);
+		$(window).off('load.revSlick.revSlick-' + _.instanceUid, _.setPosition);
 
-        $(window).off('resize.revSlick.revSlick-' + _.instanceUid, _.resize);
+	};
 
-        $('[draggable!=true]', _.$slideTrack).off('dragstart', _.preventDefault);
+	revSlick.prototype.cleanUpSlideEvents = function () {
 
-        $(window).off('load.revSlick.revSlick-' + _.instanceUid, _.setPosition);
+		var _ = this;
 
-    };
+		_.$list.off('mouseenter.revSlick', $.proxy(_.interrupt, _, true));
+		_.$list.off('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
 
-    revSlick.prototype.cleanUpSlideEvents = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.cleanUpRows = function () {
 
-        _.$list.off('mouseenter.revSlick', $.proxy(_.interrupt, _, true));
-        _.$list.off('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
+		var _ = this,
+			originalSlides;
 
-    };
+		if (_.options.rows > 0) {
+			originalSlides = _.$slides.children().children();
+			originalSlides.removeAttr('style');
+			_.$slider.empty().append(originalSlides);
+		}
 
-    revSlick.prototype.cleanUpRows = function() {
+	};
 
-        var _ = this, originalSlides;
+	revSlick.prototype.clickHandler = function (event) {
 
-        if(_.options.rows > 0) {
-            originalSlides = _.$slides.children().children();
-            originalSlides.removeAttr('style');
-            _.$slider.empty().append(originalSlides);
-        }
+		var _ = this;
 
-    };
+		if (_.shouldClick === false) {
+			event.stopImmediatePropagation();
+			event.stopPropagation();
+			event.preventDefault();
+		}
 
-    revSlick.prototype.clickHandler = function(event) {
+	};
 
-        var _ = this;
+	revSlick.prototype.destroy = function (refresh) {
 
-        if (_.shouldClick === false) {
-            event.stopImmediatePropagation();
-            event.stopPropagation();
-            event.preventDefault();
-        }
+		var _ = this;
 
-    };
+		_.autoPlayClear();
 
-    revSlick.prototype.destroy = function(refresh) {
+		_.touchObject = {};
 
-        var _ = this;
+		_.cleanUpEvents();
 
-        _.autoPlayClear();
+		$('.revSlick-cloned', _.$slider).detach();
 
-        _.touchObject = {};
+		if (_.$dots) {
+			_.$dots.remove();
+		}
 
-        _.cleanUpEvents();
+		if (_.$prevArrow && _.$prevArrow.length) {
 
-        $('.revSlick-cloned', _.$slider).detach();
+			_.$prevArrow
+				.removeClass('revSlick-disabled revSlick-arrow revSlick-hidden')
+				.removeAttr('aria-hidden aria-disabled tabindex')
+				.css('display', '');
 
-        if (_.$dots) {
-            _.$dots.remove();
-        }
+			if (_.htmlExpr.test(_.options.prevArrow)) {
+				_.$prevArrow.remove();
+			}
+		}
 
-        if ( _.$prevArrow && _.$prevArrow.length ) {
+		if (_.$nextArrow && _.$nextArrow.length) {
 
-            _.$prevArrow
-                .removeClass('revSlick-disabled revSlick-arrow revSlick-hidden')
-                .removeAttr('aria-hidden aria-disabled tabindex')
-                .css('display','');
+			_.$nextArrow
+				.removeClass('revSlick-disabled revSlick-arrow revSlick-hidden')
+				.removeAttr('aria-hidden aria-disabled tabindex')
+				.css('display', '');
 
-            if ( _.htmlExpr.test( _.options.prevArrow )) {
-                _.$prevArrow.remove();
-            }
-        }
+			if (_.htmlExpr.test(_.options.nextArrow)) {
+				_.$nextArrow.remove();
+			}
+		}
 
-        if ( _.$nextArrow && _.$nextArrow.length ) {
 
-            _.$nextArrow
-                .removeClass('revSlick-disabled revSlick-arrow revSlick-hidden')
-                .removeAttr('aria-hidden aria-disabled tabindex')
-                .css('display','');
+		if (_.$slides) {
 
-            if ( _.htmlExpr.test( _.options.nextArrow )) {
-                _.$nextArrow.remove();
-            }
-        }
+			_.$slides
+				.removeClass('revSlick-slide revSlick-active revSlick-center revSlick-visible revSlick-current')
+				.removeAttr('aria-hidden')
+				.removeAttr('data-revSlick-index')
+				.each(function () {
+					$(this).attr('style', $(this).data('originalStyling'));
+				});
 
+			_.$slideTrack.children(this.options.slide).detach();
 
-        if (_.$slides) {
+			_.$slideTrack.detach();
 
-            _.$slides
-                .removeClass('revSlick-slide revSlick-active revSlick-center revSlick-visible revSlick-current')
-                .removeAttr('aria-hidden')
-                .removeAttr('data-revSlick-index')
-                .each(function(){
-                    $(this).attr('style', $(this).data('originalStyling'));
-                });
+			_.$list.detach();
 
-            _.$slideTrack.children(this.options.slide).detach();
+			_.$slider.append(_.$slides);
+		}
 
-            _.$slideTrack.detach();
+		_.cleanUpRows();
 
-            _.$list.detach();
+		_.$slider.removeClass('revSlick-slider');
+		_.$slider.removeClass('revSlick-initialized');
+		_.$slider.removeClass('revSlick-dotted');
 
-            _.$slider.append(_.$slides);
-        }
+		_.unrevSlicked = true;
 
-        _.cleanUpRows();
+		if (!refresh) {
+			_.$slider.trigger('destroy', [_]);
+		}
 
-        _.$slider.removeClass('revSlick-slider');
-        _.$slider.removeClass('revSlick-initialized');
-        _.$slider.removeClass('revSlick-dotted');
+	};
 
-        _.unrevSlicked = true;
+	revSlick.prototype.disableTransition = function (slide) {
 
-        if(!refresh) {
-            _.$slider.trigger('destroy', [_]);
-        }
+		var _ = this,
+			transition = {};
 
-    };
+		transition[_.transitionType] = '';
 
-    revSlick.prototype.disableTransition = function(slide) {
+		if (_.options.fade === false) {
+			_.$slideTrack.css(transition);
+		} else {
+			_.$slides.eq(slide).css(transition);
+		}
 
-        var _ = this,
-            transition = {};
+	};
 
-        transition[_.transitionType] = '';
+	revSlick.prototype.fadeSlide = function (slideIndex, callback) {
 
-        if (_.options.fade === false) {
-            _.$slideTrack.css(transition);
-        } else {
-            _.$slides.eq(slide).css(transition);
-        }
+		var _ = this;
 
-    };
+		if (_.cssTransitions === false) {
 
-    revSlick.prototype.fadeSlide = function(slideIndex, callback) {
+			_.$slides.eq(slideIndex).css({
+				zIndex: _.options.zIndex
+			});
 
-        var _ = this;
+			_.$slides.eq(slideIndex).animate({
+				opacity: 1
+			}, _.options.speed, _.options.easing, callback);
 
-        if (_.cssTransitions === false) {
+		} else {
 
-            _.$slides.eq(slideIndex).css({
-                zIndex: _.options.zIndex
-            });
+			_.applyTransition(slideIndex);
 
-            _.$slides.eq(slideIndex).animate({
-                opacity: 1
-            }, _.options.speed, _.options.easing, callback);
+			_.$slides.eq(slideIndex).css({
+				opacity: 1,
+				zIndex: _.options.zIndex
+			});
 
-        } else {
+			if (callback) {
+				setTimeout(function () {
 
-            _.applyTransition(slideIndex);
+					_.disableTransition(slideIndex);
 
-            _.$slides.eq(slideIndex).css({
-                opacity: 1,
-                zIndex: _.options.zIndex
-            });
+					callback.call();
+				}, _.options.speed);
+			}
 
-            if (callback) {
-                setTimeout(function() {
+		}
 
-                    _.disableTransition(slideIndex);
+	};
 
-                    callback.call();
-                }, _.options.speed);
-            }
+	revSlick.prototype.fadeSlideOut = function (slideIndex) {
 
-        }
+		var _ = this;
 
-    };
+		if (_.cssTransitions === false) {
 
-    revSlick.prototype.fadeSlideOut = function(slideIndex) {
+			_.$slides.eq(slideIndex).animate({
+				opacity: 0,
+				zIndex: _.options.zIndex - 2
+			}, _.options.speed, _.options.easing);
 
-        var _ = this;
+		} else {
 
-        if (_.cssTransitions === false) {
+			_.applyTransition(slideIndex);
 
-            _.$slides.eq(slideIndex).animate({
-                opacity: 0,
-                zIndex: _.options.zIndex - 2
-            }, _.options.speed, _.options.easing);
+			_.$slides.eq(slideIndex).css({
+				opacity: 0,
+				zIndex: _.options.zIndex - 2
+			});
 
-        } else {
+		}
 
-            _.applyTransition(slideIndex);
+	};
 
-            _.$slides.eq(slideIndex).css({
-                opacity: 0,
-                zIndex: _.options.zIndex - 2
-            });
+	revSlick.prototype.filterSlides = revSlick.prototype.revSlickFilter = function (filter) {
 
-        }
+		var _ = this;
 
-    };
+		if (filter !== null) {
 
-    revSlick.prototype.filterSlides = revSlick.prototype.revSlickFilter = function(filter) {
+			_.$slidesCache = _.$slides;
 
-        var _ = this;
+			_.unload();
 
-        if (filter !== null) {
+			_.$slideTrack.children(this.options.slide).detach();
 
-            _.$slidesCache = _.$slides;
+			_.$slidesCache.filter(filter).appendTo(_.$slideTrack);
 
-            _.unload();
+			_.reinit();
 
-            _.$slideTrack.children(this.options.slide).detach();
+		}
 
-            _.$slidesCache.filter(filter).appendTo(_.$slideTrack);
+	};
 
-            _.reinit();
+	revSlick.prototype.focusHandler = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.$slider
+			.off('focus.revSlick blur.revSlick')
+			.on('focus.revSlick blur.revSlick', '*', function (event) {
 
-    revSlick.prototype.focusHandler = function() {
+				event.stopImmediatePropagation();
+				var $sf = $(this);
 
-        var _ = this;
+				setTimeout(function () {
 
-        _.$slider
-            .off('focus.revSlick blur.revSlick')
-            .on('focus.revSlick blur.revSlick', '*', function(event) {
+					if (_.options.pauseOnFocus) {
+						_.focussed = $sf.is(':focus');
+						_.autoPlay();
+					}
 
-            event.stopImmediatePropagation();
-            var $sf = $(this);
+				}, 0);
 
-            setTimeout(function() {
+			});
+	};
 
-                if( _.options.pauseOnFocus ) {
-                    _.focussed = $sf.is(':focus');
-                    _.autoPlay();
-                }
+	revSlick.prototype.getCurrent = revSlick.prototype.revSlickCurrentSlide = function () {
 
-            }, 0);
+		var _ = this;
+		return _.currentSlide;
 
-        });
-    };
+	};
 
-    revSlick.prototype.getCurrent = revSlick.prototype.revSlickCurrentSlide = function() {
+	revSlick.prototype.getDotCount = function () {
 
-        var _ = this;
-        return _.currentSlide;
+		var _ = this;
 
-    };
+		var breakPoint = 0;
+		var counter = 0;
+		var pagerQty = 0;
 
-    revSlick.prototype.getDotCount = function() {
+		if (_.options.infinite === true) {
+			if (_.slideCount <= _.options.slidesToShow) {
+				++pagerQty;
+			} else {
+				while (breakPoint < _.slideCount) {
+					++pagerQty;
+					breakPoint = counter + _.options.slidesToScroll;
+					counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
+				}
+			}
+		} else if (_.options.centerMode === true) {
+			pagerQty = _.slideCount;
+		} else if (!_.options.asNavFor) {
+			pagerQty = 1 + Math.ceil((_.slideCount - _.options.slidesToShow) / _.options.slidesToScroll);
+		} else {
+			while (breakPoint < _.slideCount) {
+				++pagerQty;
+				breakPoint = counter + _.options.slidesToScroll;
+				counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
+			}
+		}
 
-        var _ = this;
+		return pagerQty - 1;
 
-        var breakPoint = 0;
-        var counter = 0;
-        var pagerQty = 0;
+	};
 
-        if (_.options.infinite === true) {
-            if (_.slideCount <= _.options.slidesToShow) {
-                 ++pagerQty;
-            } else {
-                while (breakPoint < _.slideCount) {
-                    ++pagerQty;
-                    breakPoint = counter + _.options.slidesToScroll;
-                    counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
-                }
-            }
-        } else if (_.options.centerMode === true) {
-            pagerQty = _.slideCount;
-        } else if(!_.options.asNavFor) {
-            pagerQty = 1 + Math.ceil((_.slideCount - _.options.slidesToShow) / _.options.slidesToScroll);
-        }else {
-            while (breakPoint < _.slideCount) {
-                ++pagerQty;
-                breakPoint = counter + _.options.slidesToScroll;
-                counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
-            }
-        }
+	revSlick.prototype.getLeft = function (slideIndex) {
 
-        return pagerQty - 1;
+		var _ = this,
+			targetLeft,
+			verticalHeight,
+			verticalOffset = 0,
+			targetSlide,
+			coef;
 
-    };
+		_.slideOffset = 0;
+		verticalHeight = _.$slides.first().outerHeight(true);
 
-    revSlick.prototype.getLeft = function(slideIndex) {
+		if (_.options.infinite === true) {
+			if (_.slideCount > _.options.slidesToShow) {
+				_.slideOffset = (_.slideWidth * _.options.slidesToShow) * -1;
+				coef = -1
 
-        var _ = this,
-            targetLeft,
-            verticalHeight,
-            verticalOffset = 0,
-            targetSlide,
-            coef;
+				if (_.options.vertical === true && _.options.centerMode === true) {
+					if (_.options.slidesToShow === 2) {
+						coef = -1.5;
+					} else if (_.options.slidesToShow === 1) {
+						coef = -2
+					}
+				}
+				verticalOffset = (verticalHeight * _.options.slidesToShow) * coef;
+			}
+			if (_.slideCount % _.options.slidesToScroll !== 0) {
+				if (slideIndex + _.options.slidesToScroll > _.slideCount && _.slideCount > _.options.slidesToShow) {
+					if (slideIndex > _.slideCount) {
+						_.slideOffset = ((_.options.slidesToShow - (slideIndex - _.slideCount)) * _.slideWidth) * -1;
+						verticalOffset = ((_.options.slidesToShow - (slideIndex - _.slideCount)) * verticalHeight) * -1;
+					} else {
+						_.slideOffset = ((_.slideCount % _.options.slidesToScroll) * _.slideWidth) * -1;
+						verticalOffset = ((_.slideCount % _.options.slidesToScroll) * verticalHeight) * -1;
+					}
+				}
+			}
+		} else {
+			if (slideIndex + _.options.slidesToShow > _.slideCount) {
+				_.slideOffset = ((slideIndex + _.options.slidesToShow) - _.slideCount) * _.slideWidth;
+				verticalOffset = ((slideIndex + _.options.slidesToShow) - _.slideCount) * verticalHeight;
+			}
+		}
 
-        _.slideOffset = 0;
-        verticalHeight = _.$slides.first().outerHeight(true);
+		if (_.slideCount <= _.options.slidesToShow) {
+			_.slideOffset = 0;
+			verticalOffset = 0;
+		}
 
-        if (_.options.infinite === true) {
-            if (_.slideCount > _.options.slidesToShow) {
-                _.slideOffset = (_.slideWidth * _.options.slidesToShow) * -1;
-                coef = -1
+		if (_.options.centerMode === true && _.slideCount <= _.options.slidesToShow) {
+			_.slideOffset = ((_.slideWidth * Math.floor(_.options.slidesToShow)) / 2) - ((_.slideWidth * _.slideCount) / 2);
+		} else if (_.options.centerMode === true && _.options.infinite === true) {
+			_.slideOffset += _.slideWidth * Math.floor(_.options.slidesToShow / 2) - _.slideWidth;
+		} else if (_.options.centerMode === true) {
+			_.slideOffset = 0;
+			_.slideOffset += _.slideWidth * Math.floor(_.options.slidesToShow / 2);
+		}
 
-                if (_.options.vertical === true && _.options.centerMode === true) {
-                    if (_.options.slidesToShow === 2) {
-                        coef = -1.5;
-                    } else if (_.options.slidesToShow === 1) {
-                        coef = -2
-                    }
-                }
-                verticalOffset = (verticalHeight * _.options.slidesToShow) * coef;
-            }
-            if (_.slideCount % _.options.slidesToScroll !== 0) {
-                if (slideIndex + _.options.slidesToScroll > _.slideCount && _.slideCount > _.options.slidesToShow) {
-                    if (slideIndex > _.slideCount) {
-                        _.slideOffset = ((_.options.slidesToShow - (slideIndex - _.slideCount)) * _.slideWidth) * -1;
-                        verticalOffset = ((_.options.slidesToShow - (slideIndex - _.slideCount)) * verticalHeight) * -1;
-                    } else {
-                        _.slideOffset = ((_.slideCount % _.options.slidesToScroll) * _.slideWidth) * -1;
-                        verticalOffset = ((_.slideCount % _.options.slidesToScroll) * verticalHeight) * -1;
-                    }
-                }
-            }
-        } else {
-            if (slideIndex + _.options.slidesToShow > _.slideCount) {
-                _.slideOffset = ((slideIndex + _.options.slidesToShow) - _.slideCount) * _.slideWidth;
-                verticalOffset = ((slideIndex + _.options.slidesToShow) - _.slideCount) * verticalHeight;
-            }
-        }
+		if (_.options.vertical === false) {
+			targetLeft = ((slideIndex * _.slideWidth) * -1) + _.slideOffset;
+		} else {
+			targetLeft = ((slideIndex * verticalHeight) * -1) + verticalOffset;
+		}
 
-        if (_.slideCount <= _.options.slidesToShow) {
-            _.slideOffset = 0;
-            verticalOffset = 0;
-        }
+		if (_.options.variableWidth === true) {
 
-        if (_.options.centerMode === true && _.slideCount <= _.options.slidesToShow) {
-            _.slideOffset = ((_.slideWidth * Math.floor(_.options.slidesToShow)) / 2) - ((_.slideWidth * _.slideCount) / 2);
-        } else if (_.options.centerMode === true && _.options.infinite === true) {
-            _.slideOffset += _.slideWidth * Math.floor(_.options.slidesToShow / 2) - _.slideWidth;
-        } else if (_.options.centerMode === true) {
-            _.slideOffset = 0;
-            _.slideOffset += _.slideWidth * Math.floor(_.options.slidesToShow / 2);
-        }
+			if (_.slideCount <= _.options.slidesToShow || _.options.infinite === false) {
+				targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex);
+			} else {
+				targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex + _.options.slidesToShow);
+			}
 
-        if (_.options.vertical === false) {
-            targetLeft = ((slideIndex * _.slideWidth) * -1) + _.slideOffset;
-        } else {
-            targetLeft = ((slideIndex * verticalHeight) * -1) + verticalOffset;
-        }
+			if (_.options.rtl === true) {
+				if (targetSlide[0]) {
+					targetLeft = (_.$slideTrack.width() - targetSlide[0].offsetLeft - targetSlide.width()) * -1;
+				} else {
+					targetLeft = 0;
+				}
+			} else {
+				targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
+			}
 
-        if (_.options.variableWidth === true) {
+			if (_.options.centerMode === true) {
+				if (_.slideCount <= _.options.slidesToShow || _.options.infinite === false) {
+					targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex);
+				} else {
+					targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex + _.options.slidesToShow + 1);
+				}
 
-            if (_.slideCount <= _.options.slidesToShow || _.options.infinite === false) {
-                targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex);
-            } else {
-                targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex + _.options.slidesToShow);
-            }
+				if (_.options.rtl === true) {
+					if (targetSlide[0]) {
+						targetLeft = (_.$slideTrack.width() - targetSlide[0].offsetLeft - targetSlide.width()) * -1;
+					} else {
+						targetLeft = 0;
+					}
+				} else {
+					targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
+				}
 
-            if (_.options.rtl === true) {
-                if (targetSlide[0]) {
-                    targetLeft = (_.$slideTrack.width() - targetSlide[0].offsetLeft - targetSlide.width()) * -1;
-                } else {
-                    targetLeft =  0;
-                }
-            } else {
-                targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
-            }
+				targetLeft += (_.$list.width() - targetSlide.outerWidth()) / 2;
+			}
+		}
 
-            if (_.options.centerMode === true) {
-                if (_.slideCount <= _.options.slidesToShow || _.options.infinite === false) {
-                    targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex);
-                } else {
-                    targetSlide = _.$slideTrack.children('.revSlick-slide').eq(slideIndex + _.options.slidesToShow + 1);
-                }
+		return targetLeft;
 
-                if (_.options.rtl === true) {
-                    if (targetSlide[0]) {
-                        targetLeft = (_.$slideTrack.width() - targetSlide[0].offsetLeft - targetSlide.width()) * -1;
-                    } else {
-                        targetLeft =  0;
-                    }
-                } else {
-                    targetLeft = targetSlide[0] ? targetSlide[0].offsetLeft * -1 : 0;
-                }
+	};
 
-                targetLeft += (_.$list.width() - targetSlide.outerWidth()) / 2;
-            }
-        }
+	revSlick.prototype.getOption = revSlick.prototype.revSlickGetOption = function (option) {
 
-        return targetLeft;
+		var _ = this;
 
-    };
+		return _.options[option];
 
-    revSlick.prototype.getOption = revSlick.prototype.revSlickGetOption = function(option) {
+	};
 
-        var _ = this;
+	revSlick.prototype.getNavigableIndexes = function () {
 
-        return _.options[option];
+		var _ = this,
+			breakPoint = 0,
+			counter = 0,
+			indexes = [],
+			max;
 
-    };
+		if (_.options.infinite === false) {
+			max = _.slideCount;
+		} else {
+			breakPoint = _.options.slidesToScroll * -1;
+			counter = _.options.slidesToScroll * -1;
+			max = _.slideCount * 2;
+		}
 
-    revSlick.prototype.getNavigableIndexes = function() {
+		while (breakPoint < max) {
+			indexes.push(breakPoint);
+			breakPoint = counter + _.options.slidesToScroll;
+			counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
+		}
 
-        var _ = this,
-            breakPoint = 0,
-            counter = 0,
-            indexes = [],
-            max;
+		return indexes;
 
-        if (_.options.infinite === false) {
-            max = _.slideCount;
-        } else {
-            breakPoint = _.options.slidesToScroll * -1;
-            counter = _.options.slidesToScroll * -1;
-            max = _.slideCount * 2;
-        }
+	};
 
-        while (breakPoint < max) {
-            indexes.push(breakPoint);
-            breakPoint = counter + _.options.slidesToScroll;
-            counter += _.options.slidesToScroll <= _.options.slidesToShow ? _.options.slidesToScroll : _.options.slidesToShow;
-        }
+	revSlick.prototype.getrevSlick = function () {
 
-        return indexes;
+		return this;
 
-    };
+	};
 
-    revSlick.prototype.getrevSlick = function() {
+	revSlick.prototype.getSlideCount = function () {
 
-        return this;
+		var _ = this,
+			slidesTraversed, swipedSlide, centerOffset;
 
-    };
+		centerOffset = _.options.centerMode === true ? _.slideWidth * Math.floor(_.options.slidesToShow / 2) : 0;
 
-    revSlick.prototype.getSlideCount = function() {
+		if (_.options.swipeToSlide === true) {
+			_.$slideTrack.find('.revSlick-slide').each(function (index, slide) {
+				if (slide.offsetLeft - centerOffset + ($(slide).outerWidth() / 2) > (_.swipeLeft * -1)) {
+					swipedSlide = slide;
+					return false;
+				}
+			});
 
-        var _ = this,
-            slidesTraversed, swipedSlide, centerOffset;
+			slidesTraversed = Math.abs($(swipedSlide).attr('data-revSlick-index') - _.currentSlide) || 1;
 
-        centerOffset = _.options.centerMode === true ? _.slideWidth * Math.floor(_.options.slidesToShow / 2) : 0;
+			return slidesTraversed;
 
-        if (_.options.swipeToSlide === true) {
-            _.$slideTrack.find('.revSlick-slide').each(function(index, slide) {
-                if (slide.offsetLeft - centerOffset + ($(slide).outerWidth() / 2) > (_.swipeLeft * -1)) {
-                    swipedSlide = slide;
-                    return false;
-                }
-            });
+		} else {
+			return _.options.slidesToScroll;
+		}
 
-            slidesTraversed = Math.abs($(swipedSlide).attr('data-revSlick-index') - _.currentSlide) || 1;
+	};
 
-            return slidesTraversed;
+	revSlick.prototype.goTo = revSlick.prototype.revSlickGoTo = function (slide, dontAnimate) {
 
-        } else {
-            return _.options.slidesToScroll;
-        }
+		var _ = this;
 
-    };
+		_.changeSlide({
+			data: {
+				message: 'index',
+				index: parseInt(slide)
+			}
+		}, dontAnimate);
 
-    revSlick.prototype.goTo = revSlick.prototype.revSlickGoTo = function(slide, dontAnimate) {
+	};
 
-        var _ = this;
+	revSlick.prototype.init = function (creation) {
 
-        _.changeSlide({
-            data: {
-                message: 'index',
-                index: parseInt(slide)
-            }
-        }, dontAnimate);
+		var _ = this;
 
-    };
+		if (!$(_.$slider).hasClass('revSlick-initialized')) {
 
-    revSlick.prototype.init = function(creation) {
+			$(_.$slider).addClass('revSlick-initialized');
 
-        var _ = this;
+			_.buildRows();
+			_.buildOut();
+			_.setProps();
+			_.startLoad();
+			_.loadSlider();
+			_.initializeEvents();
+			_.updateArrows();
+			_.updateDots();
+			_.checkResponsive(true);
+			_.focusHandler();
 
-        if (!$(_.$slider).hasClass('revSlick-initialized')) {
+		}
 
-            $(_.$slider).addClass('revSlick-initialized');
+		if (creation) {
+			_.$slider.trigger('init', [_]);
+		}
 
-            _.buildRows();
-            _.buildOut();
-            _.setProps();
-            _.startLoad();
-            _.loadSlider();
-            _.initializeEvents();
-            _.updateArrows();
-            _.updateDots();
-            _.checkResponsive(true);
-            _.focusHandler();
+		if (_.options.accessibility === true) {
+			_.initADA();
+		}
 
-        }
+		if (_.options.autoplay) {
 
-        if (creation) {
-            _.$slider.trigger('init', [_]);
-        }
+			_.paused = false;
+			_.autoPlay();
 
-        if (_.options.accessibility === true) {
-            _.initADA();
-        }
+		}
 
-        if ( _.options.autoplay ) {
+	};
 
-            _.paused = false;
-            _.autoPlay();
+	revSlick.prototype.initADA = function () {
+		var _ = this,
+			numDotGroups = Math.ceil(_.slideCount / _.options.slidesToShow),
+			tabControlIndexes = _.getNavigableIndexes().filter(function (val) {
+				return (val >= 0) && (val < _.slideCount);
+			});
 
-        }
+		_.$slides.add(_.$slideTrack.find('.revSlick-cloned')).attr({
+			'aria-hidden': 'true',
+			'tabindex': '-1'
+		}).find('a, input, button, select').attr({
+			'tabindex': '-1'
+		});
 
-    };
+		if (_.$dots !== null) {
+			_.$slides.not(_.$slideTrack.find('.revSlick-cloned')).each(function (i) {
+				var slideControlIndex = tabControlIndexes.indexOf(i);
 
-    revSlick.prototype.initADA = function() {
-        var _ = this,
-                numDotGroups = Math.ceil(_.slideCount / _.options.slidesToShow),
-                tabControlIndexes = _.getNavigableIndexes().filter(function(val) {
-                    return (val >= 0) && (val < _.slideCount);
-                });
+				$(this).attr({
+					'role': 'tabpanel',
+					'id': 'revSlick-slide' + _.instanceUid + i,
+					'tabindex': -1
+				});
 
-        _.$slides.add(_.$slideTrack.find('.revSlick-cloned')).attr({
-            'aria-hidden': 'true',
-            'tabindex': '-1'
-        }).find('a, input, button, select').attr({
-            'tabindex': '-1'
-        });
+				if (slideControlIndex !== -1) {
+					var ariaButtonControl = 'revSlick-slide-control' + _.instanceUid + slideControlIndex
+					if ($('#' + ariaButtonControl).length) {
+						$(this).attr({
+							'aria-describedby': ariaButtonControl
+						});
+					}
+				}
+			});
 
-        if (_.$dots !== null) {
-            _.$slides.not(_.$slideTrack.find('.revSlick-cloned')).each(function(i) {
-                var slideControlIndex = tabControlIndexes.indexOf(i);
+			_.$dots.attr('role', 'tablist').find('li').each(function (i) {
+				var mappedSlideIndex = tabControlIndexes[i];
 
-                $(this).attr({
-                    'role': 'tabpanel',
-                    'id': 'revSlick-slide' + _.instanceUid + i,
-                    'tabindex': -1
-                });
+				$(this).attr({
+					'role': 'presentation'
+				});
 
-                if (slideControlIndex !== -1) {
-                   var ariaButtonControl = 'revSlick-slide-control' + _.instanceUid + slideControlIndex
-                   if ($('#' + ariaButtonControl).length) {
-                     $(this).attr({
-                         'aria-describedby': ariaButtonControl
-                     });
-                   }
-                }
-            });
+				$(this).find('button').first().attr({
+					'role': 'tab',
+					'id': 'revSlick-slide-control' + _.instanceUid + i,
+					'aria-controls': 'revSlick-slide' + _.instanceUid + mappedSlideIndex,
+					'aria-label': (i + 1) + ' of ' + numDotGroups,
+					'aria-selected': null,
+					'tabindex': '-1'
+				});
 
-            _.$dots.attr('role', 'tablist').find('li').each(function(i) {
-                var mappedSlideIndex = tabControlIndexes[i];
+			}).eq(_.currentSlide).find('button').attr({
+				'aria-selected': 'true',
+				'tabindex': '0'
+			}).end();
+		}
 
-                $(this).attr({
-                    'role': 'presentation'
-                });
+		for (var i = _.currentSlide, max = i + _.options.slidesToShow; i < max; i++) {
+			if (_.options.focusOnChange) {
+				_.$slides.eq(i).attr({
+					'tabindex': '0'
+				});
+			} else {
+				_.$slides.eq(i).removeAttr('tabindex');
+			}
+		}
 
-                $(this).find('button').first().attr({
-                    'role': 'tab',
-                    'id': 'revSlick-slide-control' + _.instanceUid + i,
-                    'aria-controls': 'revSlick-slide' + _.instanceUid + mappedSlideIndex,
-                    'aria-label': (i + 1) + ' of ' + numDotGroups,
-                    'aria-selected': null,
-                    'tabindex': '-1'
-                });
+		_.activateADA();
 
-            }).eq(_.currentSlide).find('button').attr({
-                'aria-selected': 'true',
-                'tabindex': '0'
-            }).end();
-        }
+	};
 
-        for (var i=_.currentSlide, max=i+_.options.slidesToShow; i < max; i++) {
-          if (_.options.focusOnChange) {
-            _.$slides.eq(i).attr({'tabindex': '0'});
-          } else {
-            _.$slides.eq(i).removeAttr('tabindex');
-          }
-        }
+	revSlick.prototype.initArrowEvents = function () {
 
-        _.activateADA();
+		var _ = this;
 
-    };
+		if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
+			_.$prevArrow
+				.off('click.revSlick')
+				.on('click.revSlick', {
+					message: 'previous'
+				}, _.changeSlide);
+			_.$nextArrow
+				.off('click.revSlick')
+				.on('click.revSlick', {
+					message: 'next'
+				}, _.changeSlide);
 
-    revSlick.prototype.initArrowEvents = function() {
+			if (_.options.accessibility === true) {
+				_.$prevArrow.on('keydown.revSlick', _.keyHandler);
+				_.$nextArrow.on('keydown.revSlick', _.keyHandler);
+			}
+		}
 
-        var _ = this;
+	};
 
-        if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
-            _.$prevArrow
-               .off('click.revSlick')
-               .on('click.revSlick', {
-                    message: 'previous'
-               }, _.changeSlide);
-            _.$nextArrow
-               .off('click.revSlick')
-               .on('click.revSlick', {
-                    message: 'next'
-               }, _.changeSlide);
+	revSlick.prototype.initDotEvents = function () {
 
-            if (_.options.accessibility === true) {
-                _.$prevArrow.on('keydown.revSlick', _.keyHandler);
-                _.$nextArrow.on('keydown.revSlick', _.keyHandler);
-            }
-        }
+		var _ = this;
 
-    };
+		if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
+			$('li', _.$dots).on('click.revSlick', {
+				message: 'index'
+			}, _.changeSlide);
 
-    revSlick.prototype.initDotEvents = function() {
+			if (_.options.accessibility === true) {
+				_.$dots.on('keydown.revSlick', _.keyHandler);
+			}
+		}
 
-        var _ = this;
+		if (_.options.dots === true && _.options.pauseOnDotsHover === true && _.slideCount > _.options.slidesToShow) {
 
-        if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
-            $('li', _.$dots).on('click.revSlick', {
-                message: 'index'
-            }, _.changeSlide);
+			$('li', _.$dots)
+				.on('mouseenter.revSlick', $.proxy(_.interrupt, _, true))
+				.on('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
 
-            if (_.options.accessibility === true) {
-                _.$dots.on('keydown.revSlick', _.keyHandler);
-            }
-        }
+		}
 
-        if (_.options.dots === true && _.options.pauseOnDotsHover === true && _.slideCount > _.options.slidesToShow) {
+	};
 
-            $('li', _.$dots)
-                .on('mouseenter.revSlick', $.proxy(_.interrupt, _, true))
-                .on('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
+	revSlick.prototype.initSlideEvents = function () {
 
-        }
+		var _ = this;
 
-    };
+		if (_.options.pauseOnHover) {
 
-    revSlick.prototype.initSlideEvents = function() {
+			_.$list.on('mouseenter.revSlick', $.proxy(_.interrupt, _, true));
+			_.$list.on('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
 
-        var _ = this;
+		}
 
-        if ( _.options.pauseOnHover ) {
+	};
 
-            _.$list.on('mouseenter.revSlick', $.proxy(_.interrupt, _, true));
-            _.$list.on('mouseleave.revSlick', $.proxy(_.interrupt, _, false));
+	revSlick.prototype.initializeEvents = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.initArrowEvents();
 
-    revSlick.prototype.initializeEvents = function() {
+		_.initDotEvents();
+		_.initSlideEvents();
 
-        var _ = this;
+		_.$list.on('touchstart.revSlick mousedown.revSlick', {
+			action: 'start'
+		}, _.swipeHandler);
+		_.$list.on('touchmove.revSlick mousemove.revSlick', {
+			action: 'move'
+		}, _.swipeHandler);
+		_.$list.on('touchend.revSlick mouseup.revSlick', {
+			action: 'end'
+		}, _.swipeHandler);
+		_.$list.on('touchcancel.revSlick mouseleave.revSlick', {
+			action: 'end'
+		}, _.swipeHandler);
 
-        _.initArrowEvents();
+		_.$list.on('click.revSlick', _.clickHandler);
 
-        _.initDotEvents();
-        _.initSlideEvents();
+		$(document).on(_.visibilityChange, $.proxy(_.visibility, _));
 
-        _.$list.on('touchstart.revSlick mousedown.revSlick', {
-            action: 'start'
-        }, _.swipeHandler);
-        _.$list.on('touchmove.revSlick mousemove.revSlick', {
-            action: 'move'
-        }, _.swipeHandler);
-        _.$list.on('touchend.revSlick mouseup.revSlick', {
-            action: 'end'
-        }, _.swipeHandler);
-        _.$list.on('touchcancel.revSlick mouseleave.revSlick', {
-            action: 'end'
-        }, _.swipeHandler);
+		if (_.options.accessibility === true) {
+			_.$list.on('keydown.revSlick', _.keyHandler);
+		}
 
-        _.$list.on('click.revSlick', _.clickHandler);
+		if (_.options.focusOnSelect === true) {
+			$(_.$slideTrack).children().on('click.revSlick', _.selectHandler);
+		}
 
-        $(document).on(_.visibilityChange, $.proxy(_.visibility, _));
+		$(window).on('orientationchange.revSlick.revSlick-' + _.instanceUid, $.proxy(_.orientationChange, _));
 
-        if (_.options.accessibility === true) {
-            _.$list.on('keydown.revSlick', _.keyHandler);
-        }
+		$(window).on('resize.revSlick.revSlick-' + _.instanceUid, $.proxy(_.resize, _));
 
-        if (_.options.focusOnSelect === true) {
-            $(_.$slideTrack).children().on('click.revSlick', _.selectHandler);
-        }
+		$('[draggable!=true]', _.$slideTrack).on('dragstart', _.preventDefault);
 
-        $(window).on('orientationchange.revSlick.revSlick-' + _.instanceUid, $.proxy(_.orientationChange, _));
+		$(window).on('load.revSlick.revSlick-' + _.instanceUid, _.setPosition);
+		$(_.setPosition);
 
-        $(window).on('resize.revSlick.revSlick-' + _.instanceUid, $.proxy(_.resize, _));
+	};
 
-        $('[draggable!=true]', _.$slideTrack).on('dragstart', _.preventDefault);
+	revSlick.prototype.initUI = function () {
 
-        $(window).on('load.revSlick.revSlick-' + _.instanceUid, _.setPosition);
-        $(_.setPosition);
+		var _ = this;
 
-    };
+		if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
 
-    revSlick.prototype.initUI = function() {
+			_.$prevArrow.show();
+			_.$nextArrow.show();
 
-        var _ = this;
+		}
 
-        if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
+		if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
 
-            _.$prevArrow.show();
-            _.$nextArrow.show();
+			_.$dots.show();
 
-        }
+		}
 
-        if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
+	};
 
-            _.$dots.show();
+	revSlick.prototype.keyHandler = function (event) {
 
-        }
+		var _ = this;
+		//Dont slide if the cursor is inside the form fields and arrow keys are pressed
+		if (!event.target.tagName.match('TEXTAREA|INPUT|SELECT')) {
+			if (event.keyCode === 37 && _.options.accessibility === true) {
+				_.changeSlide({
+					data: {
+						message: _.options.rtl === true ? 'next' : 'previous'
+					}
+				});
+			} else if (event.keyCode === 39 && _.options.accessibility === true) {
+				_.changeSlide({
+					data: {
+						message: _.options.rtl === true ? 'previous' : 'next'
+					}
+				});
+			}
+		}
 
-    };
+	};
 
-    revSlick.prototype.keyHandler = function(event) {
+	revSlick.prototype.lazyLoad = function () {
 
-        var _ = this;
-         //Dont slide if the cursor is inside the form fields and arrow keys are pressed
-        if(!event.target.tagName.match('TEXTAREA|INPUT|SELECT')) {
-            if (event.keyCode === 37 && _.options.accessibility === true) {
-                _.changeSlide({
-                    data: {
-                        message: _.options.rtl === true ? 'next' :  'previous'
-                    }
-                });
-            } else if (event.keyCode === 39 && _.options.accessibility === true) {
-                _.changeSlide({
-                    data: {
-                        message: _.options.rtl === true ? 'previous' : 'next'
-                    }
-                });
-            }
-        }
+		var _ = this,
+			loadRange, cloneRange, rangeStart, rangeEnd;
 
-    };
+		function loadImages(imagesScope) {
 
-    revSlick.prototype.lazyLoad = function() {
+			$('img[data-lazy]', imagesScope).each(function () {
 
-        var _ = this,
-            loadRange, cloneRange, rangeStart, rangeEnd;
+				var image = $(this),
+					imageSource = $(this).attr('data-lazy'),
+					imageSrcSet = $(this).attr('data-srcset'),
+					imageSizes = $(this).attr('data-sizes') || _.$slider.attr('data-sizes'),
+					imageToLoad = document.createElement('img');
 
-        function loadImages(imagesScope) {
+				imageToLoad.onload = function () {
 
-            $('img[data-lazy]', imagesScope).each(function() {
+					image
+						.animate({
+							opacity: 0
+						}, 100, function () {
 
-                var image = $(this),
-                    imageSource = $(this).attr('data-lazy'),
-                    imageSrcSet = $(this).attr('data-srcset'),
-                    imageSizes  = $(this).attr('data-sizes') || _.$slider.attr('data-sizes'),
-                    imageToLoad = document.createElement('img');
+							if (imageSrcSet) {
+								image
+									.attr('srcset', imageSrcSet);
 
-                imageToLoad.onload = function() {
+								if (imageSizes) {
+									image
+										.attr('sizes', imageSizes);
+								}
+							}
 
-                    image
-                        .animate({ opacity: 0 }, 100, function() {
+							image
+								.attr('src', imageSource)
+								.animate({
+									opacity: 1
+								}, 200, function () {
+									image
+										.removeAttr('data-lazy data-srcset data-sizes')
+										.removeClass('revSlick-loading');
+								});
+							_.$slider.trigger('lazyLoaded', [_, image, imageSource]);
+						});
 
-                            if (imageSrcSet) {
-                                image
-                                    .attr('srcset', imageSrcSet );
+				};
 
-                                if (imageSizes) {
-                                    image
-                                        .attr('sizes', imageSizes );
-                                }
-                            }
+				imageToLoad.onerror = function () {
 
-                            image
-                                .attr('src', imageSource)
-                                .animate({ opacity: 1 }, 200, function() {
-                                    image
-                                        .removeAttr('data-lazy data-srcset data-sizes')
-                                        .removeClass('revSlick-loading');
-                                });
-                            _.$slider.trigger('lazyLoaded', [_, image, imageSource]);
-                        });
+					image
+						.removeAttr('data-lazy')
+						.removeClass('revSlick-loading')
+						.addClass('revSlick-lazyload-error');
 
-                };
+					_.$slider.trigger('lazyLoadError', [_, image, imageSource]);
 
-                imageToLoad.onerror = function() {
+				};
 
-                    image
-                        .removeAttr( 'data-lazy' )
-                        .removeClass( 'revSlick-loading' )
-                        .addClass( 'revSlick-lazyload-error' );
+				imageToLoad.src = imageSource;
 
-                    _.$slider.trigger('lazyLoadError', [ _, image, imageSource ]);
+			});
 
-                };
+		}
 
-                imageToLoad.src = imageSource;
+		if (_.options.centerMode === true) {
+			if (_.options.infinite === true) {
+				rangeStart = _.currentSlide + (_.options.slidesToShow / 2 + 1);
+				rangeEnd = rangeStart + _.options.slidesToShow + 2;
+			} else {
+				rangeStart = Math.max(0, _.currentSlide - (_.options.slidesToShow / 2 + 1));
+				rangeEnd = 2 + (_.options.slidesToShow / 2 + 1) + _.currentSlide;
+			}
+		} else {
+			rangeStart = _.options.infinite ? _.options.slidesToShow + _.currentSlide : _.currentSlide;
+			rangeEnd = Math.ceil(rangeStart + _.options.slidesToShow);
+			if (_.options.fade === true) {
+				if (rangeStart > 0) rangeStart--;
+				if (rangeEnd <= _.slideCount) rangeEnd++;
+			}
+		}
 
-            });
+		loadRange = _.$slider.find('.revSlick-slide').slice(rangeStart, rangeEnd);
 
-        }
+		if (_.options.lazyLoad === 'anticipated') {
+			var prevSlide = rangeStart - 1,
+				nextSlide = rangeEnd,
+				$slides = _.$slider.find('.revSlick-slide');
 
-        if (_.options.centerMode === true) {
-            if (_.options.infinite === true) {
-                rangeStart = _.currentSlide + (_.options.slidesToShow / 2 + 1);
-                rangeEnd = rangeStart + _.options.slidesToShow + 2;
-            } else {
-                rangeStart = Math.max(0, _.currentSlide - (_.options.slidesToShow / 2 + 1));
-                rangeEnd = 2 + (_.options.slidesToShow / 2 + 1) + _.currentSlide;
-            }
-        } else {
-            rangeStart = _.options.infinite ? _.options.slidesToShow + _.currentSlide : _.currentSlide;
-            rangeEnd = Math.ceil(rangeStart + _.options.slidesToShow);
-            if (_.options.fade === true) {
-                if (rangeStart > 0) rangeStart--;
-                if (rangeEnd <= _.slideCount) rangeEnd++;
-            }
-        }
+			for (var i = 0; i < _.options.slidesToScroll; i++) {
+				if (prevSlide < 0) prevSlide = _.slideCount - 1;
+				loadRange = loadRange.add($slides.eq(prevSlide));
+				loadRange = loadRange.add($slides.eq(nextSlide));
+				prevSlide--;
+				nextSlide++;
+			}
+		}
 
-        loadRange = _.$slider.find('.revSlick-slide').slice(rangeStart, rangeEnd);
+		loadImages(loadRange);
 
-        if (_.options.lazyLoad === 'anticipated') {
-            var prevSlide = rangeStart - 1,
-                nextSlide = rangeEnd,
-                $slides = _.$slider.find('.revSlick-slide');
+		if (_.slideCount <= _.options.slidesToShow) {
+			cloneRange = _.$slider.find('.revSlick-slide');
+			loadImages(cloneRange);
+		} else
+		if (_.currentSlide >= _.slideCount - _.options.slidesToShow) {
+			cloneRange = _.$slider.find('.revSlick-cloned').slice(0, _.options.slidesToShow);
+			loadImages(cloneRange);
+		} else if (_.currentSlide === 0) {
+			cloneRange = _.$slider.find('.revSlick-cloned').slice(_.options.slidesToShow * -1);
+			loadImages(cloneRange);
+		}
 
-            for (var i = 0; i < _.options.slidesToScroll; i++) {
-                if (prevSlide < 0) prevSlide = _.slideCount - 1;
-                loadRange = loadRange.add($slides.eq(prevSlide));
-                loadRange = loadRange.add($slides.eq(nextSlide));
-                prevSlide--;
-                nextSlide++;
-            }
-        }
+	};
 
-        loadImages(loadRange);
+	revSlick.prototype.loadSlider = function () {
 
-        if (_.slideCount <= _.options.slidesToShow) {
-            cloneRange = _.$slider.find('.revSlick-slide');
-            loadImages(cloneRange);
-        } else
-        if (_.currentSlide >= _.slideCount - _.options.slidesToShow) {
-            cloneRange = _.$slider.find('.revSlick-cloned').slice(0, _.options.slidesToShow);
-            loadImages(cloneRange);
-        } else if (_.currentSlide === 0) {
-            cloneRange = _.$slider.find('.revSlick-cloned').slice(_.options.slidesToShow * -1);
-            loadImages(cloneRange);
-        }
+		var _ = this;
 
-    };
+		_.setPosition();
 
-    revSlick.prototype.loadSlider = function() {
+		_.$slideTrack.css({
+			opacity: 1
+		});
 
-        var _ = this;
+		_.$slider.removeClass('revSlick-loading');
 
-        _.setPosition();
+		_.initUI();
 
-        _.$slideTrack.css({
-            opacity: 1
-        });
+		if (_.options.lazyLoad === 'progressive') {
+			_.progressiveLazyLoad();
+		}
 
-        _.$slider.removeClass('revSlick-loading');
+	};
 
-        _.initUI();
+	revSlick.prototype.next = revSlick.prototype.revSlickNext = function () {
 
-        if (_.options.lazyLoad === 'progressive') {
-            _.progressiveLazyLoad();
-        }
+		var _ = this;
 
-    };
+		_.changeSlide({
+			data: {
+				message: 'next'
+			}
+		});
 
-    revSlick.prototype.next = revSlick.prototype.revSlickNext = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.orientationChange = function () {
 
-        _.changeSlide({
-            data: {
-                message: 'next'
-            }
-        });
+		var _ = this;
 
-    };
+		_.checkResponsive();
+		_.setPosition();
 
-    revSlick.prototype.orientationChange = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.pause = revSlick.prototype.revSlickPause = function () {
 
-        _.checkResponsive();
-        _.setPosition();
+		var _ = this;
 
-    };
+		_.autoPlayClear();
+		_.paused = true;
 
-    revSlick.prototype.pause = revSlick.prototype.revSlickPause = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.play = revSlick.prototype.revSlickPlay = function () {
 
-        _.autoPlayClear();
-        _.paused = true;
+		var _ = this;
 
-    };
+		_.autoPlay();
+		_.options.autoplay = true;
+		_.paused = false;
+		_.focussed = false;
+		_.interrupted = false;
 
-    revSlick.prototype.play = revSlick.prototype.revSlickPlay = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.postSlide = function (index) {
 
-        _.autoPlay();
-        _.options.autoplay = true;
-        _.paused = false;
-        _.focussed = false;
-        _.interrupted = false;
+		var _ = this;
 
-    };
+		if (!_.unrevSlicked) {
 
-    revSlick.prototype.postSlide = function(index) {
+			_.$slider.trigger('afterChange', [_, index]);
 
-        var _ = this;
+			_.animating = false;
 
-        if( !_.unrevSlicked ) {
+			if (_.slideCount > _.options.slidesToShow) {
+				_.setPosition();
+			}
 
-            _.$slider.trigger('afterChange', [_, index]);
+			_.swipeLeft = null;
 
-            _.animating = false;
+			if (_.options.autoplay) {
+				_.autoPlay();
+			}
 
-            if (_.slideCount > _.options.slidesToShow) {
-                _.setPosition();
-            }
+			if (_.options.accessibility === true) {
+				_.initADA();
 
-            _.swipeLeft = null;
+				if (_.options.focusOnChange) {
+					var $currentSlide = $(_.$slides.get(_.currentSlide));
+					$currentSlide.attr('tabindex', 0).focus();
+				}
+			}
 
-            if ( _.options.autoplay ) {
-                _.autoPlay();
-            }
+		}
 
-            if (_.options.accessibility === true) {
-                _.initADA();
+	};
 
-                if (_.options.focusOnChange) {
-                    var $currentSlide = $(_.$slides.get(_.currentSlide));
-                    $currentSlide.attr('tabindex', 0).focus();
-                }
-            }
+	revSlick.prototype.prev = revSlick.prototype.revSlickPrev = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.changeSlide({
+			data: {
+				message: 'previous'
+			}
+		});
 
-    revSlick.prototype.prev = revSlick.prototype.revSlickPrev = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.preventDefault = function (event) {
 
-        _.changeSlide({
-            data: {
-                message: 'previous'
-            }
-        });
+		event.preventDefault();
 
-    };
+	};
 
-    revSlick.prototype.preventDefault = function(event) {
+	revSlick.prototype.progressiveLazyLoad = function (tryCount) {
 
-        event.preventDefault();
+		tryCount = tryCount || 1;
 
-    };
+		var _ = this,
+			$imgsToLoad = $('img[data-lazy]', _.$slider),
+			image,
+			imageSource,
+			imageSrcSet,
+			imageSizes,
+			imageToLoad;
 
-    revSlick.prototype.progressiveLazyLoad = function( tryCount ) {
+		if ($imgsToLoad.length) {
 
-        tryCount = tryCount || 1;
+			image = $imgsToLoad.first();
+			imageSource = image.attr('data-lazy');
+			imageSrcSet = image.attr('data-srcset');
+			imageSizes = image.attr('data-sizes') || _.$slider.attr('data-sizes');
+			imageToLoad = document.createElement('img');
 
-        var _ = this,
-            $imgsToLoad = $( 'img[data-lazy]', _.$slider ),
-            image,
-            imageSource,
-            imageSrcSet,
-            imageSizes,
-            imageToLoad;
+			imageToLoad.onload = function () {
 
-        if ( $imgsToLoad.length ) {
+				if (imageSrcSet) {
+					image
+						.attr('srcset', imageSrcSet);
 
-            image = $imgsToLoad.first();
-            imageSource = image.attr('data-lazy');
-            imageSrcSet = image.attr('data-srcset');
-            imageSizes  = image.attr('data-sizes') || _.$slider.attr('data-sizes');
-            imageToLoad = document.createElement('img');
+					if (imageSizes) {
+						image
+							.attr('sizes', imageSizes);
+					}
+				}
 
-            imageToLoad.onload = function() {
+				image
+					.attr('src', imageSource)
+					.removeAttr('data-lazy data-srcset data-sizes')
+					.removeClass('revSlick-loading');
 
-                if (imageSrcSet) {
-                    image
-                        .attr('srcset', imageSrcSet );
+				if (_.options.adaptiveHeight === true) {
+					_.setPosition();
+				}
 
-                    if (imageSizes) {
-                        image
-                            .attr('sizes', imageSizes );
-                    }
-                }
+				_.$slider.trigger('lazyLoaded', [_, image, imageSource]);
+				_.progressiveLazyLoad();
 
-                image
-                    .attr( 'src', imageSource )
-                    .removeAttr('data-lazy data-srcset data-sizes')
-                    .removeClass('revSlick-loading');
+			};
 
-                if ( _.options.adaptiveHeight === true ) {
-                    _.setPosition();
-                }
+			imageToLoad.onerror = function () {
 
-                _.$slider.trigger('lazyLoaded', [ _, image, imageSource ]);
-                _.progressiveLazyLoad();
+				if (tryCount < 3) {
 
-            };
+					/**
+					 * try to load the image 3 times,
+					 * leave a slight delay so we don't get
+					 * servers blocking the request.
+					 */
+					setTimeout(function () {
+						_.progressiveLazyLoad(tryCount + 1);
+					}, 500);
 
-            imageToLoad.onerror = function() {
+				} else {
 
-                if ( tryCount < 3 ) {
+					image
+						.removeAttr('data-lazy')
+						.removeClass('revSlick-loading')
+						.addClass('revSlick-lazyload-error');
 
-                    /**
-                     * try to load the image 3 times,
-                     * leave a slight delay so we don't get
-                     * servers blocking the request.
-                     */
-                    setTimeout( function() {
-                        _.progressiveLazyLoad( tryCount + 1 );
-                    }, 500 );
+					_.$slider.trigger('lazyLoadError', [_, image, imageSource]);
 
-                } else {
+					_.progressiveLazyLoad();
 
-                    image
-                        .removeAttr( 'data-lazy' )
-                        .removeClass( 'revSlick-loading' )
-                        .addClass( 'revSlick-lazyload-error' );
+				}
 
-                    _.$slider.trigger('lazyLoadError', [ _, image, imageSource ]);
+			};
 
-                    _.progressiveLazyLoad();
+			imageToLoad.src = imageSource;
 
-                }
+		} else {
 
-            };
+			_.$slider.trigger('allImagesLoaded', [_]);
 
-            imageToLoad.src = imageSource;
+		}
 
-        } else {
+	};
 
-            _.$slider.trigger('allImagesLoaded', [ _ ]);
+	revSlick.prototype.refresh = function (initializing) {
 
-        }
+		var _ = this,
+			currentSlide, lastVisibleIndex;
 
-    };
+		lastVisibleIndex = _.slideCount - _.options.slidesToShow;
 
-    revSlick.prototype.refresh = function( initializing ) {
+		// in non-infinite sliders, we don't want to go past the
+		// last visible index.
+		if (!_.options.infinite && (_.currentSlide > lastVisibleIndex)) {
+			_.currentSlide = lastVisibleIndex;
+		}
 
-        var _ = this, currentSlide, lastVisibleIndex;
+		// if less slides than to show, go to start.
+		if (_.slideCount <= _.options.slidesToShow) {
+			_.currentSlide = 0;
 
-        lastVisibleIndex = _.slideCount - _.options.slidesToShow;
+		}
 
-        // in non-infinite sliders, we don't want to go past the
-        // last visible index.
-        if( !_.options.infinite && ( _.currentSlide > lastVisibleIndex )) {
-            _.currentSlide = lastVisibleIndex;
-        }
+		currentSlide = _.currentSlide;
 
-        // if less slides than to show, go to start.
-        if ( _.slideCount <= _.options.slidesToShow ) {
-            _.currentSlide = 0;
+		_.destroy(true);
 
-        }
+		$.extend(_, _.initials, {
+			currentSlide: currentSlide
+		});
 
-        currentSlide = _.currentSlide;
+		_.init();
 
-        _.destroy(true);
+		if (!initializing) {
 
-        $.extend(_, _.initials, { currentSlide: currentSlide });
+			_.changeSlide({
+				data: {
+					message: 'index',
+					index: currentSlide
+				}
+			}, false);
 
-        _.init();
+		}
 
-        if( !initializing ) {
+	};
 
-            _.changeSlide({
-                data: {
-                    message: 'index',
-                    index: currentSlide
-                }
-            }, false);
+	revSlick.prototype.registerBreakpoints = function () {
 
-        }
+		var _ = this,
+			breakpoint, currentBreakpoint, l,
+			responsiveSettings = _.options.responsive || null;
 
-    };
+		if ($.type(responsiveSettings) === 'array' && responsiveSettings.length) {
 
-    revSlick.prototype.registerBreakpoints = function() {
+			_.respondTo = _.options.respondTo || 'window';
 
-        var _ = this, breakpoint, currentBreakpoint, l,
-            responsiveSettings = _.options.responsive || null;
+			for (breakpoint in responsiveSettings) {
 
-        if ( $.type(responsiveSettings) === 'array' && responsiveSettings.length ) {
+				l = _.breakpoints.length - 1;
 
-            _.respondTo = _.options.respondTo || 'window';
+				if (responsiveSettings.hasOwnProperty(breakpoint)) {
+					currentBreakpoint = responsiveSettings[breakpoint].breakpoint;
 
-            for ( breakpoint in responsiveSettings ) {
+					// loop through the breakpoints and cut out any existing
+					// ones with the same breakpoint number, we don't want dupes.
+					while (l >= 0) {
+						if (_.breakpoints[l] && _.breakpoints[l] === currentBreakpoint) {
+							_.breakpoints.splice(l, 1);
+						}
+						l--;
+					}
 
-                l = _.breakpoints.length-1;
+					_.breakpoints.push(currentBreakpoint);
+					_.breakpointSettings[currentBreakpoint] = responsiveSettings[breakpoint].settings;
 
-                if (responsiveSettings.hasOwnProperty(breakpoint)) {
-                    currentBreakpoint = responsiveSettings[breakpoint].breakpoint;
+				}
 
-                    // loop through the breakpoints and cut out any existing
-                    // ones with the same breakpoint number, we don't want dupes.
-                    while( l >= 0 ) {
-                        if( _.breakpoints[l] && _.breakpoints[l] === currentBreakpoint ) {
-                            _.breakpoints.splice(l,1);
-                        }
-                        l--;
-                    }
+			}
 
-                    _.breakpoints.push(currentBreakpoint);
-                    _.breakpointSettings[currentBreakpoint] = responsiveSettings[breakpoint].settings;
+			_.breakpoints.sort(function (a, b) {
+				return (_.options.mobileFirst) ? a - b : b - a;
+			});
 
-                }
+		}
 
-            }
+	};
 
-            _.breakpoints.sort(function(a, b) {
-                return ( _.options.mobileFirst ) ? a-b : b-a;
-            });
+	revSlick.prototype.reinit = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.$slides =
+			_.$slideTrack
+			.children(_.options.slide)
+			.addClass('revSlick-slide');
 
-    revSlick.prototype.reinit = function() {
+		_.slideCount = _.$slides.length;
 
-        var _ = this;
+		if (_.currentSlide >= _.slideCount && _.currentSlide !== 0) {
+			_.currentSlide = _.currentSlide - _.options.slidesToScroll;
+		}
 
-        _.$slides =
-            _.$slideTrack
-                .children(_.options.slide)
-                .addClass('revSlick-slide');
+		if (_.slideCount <= _.options.slidesToShow) {
+			_.currentSlide = 0;
+		}
 
-        _.slideCount = _.$slides.length;
+		_.registerBreakpoints();
 
-        if (_.currentSlide >= _.slideCount && _.currentSlide !== 0) {
-            _.currentSlide = _.currentSlide - _.options.slidesToScroll;
-        }
+		_.setProps();
+		_.setupInfinite();
+		_.buildArrows();
+		_.updateArrows();
+		_.initArrowEvents();
+		_.buildDots();
+		_.updateDots();
+		_.initDotEvents();
+		_.cleanUpSlideEvents();
+		_.initSlideEvents();
 
-        if (_.slideCount <= _.options.slidesToShow) {
-            _.currentSlide = 0;
-        }
+		_.checkResponsive(false, true);
 
-        _.registerBreakpoints();
+		if (_.options.focusOnSelect === true) {
+			$(_.$slideTrack).children().on('click.revSlick', _.selectHandler);
+		}
 
-        _.setProps();
-        _.setupInfinite();
-        _.buildArrows();
-        _.updateArrows();
-        _.initArrowEvents();
-        _.buildDots();
-        _.updateDots();
-        _.initDotEvents();
-        _.cleanUpSlideEvents();
-        _.initSlideEvents();
+		_.setSlideClasses(typeof _.currentSlide === 'number' ? _.currentSlide : 0);
 
-        _.checkResponsive(false, true);
+		_.setPosition();
+		_.focusHandler();
 
-        if (_.options.focusOnSelect === true) {
-            $(_.$slideTrack).children().on('click.revSlick', _.selectHandler);
-        }
+		_.paused = !_.options.autoplay;
+		_.autoPlay();
 
-        _.setSlideClasses(typeof _.currentSlide === 'number' ? _.currentSlide : 0);
+		_.$slider.trigger('reInit', [_]);
 
-        _.setPosition();
-        _.focusHandler();
+	};
 
-        _.paused = !_.options.autoplay;
-        _.autoPlay();
+	revSlick.prototype.resize = function () {
 
-        _.$slider.trigger('reInit', [_]);
+		var _ = this;
 
-    };
+		if ($(window).width() !== _.windowWidth) {
+			clearTimeout(_.windowDelay);
+			_.windowDelay = window.setTimeout(function () {
+				_.windowWidth = $(window).width();
+				_.checkResponsive();
+				if (!_.unrevSlicked) {
+					_.setPosition();
+				}
+			}, 50);
+		}
+	};
 
-    revSlick.prototype.resize = function() {
+	revSlick.prototype.removeSlide = revSlick.prototype.revSlickRemove = function (index, removeBefore, removeAll) {
 
-        var _ = this;
+		var _ = this;
 
-        if ($(window).width() !== _.windowWidth) {
-            clearTimeout(_.windowDelay);
-            _.windowDelay = window.setTimeout(function() {
-                _.windowWidth = $(window).width();
-                _.checkResponsive();
-                if( !_.unrevSlicked ) { _.setPosition(); }
-            }, 50);
-        }
-    };
+		if (typeof (index) === 'boolean') {
+			removeBefore = index;
+			index = removeBefore === true ? 0 : _.slideCount - 1;
+		} else {
+			index = removeBefore === true ? --index : index;
+		}
 
-    revSlick.prototype.removeSlide = revSlick.prototype.revSlickRemove = function(index, removeBefore, removeAll) {
+		if (_.slideCount < 1 || index < 0 || index > _.slideCount - 1) {
+			return false;
+		}
 
-        var _ = this;
+		_.unload();
 
-        if (typeof(index) === 'boolean') {
-            removeBefore = index;
-            index = removeBefore === true ? 0 : _.slideCount - 1;
-        } else {
-            index = removeBefore === true ? --index : index;
-        }
+		if (removeAll === true) {
+			_.$slideTrack.children().remove();
+		} else {
+			_.$slideTrack.children(this.options.slide).eq(index).remove();
+		}
 
-        if (_.slideCount < 1 || index < 0 || index > _.slideCount - 1) {
-            return false;
-        }
+		_.$slides = _.$slideTrack.children(this.options.slide);
 
-        _.unload();
+		_.$slideTrack.children(this.options.slide).detach();
 
-        if (removeAll === true) {
-            _.$slideTrack.children().remove();
-        } else {
-            _.$slideTrack.children(this.options.slide).eq(index).remove();
-        }
+		_.$slideTrack.append(_.$slides);
 
-        _.$slides = _.$slideTrack.children(this.options.slide);
+		_.$slidesCache = _.$slides;
 
-        _.$slideTrack.children(this.options.slide).detach();
+		_.reinit();
 
-        _.$slideTrack.append(_.$slides);
+	};
 
-        _.$slidesCache = _.$slides;
+	revSlick.prototype.setCSS = function (position) {
 
-        _.reinit();
+		var _ = this,
+			positionProps = {},
+			x, y;
 
-    };
+		if (_.options.rtl === true) {
+			position = -position;
+		}
+		x = _.positionProp == 'left' ? Math.ceil(position) + 'px' : '0px';
+		y = _.positionProp == 'top' ? Math.ceil(position) + 'px' : '0px';
 
-    revSlick.prototype.setCSS = function(position) {
+		positionProps[_.positionProp] = position;
 
-        var _ = this,
-            positionProps = {},
-            x, y;
+		if (_.transformsEnabled === false) {
+			_.$slideTrack.css(positionProps);
+		} else {
+			positionProps = {};
+			if (_.cssTransitions === false) {
+				positionProps[_.animType] = 'translate(' + x + ', ' + y + ')';
+				_.$slideTrack.css(positionProps);
+			} else {
+				positionProps[_.animType] = 'translate3d(' + x + ', ' + y + ', 0px)';
+				_.$slideTrack.css(positionProps);
+			}
+		}
 
-        if (_.options.rtl === true) {
-            position = -position;
-        }
-        x = _.positionProp == 'left' ? Math.ceil(position) + 'px' : '0px';
-        y = _.positionProp == 'top' ? Math.ceil(position) + 'px' : '0px';
+	};
 
-        positionProps[_.positionProp] = position;
+	revSlick.prototype.setDimensions = function () {
 
-        if (_.transformsEnabled === false) {
-            _.$slideTrack.css(positionProps);
-        } else {
-            positionProps = {};
-            if (_.cssTransitions === false) {
-                positionProps[_.animType] = 'translate(' + x + ', ' + y + ')';
-                _.$slideTrack.css(positionProps);
-            } else {
-                positionProps[_.animType] = 'translate3d(' + x + ', ' + y + ', 0px)';
-                _.$slideTrack.css(positionProps);
-            }
-        }
+		var _ = this;
 
-    };
+		if (_.options.vertical === false) {
+			if (_.options.centerMode === true) {
+				_.$list.css({
+					padding: ('0px ' + _.options.centerPadding)
+				});
+			}
+		} else {
+			_.$list.height(_.$slides.first().outerHeight(true) * _.options.slidesToShow);
+			if (_.options.centerMode === true) {
+				_.$list.css({
+					padding: (_.options.centerPadding + ' 0px')
+				});
+			}
+		}
 
-    revSlick.prototype.setDimensions = function() {
+		_.listWidth = _.$list.width();
+		_.listHeight = _.$list.height();
 
-        var _ = this;
 
-        if (_.options.vertical === false) {
-            if (_.options.centerMode === true) {
-                _.$list.css({
-                    padding: ('0px ' + _.options.centerPadding)
-                });
-            }
-        } else {
-            _.$list.height(_.$slides.first().outerHeight(true) * _.options.slidesToShow);
-            if (_.options.centerMode === true) {
-                _.$list.css({
-                    padding: (_.options.centerPadding + ' 0px')
-                });
-            }
-        }
+		if (_.options.vertical === false && _.options.variableWidth === false) {
+			_.slideWidth = Math.ceil(_.listWidth / _.options.slidesToShow);
+			_.$slideTrack.width(Math.ceil((_.slideWidth * _.$slideTrack.children('.revSlick-slide').length)));
 
-        _.listWidth = _.$list.width();
-        _.listHeight = _.$list.height();
+		} else if (_.options.variableWidth === true) {
+			_.$slideTrack.width(5000 * _.slideCount);
+		} else {
+			_.slideWidth = Math.ceil(_.listWidth);
+			_.$slideTrack.height(Math.ceil((_.$slides.first().outerHeight(true) * _.$slideTrack.children('.revSlick-slide').length)));
+		}
 
+		var offset = _.$slides.first().outerWidth(true) - _.$slides.first().width();
+		if (_.options.variableWidth === false) _.$slideTrack.children('.revSlick-slide').width(_.slideWidth - offset);
 
-        if (_.options.vertical === false && _.options.variableWidth === false) {
-            _.slideWidth = Math.ceil(_.listWidth / _.options.slidesToShow);
-            _.$slideTrack.width(Math.ceil((_.slideWidth * _.$slideTrack.children('.revSlick-slide').length)));
+	};
 
-        } else if (_.options.variableWidth === true) {
-            _.$slideTrack.width(5000 * _.slideCount);
-        } else {
-            _.slideWidth = Math.ceil(_.listWidth);
-            _.$slideTrack.height(Math.ceil((_.$slides.first().outerHeight(true) * _.$slideTrack.children('.revSlick-slide').length)));
-        }
+	revSlick.prototype.setFade = function () {
 
-        var offset = _.$slides.first().outerWidth(true) - _.$slides.first().width();
-        if (_.options.variableWidth === false) _.$slideTrack.children('.revSlick-slide').width(_.slideWidth - offset);
+		var _ = this,
+			targetLeft;
 
-    };
+		_.$slides.each(function (index, element) {
+			targetLeft = (_.slideWidth * index) * -1;
+			if (_.options.rtl === true) {
+				$(element).css({
+					position: 'relative',
+					right: targetLeft,
+					top: 0,
+					zIndex: _.options.zIndex - 2,
+					opacity: 0
+				});
+			} else {
+				$(element).css({
+					position: 'relative',
+					left: targetLeft,
+					top: 0,
+					zIndex: _.options.zIndex - 2,
+					opacity: 0
+				});
+			}
+		});
 
-    revSlick.prototype.setFade = function() {
+		_.$slides.eq(_.currentSlide).css({
+			zIndex: _.options.zIndex - 1,
+			opacity: 1
+		});
 
-        var _ = this,
-            targetLeft;
+	};
 
-        _.$slides.each(function(index, element) {
-            targetLeft = (_.slideWidth * index) * -1;
-            if (_.options.rtl === true) {
-                $(element).css({
-                    position: 'relative',
-                    right: targetLeft,
-                    top: 0,
-                    zIndex: _.options.zIndex - 2,
-                    opacity: 0
-                });
-            } else {
-                $(element).css({
-                    position: 'relative',
-                    left: targetLeft,
-                    top: 0,
-                    zIndex: _.options.zIndex - 2,
-                    opacity: 0
-                });
-            }
-        });
+	revSlick.prototype.setHeight = function () {
 
-        _.$slides.eq(_.currentSlide).css({
-            zIndex: _.options.zIndex - 1,
-            opacity: 1
-        });
+		var _ = this;
 
-    };
+		if (_.options.slidesToShow === 1 && _.options.adaptiveHeight === true && _.options.vertical === false) {
+			var targetHeight = _.$slides.eq(_.currentSlide).outerHeight(true);
+			_.$list.css('height', targetHeight);
+		}
 
-    revSlick.prototype.setHeight = function() {
+	};
 
-        var _ = this;
+	revSlick.prototype.setOption =
+		revSlick.prototype.revSlickSetOption = function () {
 
-        if (_.options.slidesToShow === 1 && _.options.adaptiveHeight === true && _.options.vertical === false) {
-            var targetHeight = _.$slides.eq(_.currentSlide).outerHeight(true);
-            _.$list.css('height', targetHeight);
-        }
+			/**
+			 * accepts arguments in format of:
+			 *
+			 *  - for changing a single option's value:
+			 *     .revSlick("setOption", option, value, refresh )
+			 *
+			 *  - for changing a set of responsive options:
+			 *     .revSlick("setOption", 'responsive', [{}, ...], refresh )
+			 *
+			 *  - for updating multiple values at once (not responsive)
+			 *     .revSlick("setOption", { 'option': value, ... }, refresh )
+			 */
 
-    };
+			var _ = this,
+				l, item, option, value, refresh = false,
+				type;
 
-    revSlick.prototype.setOption =
-    revSlick.prototype.revSlickSetOption = function() {
+			if ($.type(arguments[0]) === 'object') {
 
-        /**
-         * accepts arguments in format of:
-         *
-         *  - for changing a single option's value:
-         *     .revSlick("setOption", option, value, refresh )
-         *
-         *  - for changing a set of responsive options:
-         *     .revSlick("setOption", 'responsive', [{}, ...], refresh )
-         *
-         *  - for updating multiple values at once (not responsive)
-         *     .revSlick("setOption", { 'option': value, ... }, refresh )
-         */
+				option = arguments[0];
+				refresh = arguments[1];
+				type = 'multiple';
 
-        var _ = this, l, item, option, value, refresh = false, type;
+			} else if ($.type(arguments[0]) === 'string') {
 
-        if( $.type( arguments[0] ) === 'object' ) {
+				option = arguments[0];
+				value = arguments[1];
+				refresh = arguments[2];
 
-            option =  arguments[0];
-            refresh = arguments[1];
-            type = 'multiple';
+				if (arguments[0] === 'responsive' && $.type(arguments[1]) === 'array') {
 
-        } else if ( $.type( arguments[0] ) === 'string' ) {
+					type = 'responsive';
 
-            option =  arguments[0];
-            value = arguments[1];
-            refresh = arguments[2];
+				} else if (typeof arguments[1] !== 'undefined') {
 
-            if ( arguments[0] === 'responsive' && $.type( arguments[1] ) === 'array' ) {
+					type = 'single';
 
-                type = 'responsive';
+				}
 
-            } else if ( typeof arguments[1] !== 'undefined' ) {
+			}
 
-                type = 'single';
+			if (type === 'single') {
 
-            }
+				_.options[option] = value;
 
-        }
 
-        if ( type === 'single' ) {
+			} else if (type === 'multiple') {
 
-            _.options[option] = value;
+				$.each(option, function (opt, val) {
 
+					_.options[opt] = val;
 
-        } else if ( type === 'multiple' ) {
+				});
 
-            $.each( option , function( opt, val ) {
 
-                _.options[opt] = val;
+			} else if (type === 'responsive') {
 
-            });
+				for (item in value) {
 
+					if ($.type(_.options.responsive) !== 'array') {
 
-        } else if ( type === 'responsive' ) {
+						_.options.responsive = [value[item]];
 
-            for ( item in value ) {
+					} else {
 
-                if( $.type( _.options.responsive ) !== 'array' ) {
+						l = _.options.responsive.length - 1;
 
-                    _.options.responsive = [ value[item] ];
+						// loop through the responsive object and splice out duplicates.
+						while (l >= 0) {
 
-                } else {
+							if (_.options.responsive[l].breakpoint === value[item].breakpoint) {
 
-                    l = _.options.responsive.length-1;
+								_.options.responsive.splice(l, 1);
 
-                    // loop through the responsive object and splice out duplicates.
-                    while( l >= 0 ) {
+							}
 
-                        if( _.options.responsive[l].breakpoint === value[item].breakpoint ) {
+							l--;
 
-                            _.options.responsive.splice(l,1);
+						}
 
-                        }
+						_.options.responsive.push(value[item]);
 
-                        l--;
+					}
 
-                    }
+				}
 
-                    _.options.responsive.push( value[item] );
+			}
 
-                }
+			if (refresh) {
 
-            }
+				_.unload();
+				_.reinit();
 
-        }
+			}
 
-        if ( refresh ) {
+		};
 
-            _.unload();
-            _.reinit();
+	revSlick.prototype.setPosition = function () {
 
-        }
+		var _ = this;
 
-    };
+		_.setDimensions();
 
-    revSlick.prototype.setPosition = function() {
+		_.setHeight();
 
-        var _ = this;
+		if (_.options.fade === false) {
+			_.setCSS(_.getLeft(_.currentSlide));
+		} else {
+			_.setFade();
+		}
 
-        _.setDimensions();
+		_.$slider.trigger('setPosition', [_]);
 
-        _.setHeight();
+	};
 
-        if (_.options.fade === false) {
-            _.setCSS(_.getLeft(_.currentSlide));
-        } else {
-            _.setFade();
-        }
+	revSlick.prototype.setProps = function () {
 
-        _.$slider.trigger('setPosition', [_]);
+		var _ = this,
+			bodyStyle = document.body.style;
 
-    };
+		_.positionProp = _.options.vertical === true ? 'top' : 'left';
 
-    revSlick.prototype.setProps = function() {
+		if (_.positionProp === 'top') {
+			_.$slider.addClass('revSlick-vertical');
+		} else {
+			_.$slider.removeClass('revSlick-vertical');
+		}
 
-        var _ = this,
-            bodyStyle = document.body.style;
+		if (bodyStyle.WebkitTransition !== undefined
+			|| bodyStyle.MozTransition !== undefined
+			|| bodyStyle.msTransition !== undefined) {
+			if (_.options.useCSS === true) {
+				_.cssTransitions = true;
+			}
+		}
 
-        _.positionProp = _.options.vertical === true ? 'top' : 'left';
+		if (_.options.fade) {
+			if (typeof _.options.zIndex === 'number') {
+				if (_.options.zIndex < 3) {
+					_.options.zIndex = 3;
+				}
+			} else {
+				_.options.zIndex = _.defaults.zIndex;
+			}
+		}
 
-        if (_.positionProp === 'top') {
-            _.$slider.addClass('revSlick-vertical');
-        } else {
-            _.$slider.removeClass('revSlick-vertical');
-        }
+		if (bodyStyle.OTransform !== undefined) {
+			_.animType = 'OTransform';
+			_.transformType = '-o-transform';
+			_.transitionType = 'OTransition';
+			if (bodyStyle.perspectiveProperty === undefined && bodyStyle.webkitPerspective === undefined) _.animType = false;
+		}
+		if (bodyStyle.MozTransform !== undefined) {
+			_.animType = 'MozTransform';
+			_.transformType = '-moz-transform';
+			_.transitionType = 'MozTransition';
+			if (bodyStyle.perspectiveProperty === undefined && bodyStyle.MozPerspective === undefined) _.animType = false;
+		}
+		if (bodyStyle.webkitTransform !== undefined) {
+			_.animType = 'webkitTransform';
+			_.transformType = '-webkit-transform';
+			_.transitionType = 'webkitTransition';
+			if (bodyStyle.perspectiveProperty === undefined && bodyStyle.webkitPerspective === undefined) _.animType = false;
+		}
+		if (bodyStyle.msTransform !== undefined) {
+			_.animType = 'msTransform';
+			_.transformType = '-ms-transform';
+			_.transitionType = 'msTransition';
+			if (bodyStyle.msTransform === undefined) _.animType = false;
+		}
+		if (bodyStyle.transform !== undefined && _.animType !== false) {
+			_.animType = 'transform';
+			_.transformType = 'transform';
+			_.transitionType = 'transition';
+		}
+		_.transformsEnabled = _.options.useTransform && (_.animType !== null && _.animType !== false);
+	};
 
-        if (bodyStyle.WebkitTransition !== undefined ||
-            bodyStyle.MozTransition !== undefined ||
-            bodyStyle.msTransition !== undefined) {
-            if (_.options.useCSS === true) {
-                _.cssTransitions = true;
-            }
-        }
 
-        if ( _.options.fade ) {
-            if ( typeof _.options.zIndex === 'number' ) {
-                if( _.options.zIndex < 3 ) {
-                    _.options.zIndex = 3;
-                }
-            } else {
-                _.options.zIndex = _.defaults.zIndex;
-            }
-        }
+	revSlick.prototype.setSlideClasses = function (index) {
 
-        if (bodyStyle.OTransform !== undefined) {
-            _.animType = 'OTransform';
-            _.transformType = '-o-transform';
-            _.transitionType = 'OTransition';
-            if (bodyStyle.perspectiveProperty === undefined && bodyStyle.webkitPerspective === undefined) _.animType = false;
-        }
-        if (bodyStyle.MozTransform !== undefined) {
-            _.animType = 'MozTransform';
-            _.transformType = '-moz-transform';
-            _.transitionType = 'MozTransition';
-            if (bodyStyle.perspectiveProperty === undefined && bodyStyle.MozPerspective === undefined) _.animType = false;
-        }
-        if (bodyStyle.webkitTransform !== undefined) {
-            _.animType = 'webkitTransform';
-            _.transformType = '-webkit-transform';
-            _.transitionType = 'webkitTransition';
-            if (bodyStyle.perspectiveProperty === undefined && bodyStyle.webkitPerspective === undefined) _.animType = false;
-        }
-        if (bodyStyle.msTransform !== undefined) {
-            _.animType = 'msTransform';
-            _.transformType = '-ms-transform';
-            _.transitionType = 'msTransition';
-            if (bodyStyle.msTransform === undefined) _.animType = false;
-        }
-        if (bodyStyle.transform !== undefined && _.animType !== false) {
-            _.animType = 'transform';
-            _.transformType = 'transform';
-            _.transitionType = 'transition';
-        }
-        _.transformsEnabled = _.options.useTransform && (_.animType !== null && _.animType !== false);
-    };
+		var _ = this,
+			centerOffset, allSlides, indexOffset, remainder;
 
+		allSlides = _.$slider
+			.find('.revSlick-slide')
+			.removeClass('revSlick-active revSlick-center revSlick-current')
+			.attr('aria-hidden', 'true');
 
-    revSlick.prototype.setSlideClasses = function(index) {
+		_.$slides
+			.eq(index)
+			.addClass('revSlick-current');
 
-        var _ = this,
-            centerOffset, allSlides, indexOffset, remainder;
+		if (_.options.centerMode === true) {
 
-        allSlides = _.$slider
-            .find('.revSlick-slide')
-            .removeClass('revSlick-active revSlick-center revSlick-current')
-            .attr('aria-hidden', 'true');
+			var evenCoef = _.options.slidesToShow % 2 === 0 ? 1 : 0;
 
-        _.$slides
-            .eq(index)
-            .addClass('revSlick-current');
+			centerOffset = Math.floor(_.options.slidesToShow / 2);
 
-        if (_.options.centerMode === true) {
+			if (_.options.infinite === true) {
 
-            var evenCoef = _.options.slidesToShow % 2 === 0 ? 1 : 0;
+				if (index >= centerOffset && index <= (_.slideCount - 1) - centerOffset) {
+					_.$slides
+						.slice(index - centerOffset + evenCoef, index + centerOffset + 1)
+						.addClass('revSlick-active')
+						.attr('aria-hidden', 'false');
 
-            centerOffset = Math.floor(_.options.slidesToShow / 2);
+				} else {
 
-            if (_.options.infinite === true) {
+					indexOffset = _.options.slidesToShow + index;
+					allSlides
+						.slice(indexOffset - centerOffset + 1 + evenCoef, indexOffset + centerOffset + 2)
+						.addClass('revSlick-active')
+						.attr('aria-hidden', 'false');
 
-                if (index >= centerOffset && index <= (_.slideCount - 1) - centerOffset) {
-                    _.$slides
-                        .slice(index - centerOffset + evenCoef, index + centerOffset + 1)
-                        .addClass('revSlick-active')
-                        .attr('aria-hidden', 'false');
+				}
 
-                } else {
+				if (index === 0) {
 
-                    indexOffset = _.options.slidesToShow + index;
-                    allSlides
-                        .slice(indexOffset - centerOffset + 1 + evenCoef, indexOffset + centerOffset + 2)
-                        .addClass('revSlick-active')
-                        .attr('aria-hidden', 'false');
+					allSlides
+						.eq(allSlides.length - 1 - _.options.slidesToShow)
+						.addClass('revSlick-center');
 
-                }
+				} else if (index === _.slideCount - 1) {
 
-                if (index === 0) {
+					allSlides
+						.eq(_.options.slidesToShow)
+						.addClass('revSlick-center');
 
-                    allSlides
-                        .eq(allSlides.length - 1 - _.options.slidesToShow)
-                        .addClass('revSlick-center');
+				}
 
-                } else if (index === _.slideCount - 1) {
+			}
 
-                    allSlides
-                        .eq(_.options.slidesToShow)
-                        .addClass('revSlick-center');
+			_.$slides
+				.eq(index)
+				.addClass('revSlick-center');
 
-                }
+		} else {
 
-            }
+			if (index >= 0 && index <= (_.slideCount - _.options.slidesToShow)) {
 
-            _.$slides
-                .eq(index)
-                .addClass('revSlick-center');
+				_.$slides
+					.slice(index, index + _.options.slidesToShow)
+					.addClass('revSlick-active')
+					.attr('aria-hidden', 'false');
 
-        } else {
+			} else if (allSlides.length <= _.options.slidesToShow) {
 
-            if (index >= 0 && index <= (_.slideCount - _.options.slidesToShow)) {
+				allSlides
+					.addClass('revSlick-active')
+					.attr('aria-hidden', 'false');
 
-                _.$slides
-                    .slice(index, index + _.options.slidesToShow)
-                    .addClass('revSlick-active')
-                    .attr('aria-hidden', 'false');
+			} else {
 
-            } else if (allSlides.length <= _.options.slidesToShow) {
+				remainder = _.slideCount % _.options.slidesToShow;
+				indexOffset = _.options.infinite === true ? _.options.slidesToShow + index : index;
 
-                allSlides
-                    .addClass('revSlick-active')
-                    .attr('aria-hidden', 'false');
+				if (_.options.slidesToShow == _.options.slidesToScroll && (_.slideCount - index) < _.options.slidesToShow) {
 
-            } else {
+					allSlides
+						.slice(indexOffset - (_.options.slidesToShow - remainder), indexOffset + remainder)
+						.addClass('revSlick-active')
+						.attr('aria-hidden', 'false');
 
-                remainder = _.slideCount % _.options.slidesToShow;
-                indexOffset = _.options.infinite === true ? _.options.slidesToShow + index : index;
+				} else {
 
-                if (_.options.slidesToShow == _.options.slidesToScroll && (_.slideCount - index) < _.options.slidesToShow) {
+					allSlides
+						.slice(indexOffset, indexOffset + _.options.slidesToShow)
+						.addClass('revSlick-active')
+						.attr('aria-hidden', 'false');
 
-                    allSlides
-                        .slice(indexOffset - (_.options.slidesToShow - remainder), indexOffset + remainder)
-                        .addClass('revSlick-active')
-                        .attr('aria-hidden', 'false');
+				}
 
-                } else {
+			}
 
-                    allSlides
-                        .slice(indexOffset, indexOffset + _.options.slidesToShow)
-                        .addClass('revSlick-active')
-                        .attr('aria-hidden', 'false');
+		}
 
-                }
+		if (_.options.lazyLoad === 'ondemand' || _.options.lazyLoad === 'anticipated') {
+			_.lazyLoad();
+		}
+	};
 
-            }
+	revSlick.prototype.setupInfinite = function () {
 
-        }
+		var _ = this,
+			i, slideIndex, infiniteCount;
 
-        if (_.options.lazyLoad === 'ondemand' || _.options.lazyLoad === 'anticipated') {
-            _.lazyLoad();
-        }
-    };
+		if (_.options.fade === true) {
+			_.options.centerMode = false;
+		}
 
-    revSlick.prototype.setupInfinite = function() {
+		if (_.options.infinite === true && _.options.fade === false) {
 
-        var _ = this,
-            i, slideIndex, infiniteCount;
+			slideIndex = null;
 
-        if (_.options.fade === true) {
-            _.options.centerMode = false;
-        }
+			if (_.slideCount > _.options.slidesToShow) {
 
-        if (_.options.infinite === true && _.options.fade === false) {
+				if (_.options.centerMode === true) {
+					infiniteCount = _.options.slidesToShow + 1;
+				} else {
+					infiniteCount = _.options.slidesToShow;
+				}
 
-            slideIndex = null;
+				for (i = _.slideCount; i > (_.slideCount
+						- infiniteCount); i -= 1) {
+					slideIndex = i - 1;
+					$(_.$slides[slideIndex]).clone(true).attr('id', '')
+						.attr('data-revSlick-index', slideIndex - _.slideCount)
+						.prependTo(_.$slideTrack).addClass('revSlick-cloned');
+				}
+				for (i = 0; i < infiniteCount + _.slideCount; i += 1) {
+					slideIndex = i;
+					$(_.$slides[slideIndex]).clone(true).attr('id', '')
+						.attr('data-revSlick-index', slideIndex + _.slideCount)
+						.appendTo(_.$slideTrack).addClass('revSlick-cloned');
+				}
+				_.$slideTrack.find('.revSlick-cloned').find('[id]').each(function () {
+					$(this).attr('id', '');
+				});
 
-            if (_.slideCount > _.options.slidesToShow) {
+			}
 
-                if (_.options.centerMode === true) {
-                    infiniteCount = _.options.slidesToShow + 1;
-                } else {
-                    infiniteCount = _.options.slidesToShow;
-                }
+		}
 
-                for (i = _.slideCount; i > (_.slideCount -
-                        infiniteCount); i -= 1) {
-                    slideIndex = i - 1;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
-                        .attr('data-revSlick-index', slideIndex - _.slideCount)
-                        .prependTo(_.$slideTrack).addClass('revSlick-cloned');
-                }
-                for (i = 0; i < infiniteCount  + _.slideCount; i += 1) {
-                    slideIndex = i;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
-                        .attr('data-revSlick-index', slideIndex + _.slideCount)
-                        .appendTo(_.$slideTrack).addClass('revSlick-cloned');
-                }
-                _.$slideTrack.find('.revSlick-cloned').find('[id]').each(function() {
-                    $(this).attr('id', '');
-                });
+	};
 
-            }
+	revSlick.prototype.interrupt = function (toggle) {
 
-        }
+		var _ = this;
 
-    };
+		if (!toggle) {
+			_.autoPlay();
+		}
+		_.interrupted = toggle;
 
-    revSlick.prototype.interrupt = function( toggle ) {
+	};
 
-        var _ = this;
+	revSlick.prototype.selectHandler = function (event) {
 
-        if( !toggle ) {
-            _.autoPlay();
-        }
-        _.interrupted = toggle;
+		var _ = this;
 
-    };
+		var targetElement =
+			$(event.target).is('.revSlick-slide')
+			? $(event.target)
+			: $(event.target).parents('.revSlick-slide');
 
-    revSlick.prototype.selectHandler = function(event) {
+		var index = parseInt(targetElement.attr('data-revSlick-index'));
 
-        var _ = this;
+		if (!index) index = 0;
 
-        var targetElement =
-            $(event.target).is('.revSlick-slide') ?
-                $(event.target) :
-                $(event.target).parents('.revSlick-slide');
+		if (_.slideCount <= _.options.slidesToShow) {
 
-        var index = parseInt(targetElement.attr('data-revSlick-index'));
+			_.slideHandler(index, false, true);
+			return;
 
-        if (!index) index = 0;
+		}
 
-        if (_.slideCount <= _.options.slidesToShow) {
+		_.slideHandler(index);
 
-            _.slideHandler(index, false, true);
-            return;
+	};
 
-        }
+	revSlick.prototype.slideHandler = function (index, sync, dontAnimate) {
 
-        _.slideHandler(index);
+		var targetSlide, animSlide, oldSlide, slideLeft, targetLeft = null,
+			_ = this,
+			navTarget;
 
-    };
+		sync = sync || false;
 
-    revSlick.prototype.slideHandler = function(index, sync, dontAnimate) {
+		if (_.animating === true && _.options.waitForAnimate === true) {
+			return;
+		}
 
-        var targetSlide, animSlide, oldSlide, slideLeft, targetLeft = null,
-            _ = this, navTarget;
+		if (_.options.fade === true && _.currentSlide === index) {
+			return;
+		}
 
-        sync = sync || false;
+		if (sync === false) {
+			_.asNavFor(index);
+		}
 
-        if (_.animating === true && _.options.waitForAnimate === true) {
-            return;
-        }
+		targetSlide = index;
+		targetLeft = _.getLeft(targetSlide);
+		slideLeft = _.getLeft(_.currentSlide);
 
-        if (_.options.fade === true && _.currentSlide === index) {
-            return;
-        }
+		_.currentLeft = _.swipeLeft === null ? slideLeft : _.swipeLeft;
 
-        if (sync === false) {
-            _.asNavFor(index);
-        }
+		if (_.options.infinite === false && _.options.centerMode === false && (index < 0 || index > _.getDotCount() * _.options.slidesToScroll)) {
+			if (_.options.fade === false) {
+				targetSlide = _.currentSlide;
+				if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
+					_.animateSlide(slideLeft, function () {
+						_.postSlide(targetSlide);
+					});
+				} else {
+					_.postSlide(targetSlide);
+				}
+			}
+			return;
+		} else if (_.options.infinite === false && _.options.centerMode === true && (index < 0 || index > (_.slideCount - _.options.slidesToScroll))) {
+			if (_.options.fade === false) {
+				targetSlide = _.currentSlide;
+				if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
+					_.animateSlide(slideLeft, function () {
+						_.postSlide(targetSlide);
+					});
+				} else {
+					_.postSlide(targetSlide);
+				}
+			}
+			return;
+		}
 
-        targetSlide = index;
-        targetLeft = _.getLeft(targetSlide);
-        slideLeft = _.getLeft(_.currentSlide);
+		if (_.options.autoplay) {
+			clearInterval(_.autoPlayTimer);
+		}
 
-        _.currentLeft = _.swipeLeft === null ? slideLeft : _.swipeLeft;
+		if (targetSlide < 0) {
+			if (_.slideCount % _.options.slidesToScroll !== 0) {
+				animSlide = _.slideCount - (_.slideCount % _.options.slidesToScroll);
+			} else {
+				animSlide = _.slideCount + targetSlide;
+			}
+		} else if (targetSlide >= _.slideCount) {
+			if (_.slideCount % _.options.slidesToScroll !== 0) {
+				animSlide = 0;
+			} else {
+				animSlide = targetSlide - _.slideCount;
+			}
+		} else {
+			animSlide = targetSlide;
+		}
 
-        if (_.options.infinite === false && _.options.centerMode === false && (index < 0 || index > _.getDotCount() * _.options.slidesToScroll)) {
-            if (_.options.fade === false) {
-                targetSlide = _.currentSlide;
-                if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
-                    _.animateSlide(slideLeft, function() {
-                        _.postSlide(targetSlide);
-                    });
-                } else {
-                    _.postSlide(targetSlide);
-                }
-            }
-            return;
-        } else if (_.options.infinite === false && _.options.centerMode === true && (index < 0 || index > (_.slideCount - _.options.slidesToScroll))) {
-            if (_.options.fade === false) {
-                targetSlide = _.currentSlide;
-                if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
-                    _.animateSlide(slideLeft, function() {
-                        _.postSlide(targetSlide);
-                    });
-                } else {
-                    _.postSlide(targetSlide);
-                }
-            }
-            return;
-        }
+		_.animating = true;
 
-        if ( _.options.autoplay ) {
-            clearInterval(_.autoPlayTimer);
-        }
+		_.$slider.trigger('beforeChange', [_, _.currentSlide, animSlide]);
 
-        if (targetSlide < 0) {
-            if (_.slideCount % _.options.slidesToScroll !== 0) {
-                animSlide = _.slideCount - (_.slideCount % _.options.slidesToScroll);
-            } else {
-                animSlide = _.slideCount + targetSlide;
-            }
-        } else if (targetSlide >= _.slideCount) {
-            if (_.slideCount % _.options.slidesToScroll !== 0) {
-                animSlide = 0;
-            } else {
-                animSlide = targetSlide - _.slideCount;
-            }
-        } else {
-            animSlide = targetSlide;
-        }
+		oldSlide = _.currentSlide;
+		_.currentSlide = animSlide;
 
-        _.animating = true;
+		_.setSlideClasses(_.currentSlide);
 
-        _.$slider.trigger('beforeChange', [_, _.currentSlide, animSlide]);
+		if (_.options.asNavFor) {
 
-        oldSlide = _.currentSlide;
-        _.currentSlide = animSlide;
+			navTarget = _.getNavTarget();
+			navTarget = navTarget.revSlick('getrevSlick');
 
-        _.setSlideClasses(_.currentSlide);
+			if (navTarget.slideCount <= navTarget.options.slidesToShow) {
+				navTarget.setSlideClasses(_.currentSlide);
+			}
 
-        if ( _.options.asNavFor ) {
+		}
 
-            navTarget = _.getNavTarget();
-            navTarget = navTarget.revSlick('getrevSlick');
+		_.updateDots();
+		_.updateArrows();
 
-            if ( navTarget.slideCount <= navTarget.options.slidesToShow ) {
-                navTarget.setSlideClasses(_.currentSlide);
-            }
+		if (_.options.fade === true) {
+			if (dontAnimate !== true) {
 
-        }
+				_.fadeSlideOut(oldSlide);
 
-        _.updateDots();
-        _.updateArrows();
+				_.fadeSlide(animSlide, function () {
+					_.postSlide(animSlide);
+				});
 
-        if (_.options.fade === true) {
-            if (dontAnimate !== true) {
+			} else {
+				_.postSlide(animSlide);
+			}
+			_.animateHeight();
+			return;
+		}
 
-                _.fadeSlideOut(oldSlide);
+		if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
+			_.animateSlide(targetLeft, function () {
+				_.postSlide(animSlide);
+			});
+		} else {
+			_.postSlide(animSlide);
+		}
 
-                _.fadeSlide(animSlide, function() {
-                    _.postSlide(animSlide);
-                });
+	};
 
-            } else {
-                _.postSlide(animSlide);
-            }
-            _.animateHeight();
-            return;
-        }
+	revSlick.prototype.startLoad = function () {
 
-        if (dontAnimate !== true && _.slideCount > _.options.slidesToShow) {
-            _.animateSlide(targetLeft, function() {
-                _.postSlide(animSlide);
-            });
-        } else {
-            _.postSlide(animSlide);
-        }
+		var _ = this;
 
-    };
+		if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
 
-    revSlick.prototype.startLoad = function() {
+			_.$prevArrow.hide();
+			_.$nextArrow.hide();
 
-        var _ = this;
+		}
 
-        if (_.options.arrows === true && _.slideCount > _.options.slidesToShow) {
+		if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
 
-            _.$prevArrow.hide();
-            _.$nextArrow.hide();
+			_.$dots.hide();
 
-        }
+		}
 
-        if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
+		_.$slider.addClass('revSlick-loading');
 
-            _.$dots.hide();
+	};
 
-        }
+	revSlick.prototype.swipeDirection = function () {
 
-        _.$slider.addClass('revSlick-loading');
+		var xDist, yDist, r, swipeAngle, _ = this;
 
-    };
+		xDist = _.touchObject.startX - _.touchObject.curX;
+		yDist = _.touchObject.startY - _.touchObject.curY;
+		r = Math.atan2(yDist, xDist);
 
-    revSlick.prototype.swipeDirection = function() {
+		swipeAngle = Math.round(r * 180 / Math.PI);
+		if (swipeAngle < 0) {
+			swipeAngle = 360 - Math.abs(swipeAngle);
+		}
 
-        var xDist, yDist, r, swipeAngle, _ = this;
+		if ((swipeAngle <= 45) && (swipeAngle >= 0)) {
+			return (_.options.rtl === false ? 'left' : 'right');
+		}
+		if ((swipeAngle <= 360) && (swipeAngle >= 315)) {
+			return (_.options.rtl === false ? 'left' : 'right');
+		}
+		if ((swipeAngle >= 135) && (swipeAngle <= 225)) {
+			return (_.options.rtl === false ? 'right' : 'left');
+		}
+		if (_.options.verticalSwiping === true) {
+			if ((swipeAngle >= 35) && (swipeAngle <= 135)) {
+				return 'down';
+			} else {
+				return 'up';
+			}
+		}
 
-        xDist = _.touchObject.startX - _.touchObject.curX;
-        yDist = _.touchObject.startY - _.touchObject.curY;
-        r = Math.atan2(yDist, xDist);
+		return 'vertical';
 
-        swipeAngle = Math.round(r * 180 / Math.PI);
-        if (swipeAngle < 0) {
-            swipeAngle = 360 - Math.abs(swipeAngle);
-        }
+	};
 
-        if ((swipeAngle <= 45) && (swipeAngle >= 0)) {
-            return (_.options.rtl === false ? 'left' : 'right');
-        }
-        if ((swipeAngle <= 360) && (swipeAngle >= 315)) {
-            return (_.options.rtl === false ? 'left' : 'right');
-        }
-        if ((swipeAngle >= 135) && (swipeAngle <= 225)) {
-            return (_.options.rtl === false ? 'right' : 'left');
-        }
-        if (_.options.verticalSwiping === true) {
-            if ((swipeAngle >= 35) && (swipeAngle <= 135)) {
-                return 'down';
-            } else {
-                return 'up';
-            }
-        }
+	revSlick.prototype.swipeEnd = function (event) {
 
-        return 'vertical';
+		var _ = this,
+			slideCount,
+			direction;
 
-    };
+		_.dragging = false;
+		_.swiping = false;
 
-    revSlick.prototype.swipeEnd = function(event) {
+		if (_.scrolling) {
+			_.scrolling = false;
+			return false;
+		}
 
-        var _ = this,
-            slideCount,
-            direction;
+		_.interrupted = false;
+		_.shouldClick = (_.touchObject.swipeLength > 10) ? false : true;
 
-        _.dragging = false;
-        _.swiping = false;
+		if (_.touchObject.curX === undefined) {
+			return false;
+		}
 
-        if (_.scrolling) {
-            _.scrolling = false;
-            return false;
-        }
+		if (_.touchObject.edgeHit === true) {
+			_.$slider.trigger('edge', [_, _.swipeDirection()]);
+		}
 
-        _.interrupted = false;
-        _.shouldClick = ( _.touchObject.swipeLength > 10 ) ? false : true;
+		if (_.touchObject.swipeLength >= _.touchObject.minSwipe) {
 
-        if ( _.touchObject.curX === undefined ) {
-            return false;
-        }
+			direction = _.swipeDirection();
 
-        if ( _.touchObject.edgeHit === true ) {
-            _.$slider.trigger('edge', [_, _.swipeDirection() ]);
-        }
+			switch (direction) {
 
-        if ( _.touchObject.swipeLength >= _.touchObject.minSwipe ) {
+				case 'left':
+				case 'down':
 
-            direction = _.swipeDirection();
+					slideCount =
+						_.options.swipeToSlide
+						? _.checkNavigable(_.currentSlide + _.getSlideCount())
+						: _.currentSlide + _.getSlideCount();
 
-            switch ( direction ) {
+					_.currentDirection = 0;
 
-                case 'left':
-                case 'down':
+					break;
 
-                    slideCount =
-                        _.options.swipeToSlide ?
-                            _.checkNavigable( _.currentSlide + _.getSlideCount() ) :
-                            _.currentSlide + _.getSlideCount();
+				case 'right':
+				case 'up':
 
-                    _.currentDirection = 0;
+					slideCount =
+						_.options.swipeToSlide
+						? _.checkNavigable(_.currentSlide - _.getSlideCount())
+						: _.currentSlide - _.getSlideCount();
 
-                    break;
+					_.currentDirection = 1;
 
-                case 'right':
-                case 'up':
+					break;
 
-                    slideCount =
-                        _.options.swipeToSlide ?
-                            _.checkNavigable( _.currentSlide - _.getSlideCount() ) :
-                            _.currentSlide - _.getSlideCount();
+				default:
 
-                    _.currentDirection = 1;
 
-                    break;
+			}
 
-                default:
+			if (direction != 'vertical') {
 
+				_.slideHandler(slideCount);
+				_.touchObject = {};
+				_.$slider.trigger('swipe', [_, direction]);
 
-            }
+			}
 
-            if( direction != 'vertical' ) {
+		} else {
 
-                _.slideHandler( slideCount );
-                _.touchObject = {};
-                _.$slider.trigger('swipe', [_, direction ]);
+			if (_.touchObject.startX !== _.touchObject.curX) {
 
-            }
+				_.slideHandler(_.currentSlide);
+				_.touchObject = {};
 
-        } else {
+			}
 
-            if ( _.touchObject.startX !== _.touchObject.curX ) {
+		}
 
-                _.slideHandler( _.currentSlide );
-                _.touchObject = {};
+	};
 
-            }
+	revSlick.prototype.swipeHandler = function (event) {
 
-        }
+		var _ = this;
 
-    };
+		if ((_.options.swipe === false) || ('ontouchend' in document && _.options.swipe === false)) {
+			return;
+		} else if (_.options.draggable === false && event.type.indexOf('mouse') !== -1) {
+			return;
+		}
 
-    revSlick.prototype.swipeHandler = function(event) {
+		_.touchObject.fingerCount = event.originalEvent && event.originalEvent.touches !== undefined
+			? event.originalEvent.touches.length : 1;
 
-        var _ = this;
+		_.touchObject.minSwipe = _.listWidth / _.options
+			.touchThreshold;
 
-        if ((_.options.swipe === false) || ('ontouchend' in document && _.options.swipe === false)) {
-            return;
-        } else if (_.options.draggable === false && event.type.indexOf('mouse') !== -1) {
-            return;
-        }
+		if (_.options.verticalSwiping === true) {
+			_.touchObject.minSwipe = _.listHeight / _.options
+				.touchThreshold;
+		}
 
-        _.touchObject.fingerCount = event.originalEvent && event.originalEvent.touches !== undefined ?
-            event.originalEvent.touches.length : 1;
+		switch (event.data.action) {
 
-        _.touchObject.minSwipe = _.listWidth / _.options
-            .touchThreshold;
+			case 'start':
+				_.swipeStart(event);
+				break;
 
-        if (_.options.verticalSwiping === true) {
-            _.touchObject.minSwipe = _.listHeight / _.options
-                .touchThreshold;
-        }
+			case 'move':
+				_.swipeMove(event);
+				break;
 
-        switch (event.data.action) {
+			case 'end':
+				_.swipeEnd(event);
+				break;
 
-            case 'start':
-                _.swipeStart(event);
-                break;
+		}
 
-            case 'move':
-                _.swipeMove(event);
-                break;
+	};
 
-            case 'end':
-                _.swipeEnd(event);
-                break;
+	revSlick.prototype.swipeMove = function (event) {
 
-        }
+		var _ = this,
+			edgeWasHit = false,
+			curLeft, swipeDirection, swipeLength, positionOffset, touches, verticalSwipeLength;
 
-    };
+		touches = event.originalEvent !== undefined ? event.originalEvent.touches : null;
 
-    revSlick.prototype.swipeMove = function(event) {
+		if (!_.dragging || _.scrolling || touches && touches.length !== 1) {
+			return false;
+		}
 
-        var _ = this,
-            edgeWasHit = false,
-            curLeft, swipeDirection, swipeLength, positionOffset, touches, verticalSwipeLength;
+		curLeft = _.getLeft(_.currentSlide);
 
-        touches = event.originalEvent !== undefined ? event.originalEvent.touches : null;
+		_.touchObject.curX = touches !== undefined ? touches[0].pageX : event.clientX;
+		_.touchObject.curY = touches !== undefined ? touches[0].pageY : event.clientY;
 
-        if (!_.dragging || _.scrolling || touches && touches.length !== 1) {
-            return false;
-        }
+		_.touchObject.swipeLength = Math.round(Math.sqrt(
+			Math.pow(_.touchObject.curX - _.touchObject.startX, 2)));
 
-        curLeft = _.getLeft(_.currentSlide);
+		verticalSwipeLength = Math.round(Math.sqrt(
+			Math.pow(_.touchObject.curY - _.touchObject.startY, 2)));
 
-        _.touchObject.curX = touches !== undefined ? touches[0].pageX : event.clientX;
-        _.touchObject.curY = touches !== undefined ? touches[0].pageY : event.clientY;
+		if (!_.options.verticalSwiping && !_.swiping && verticalSwipeLength > 4) {
+			_.scrolling = true;
+			return false;
+		}
 
-        _.touchObject.swipeLength = Math.round(Math.sqrt(
-            Math.pow(_.touchObject.curX - _.touchObject.startX, 2)));
+		if (_.options.verticalSwiping === true) {
+			_.touchObject.swipeLength = verticalSwipeLength;
+		}
 
-        verticalSwipeLength = Math.round(Math.sqrt(
-            Math.pow(_.touchObject.curY - _.touchObject.startY, 2)));
+		swipeDirection = _.swipeDirection();
 
-        if (!_.options.verticalSwiping && !_.swiping && verticalSwipeLength > 4) {
-            _.scrolling = true;
-            return false;
-        }
+		if (event.originalEvent !== undefined && _.touchObject.swipeLength > 4) {
+			_.swiping = true;
+			event.preventDefault();
+		}
 
-        if (_.options.verticalSwiping === true) {
-            _.touchObject.swipeLength = verticalSwipeLength;
-        }
+		positionOffset = (_.options.rtl === false ? 1 : -1) * (_.touchObject.curX > _.touchObject.startX ? 1 : -1);
+		if (_.options.verticalSwiping === true) {
+			positionOffset = _.touchObject.curY > _.touchObject.startY ? 1 : -1;
+		}
 
-        swipeDirection = _.swipeDirection();
 
-        if (event.originalEvent !== undefined && _.touchObject.swipeLength > 4) {
-            _.swiping = true;
-            event.preventDefault();
-        }
+		swipeLength = _.touchObject.swipeLength;
 
-        positionOffset = (_.options.rtl === false ? 1 : -1) * (_.touchObject.curX > _.touchObject.startX ? 1 : -1);
-        if (_.options.verticalSwiping === true) {
-            positionOffset = _.touchObject.curY > _.touchObject.startY ? 1 : -1;
-        }
+		_.touchObject.edgeHit = false;
 
+		if (_.options.infinite === false) {
+			if ((_.currentSlide === 0 && swipeDirection === 'right') || (_.currentSlide >= _.getDotCount() && swipeDirection === 'left')) {
+				swipeLength = _.touchObject.swipeLength * _.options.edgeFriction;
+				_.touchObject.edgeHit = true;
+			}
+		}
 
-        swipeLength = _.touchObject.swipeLength;
+		if (_.options.vertical === false) {
+			_.swipeLeft = curLeft + swipeLength * positionOffset;
+		} else {
+			_.swipeLeft = curLeft + (swipeLength * (_.$list.height() / _.listWidth)) * positionOffset;
+		}
+		if (_.options.verticalSwiping === true) {
+			_.swipeLeft = curLeft + swipeLength * positionOffset;
+		}
 
-        _.touchObject.edgeHit = false;
+		if (_.options.fade === true || _.options.touchMove === false) {
+			return false;
+		}
 
-        if (_.options.infinite === false) {
-            if ((_.currentSlide === 0 && swipeDirection === 'right') || (_.currentSlide >= _.getDotCount() && swipeDirection === 'left')) {
-                swipeLength = _.touchObject.swipeLength * _.options.edgeFriction;
-                _.touchObject.edgeHit = true;
-            }
-        }
+		if (_.animating === true) {
+			_.swipeLeft = null;
+			return false;
+		}
 
-        if (_.options.vertical === false) {
-            _.swipeLeft = curLeft + swipeLength * positionOffset;
-        } else {
-            _.swipeLeft = curLeft + (swipeLength * (_.$list.height() / _.listWidth)) * positionOffset;
-        }
-        if (_.options.verticalSwiping === true) {
-            _.swipeLeft = curLeft + swipeLength * positionOffset;
-        }
+		_.setCSS(_.swipeLeft);
 
-        if (_.options.fade === true || _.options.touchMove === false) {
-            return false;
-        }
+	};
 
-        if (_.animating === true) {
-            _.swipeLeft = null;
-            return false;
-        }
+	revSlick.prototype.swipeStart = function (event) {
 
-        _.setCSS(_.swipeLeft);
+		var _ = this,
+			touches;
 
-    };
+		_.interrupted = true;
 
-    revSlick.prototype.swipeStart = function(event) {
+		if (_.touchObject.fingerCount !== 1 || _.slideCount <= _.options.slidesToShow) {
+			_.touchObject = {};
+			return false;
+		}
 
-        var _ = this,
-            touches;
+		if (event.originalEvent !== undefined && event.originalEvent.touches !== undefined) {
+			touches = event.originalEvent.touches[0];
+		}
 
-        _.interrupted = true;
+		_.touchObject.startX = _.touchObject.curX = touches !== undefined ? touches.pageX : event.clientX;
+		_.touchObject.startY = _.touchObject.curY = touches !== undefined ? touches.pageY : event.clientY;
 
-        if (_.touchObject.fingerCount !== 1 || _.slideCount <= _.options.slidesToShow) {
-            _.touchObject = {};
-            return false;
-        }
+		_.dragging = true;
 
-        if (event.originalEvent !== undefined && event.originalEvent.touches !== undefined) {
-            touches = event.originalEvent.touches[0];
-        }
+	};
 
-        _.touchObject.startX = _.touchObject.curX = touches !== undefined ? touches.pageX : event.clientX;
-        _.touchObject.startY = _.touchObject.curY = touches !== undefined ? touches.pageY : event.clientY;
+	revSlick.prototype.unfilterSlides = revSlick.prototype.revSlickUnfilter = function () {
 
-        _.dragging = true;
+		var _ = this;
 
-    };
+		if (_.$slidesCache !== null) {
 
-    revSlick.prototype.unfilterSlides = revSlick.prototype.revSlickUnfilter = function() {
+			_.unload();
 
-        var _ = this;
+			_.$slideTrack.children(this.options.slide).detach();
 
-        if (_.$slidesCache !== null) {
+			_.$slidesCache.appendTo(_.$slideTrack);
 
-            _.unload();
+			_.reinit();
 
-            _.$slideTrack.children(this.options.slide).detach();
+		}
 
-            _.$slidesCache.appendTo(_.$slideTrack);
+	};
 
-            _.reinit();
+	revSlick.prototype.unload = function () {
 
-        }
+		var _ = this;
 
-    };
+		$('.revSlick-cloned', _.$slider).remove();
 
-    revSlick.prototype.unload = function() {
+		if (_.$dots) {
+			_.$dots.remove();
+		}
 
-        var _ = this;
+		if (_.$prevArrow && _.htmlExpr.test(_.options.prevArrow)) {
+			_.$prevArrow.remove();
+		}
 
-        $('.revSlick-cloned', _.$slider).remove();
+		if (_.$nextArrow && _.htmlExpr.test(_.options.nextArrow)) {
+			_.$nextArrow.remove();
+		}
 
-        if (_.$dots) {
-            _.$dots.remove();
-        }
+		_.$slides
+			.removeClass('revSlick-slide revSlick-active revSlick-visible revSlick-current')
+			.attr('aria-hidden', 'true')
+			.css('width', '');
 
-        if (_.$prevArrow && _.htmlExpr.test(_.options.prevArrow)) {
-            _.$prevArrow.remove();
-        }
+	};
 
-        if (_.$nextArrow && _.htmlExpr.test(_.options.nextArrow)) {
-            _.$nextArrow.remove();
-        }
+	revSlick.prototype.unrevSlick = function (fromBreakpoint) {
 
-        _.$slides
-            .removeClass('revSlick-slide revSlick-active revSlick-visible revSlick-current')
-            .attr('aria-hidden', 'true')
-            .css('width', '');
+		var _ = this;
+		_.$slider.trigger('unrevSlick', [_, fromBreakpoint]);
+		_.destroy();
 
-    };
+	};
 
-    revSlick.prototype.unrevSlick = function(fromBreakpoint) {
+	revSlick.prototype.updateArrows = function () {
 
-        var _ = this;
-        _.$slider.trigger('unrevSlick', [_, fromBreakpoint]);
-        _.destroy();
+		var _ = this,
+			centerOffset;
 
-    };
+		centerOffset = Math.floor(_.options.slidesToShow / 2);
 
-    revSlick.prototype.updateArrows = function() {
+		if (_.options.arrows === true
+			&& _.slideCount > _.options.slidesToShow
+			&& !_.options.infinite) {
 
-        var _ = this,
-            centerOffset;
+			_.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
+			_.$nextArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
 
-        centerOffset = Math.floor(_.options.slidesToShow / 2);
+			if (_.currentSlide === 0) {
 
-        if ( _.options.arrows === true &&
-            _.slideCount > _.options.slidesToShow &&
-            !_.options.infinite ) {
+				_.$prevArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
+				_.$nextArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
 
-            _.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
-            _.$nextArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
+			} else if (_.currentSlide >= _.slideCount - _.options.slidesToShow && _.options.centerMode === false) {
 
-            if (_.currentSlide === 0) {
+				_.$nextArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
+				_.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
 
-                _.$prevArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
-                _.$nextArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
+			} else if (_.currentSlide >= _.slideCount - 1 && _.options.centerMode === true) {
 
-            } else if (_.currentSlide >= _.slideCount - _.options.slidesToShow && _.options.centerMode === false) {
+				_.$nextArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
+				_.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
 
-                _.$nextArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
-                _.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
+			}
 
-            } else if (_.currentSlide >= _.slideCount - 1 && _.options.centerMode === true) {
+		}
 
-                _.$nextArrow.addClass('revSlick-disabled').attr('aria-disabled', 'true');
-                _.$prevArrow.removeClass('revSlick-disabled').attr('aria-disabled', 'false');
+	};
 
-            }
+	revSlick.prototype.updateDots = function () {
 
-        }
+		var _ = this;
 
-    };
+		if (_.$dots !== null) {
 
-    revSlick.prototype.updateDots = function() {
+			_.$dots
+				.find('li')
+				.removeClass('revSlick-active')
+				.end();
 
-        var _ = this;
+			_.$dots
+				.find('li')
+				.eq(Math.floor(_.currentSlide / _.options.slidesToScroll))
+				.addClass('revSlick-active');
 
-        if (_.$dots !== null) {
+		}
 
-            _.$dots
-                .find('li')
-                    .removeClass('revSlick-active')
-                    .end();
+	};
 
-            _.$dots
-                .find('li')
-                .eq(Math.floor(_.currentSlide / _.options.slidesToScroll))
-                .addClass('revSlick-active');
+	revSlick.prototype.visibility = function () {
 
-        }
+		var _ = this;
 
-    };
+		if (_.options.autoplay) {
 
-    revSlick.prototype.visibility = function() {
+			if (document[_.hidden]) {
 
-        var _ = this;
+				_.interrupted = true;
 
-        if ( _.options.autoplay ) {
+			} else {
 
-            if ( document[_.hidden] ) {
+				_.interrupted = false;
 
-                _.interrupted = true;
+			}
 
-            } else {
+		}
 
-                _.interrupted = false;
+	};
 
-            }
-
-        }
-
-    };
-
-    $.fn.revSlick = function() {
-        var _ = this,
-            opt = arguments[0],
-            args = Array.prototype.slice.call(arguments, 1),
-            l = _.length,
-            i,
-            ret;
-        for (i = 0; i < l; i++) {
-            if (typeof opt == 'object' || typeof opt == 'undefined')
-                _[i].revSlick = new revSlick(_[i], opt);
-            else
-                ret = _[i].revSlick[opt].apply(_[i].revSlick, args);
-            if (typeof ret != 'undefined') return ret;
-        }
-        return _;
-    };
+	$.fn.revSlick = function () {
+		var _ = this,
+			opt = arguments[0],
+			args = Array.prototype.slice.call(arguments, 1),
+			l = _.length,
+			i,
+			ret;
+		for (i = 0; i < l; i++) {
+			if (typeof opt == 'object' || typeof opt == 'undefined')
+				_[i].revSlick = new revSlick(_[i], opt);
+			else
+				ret = _[i].revSlick[opt].apply(_[i].revSlick, args);
+			if (typeof ret != 'undefined') return ret;
+		}
+		return _;
+	};
 
 }));
- 

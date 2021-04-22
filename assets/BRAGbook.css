@@ -326,6 +326,7 @@ img#myFavsLogo {
 .revCatImageSet h2{
 	margin: 0 0 10px 0;
 	text-align:center;
+	font-size: 18px;
 }
 
 @media (max-width: 800px) {
@@ -1291,8 +1292,8 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
 }
 @media  (max-width : 800px) {
 	.revSlick-dots{display: none !important;}
-	.revSlideImageSetRight{width:90%;margin:0 5%;}
-	.revSlideImageSetLeft{width:90%;margin:0 5%;}
+	.revSlideImageSetRight{width: 42.5%; margin: 0 5% 0 2.5%;}
+	.revSlideImageSetLeft{width: 42.5%; margin: 0 2.5% 0 5%;}
 	.revSlick-prev{left:-15px;}
 	.revSlick-next{right: -15px;}
 	
@@ -1325,4 +1326,6 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
 }
 
 .revlightcase-inlineWrap {overflow:scroll;}
+
+.revCatImageSet:nth-child(odd) {clear:left;}
 

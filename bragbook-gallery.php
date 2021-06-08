@@ -519,10 +519,15 @@ function bragbook_start(){
 				  $bodyMenuImage = get_option( 'revBodyMenuImage', '');
 				  $skinMenuImage = get_option( 'revSkinMenuImage', '');
 				  
-				  if(isset($faceMenuImage) && $faceMenuImage != ''){$faceMenuImage = '<img src="'.$faceMenuImage.'" />';}
-				  if(isset($breastMenuImage) && $breastMenuImage != ''){$breastMenuImage = '<img src="'.$breastMenuImage.'" />';}
-				  if(isset($bodyMenuImage) && $bodyMenuImage != ''){$bodyMenuImage = '<img src="'.$bodyMenuImage.'" />';}
-				  if(isset($skinMenuImage) && $skinMenuImage != ''){$skinMenuImage = '<img src="'.$skinMenuImage.'" />';}
+				  $faceMenuImageAlt = get_option( 'revFaceMenuImageAlt', '');
+				  $breastMenuImageAlt = get_option( 'revBreastMenuImageAlt', '');
+				  $bodyMenuImageAlt = get_option( 'revBodyMenuImageAlt', '');
+				  $skinMenuImageAlt = get_option( 'revSkinMenuImageAlt', '');
+				  
+				  if(isset($faceMenuImage) && $faceMenuImage != ''){$faceMenuImage = '<img alt="'.$faceMenuImageAlt.'" src="'.$faceMenuImage.'" />';}
+				  if(isset($breastMenuImage) && $breastMenuImage != ''){$breastMenuImage = '<img alt="'.$breastMenuImageAlt.'" src="'.$breastMenuImage.'" />';}
+				  if(isset($bodyMenuImage) && $bodyMenuImage != ''){$bodyMenuImage = '<img alt="'.$bodyMenuImageAlt.'" src="'.$bodyMenuImage.'" />';}
+				  if(isset($skinMenuImage) && $skinMenuImage != ''){$skinMenuImage = '<img alt="'.$skinMenuImageAlt.'" src="'.$skinMenuImage.'" />';}
 				  
 				  
               $revGallery->landingMenuWrapOpen = '<div id="bbmenu">'; //html tags to place before the landing page menu on the landing page

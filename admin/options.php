@@ -569,7 +569,7 @@ jQuery(document).ready(function($){
                 </tr>
                 <tr valign="top">
                   <th scope="row">Select Installed SEO Plugin </th>
-                  <td><input name="revUseWPseo" type="checkbox" id="revUseWPseo" value="1" <?php if( get_option('revUseWPseo') == 1){echo 'checked="checked"';} ?> />
+                  <td>
 					<select name="revUseWPseo" id="revUseWPseo">
                       <option value="" <?php if(get_option('revUseWPseo') == "" || get_option('revUseWPseo') == 0){ echo 'selected="selected"'; } ?>>No SEO Plugins</option>
                       <option value="1" <?php if(get_option('revSetDetails') == "1"){ echo 'selected="selected"'; } ?>>Yoast WP SEO</option>

@@ -359,20 +359,36 @@ jQuery(document).ready(function($){
                   <td><input type="text" name="revFaceMenuImage" id="revFaceMenuImage" class="regular-text"  value="<?php echo get_option('revFaceMenuImage'); ?>">
                     <input type="button" name="upload-btn" id="upload-btn1" class="button-secondary upload-btn" value="Select Image"></td>
                 </tr>
+				  <tr valign="top">
+                  <th scope="row">Face Menu Image Alt</th>
+                  <td><input type="text" name="revFaceMenuImageAlt" value="<?php echo get_option('revFaceMenuImageAlt'); ?>"  style="width:100%;" /></td>
+                </tr>
                 <tr valign="top">
                   <th scope="row">Breast Menu Image</th>
                   <td><input type="text" name="revBreastMenuImage" id="revBreastMenuImage" class="regular-text"  value="<?php echo get_option('revBreastMenuImage'); ?>">
                     <input type="button" name="upload-btn" id="upload-btn2" class="button-secondary upload-btn" value="Select Image"></td>
+                </tr>
+				  <tr valign="top">
+                  <th scope="row">Breast Menu Image Alt</th>
+                  <td><input type="text" name="revBreastMenuImageAlt" value="<?php echo get_option('revBreastMenuImageAlt'); ?>"  style="width:100%;" /></td>
                 </tr>
                 <tr valign="top">
                   <th scope="row">Body Menu Image</th>
                   <td><input type="text" name="revBodyMenuImage" id="revBodyMenuImage" class="regular-text"  value="<?php echo get_option('revBodyMenuImage'); ?>">
                     <input type="button" name="upload-btn" id="upload-btn3" class="button-secondary upload-btn" value="Select Image"></td>
                 </tr>
+				   <tr valign="top">
+                  <th scope="row">Body Menu Image Alt</th>
+                  <td><input type="text" name="revBodyMenuImageAlt" value="<?php echo get_option('revBodyMenuImageAlt'); ?>"  style="width:100%;" /></td>
+                </tr>
                 <tr valign="top">
                   <th scope="row">Non-Surgical Menu Image</th>
                   <td><input type="text" name="revSkinMenuImage" id="revSkinMenuImage" class="regular-text"  value="<?php echo get_option('revSkinMenuImage'); ?>">
                     <input type="button" name="upload-btn" id="upload-btn4" class="button-secondary upload-btn" value="Select Image"></td>
+                </tr>
+				  <tr valign="top">
+                  <th scope="row">Non-Surgical Menu Image Alt</th>
+                  <td><input type="text" name="revSkinMenuImageAlt" value="<?php echo get_option('revSkinMenuImageAlt'); ?>"  style="width:100%;" /></td>
                 </tr>
               </table>
               <p>&nbsp;</p>
@@ -552,8 +568,14 @@ jQuery(document).ready(function($){
                   <td><input name="revEnableSitemap" type="checkbox" id="revEnableSitemap" value="1" <?php if( get_option('revEnableSitemap') == 1){echo 'checked="checked"';} ?> /></td>
                 </tr>
                 <tr valign="top">
-                  <th scope="row">Yoast WP SEO Plugin in use?</th>
-                  <td><input name="revUseWPseo" type="checkbox" id="revUseWPseo" value="1" <?php if( get_option('revUseWPseo') == 1){echo 'checked="checked"';} ?> /></td>
+                  <th scope="row">Select Installed SEO Plugin </th>
+                  <td><input name="revUseWPseo" type="checkbox" id="revUseWPseo" value="1" <?php if( get_option('revUseWPseo') == 1){echo 'checked="checked"';} ?> />
+					<select name="revUseWPseo" id="revUseWPseo">
+                      <option value="" <?php if(get_option('revUseWPseo') == "" || get_option('revUseWPseo') == 0){ echo 'selected="selected"'; } ?>>No SEO Plugins</option>
+                      <option value="1" <?php if(get_option('revSetDetails') == "1"){ echo 'selected="selected"'; } ?>>Yoast WP SEO</option>
+                      <option value="2" <?php if(get_option('revSetDetails') == "2"){ echo 'selected="selected"'; } ?>>All In One SEO</option>
+                    </select>
+					</td>
                 </tr>
               </table>
             </div>

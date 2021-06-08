@@ -1296,6 +1296,7 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
 	.revSlideImageSetLeft{width: 42.5%; margin: 0 2.5% 0 5%;}
 	.revSlick-prev{left:-15px;}
 	.revSlick-next{right: -15px;}
+	.revNextNav, .revPrevNav{display:none;}
 	
 }
 

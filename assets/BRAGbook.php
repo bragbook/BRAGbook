@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.2.0
+//BRAGbook™ 1.4.2.1
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -1244,9 +1244,9 @@ $string = strtr( $string, $unwanted_array );
 					}
 		
 		if($this->urlRewrite == true){
-		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'">&lt; Previous</a></li>';
+		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'">&lt; <span class="revPrevNav">Previous</span></a></li>';
 		} else{ 
-		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'">&lt; Previous</a></li>';
+		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'">&lt; <span class="revPrevNav">Previous</span></a></li>';
 		}
 	}
 	
@@ -1337,9 +1337,9 @@ $string = strtr( $string, $unwanted_array );
 					}
 		
 		if($this->urlRewrite == true){   
-		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'">Next &gt;</a></li>';
+		$revImageSetNavOutput .= '<li><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revNextNav">Next</span> &gt;</a></li>';
 		} else {
-			$revImageSetNavOutput .=  '<li><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'">Next &gt;</a></li>';
+			$revImageSetNavOutput .=  '<li><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revNextNav">Next</span> &gt;</a></li>';
 		}
 	}
 
@@ -1650,9 +1650,9 @@ $string = strtr( $string, $unwanted_array );
 		}
 		
 		if($_SESSION['patientsig'] != ""){
-			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">View MyFavorites</a></p></div>';
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">View MyFavorites</a></p></div>';
 		} else{
-			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">Create a MyFavorites account</a> and save any before and afters you think you might like to use as examples to show us.</p></div>';
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">Create a MyFavorites account</a> and save any before and afters you think you might like to use as examples to show us.</p></div>';
 		}
 		
 		
@@ -3006,7 +3006,7 @@ $string = strtr( $string, $unwanted_array );
 		
 						//$revLink = $revCatname."|".($thumbStart - 1);
 		
-		$revThumbnailNavOutput .= '<li><a class="thumbNavLink" href="javascript:;" data-revcatname="'.$revCatname.'" data-thumbstart="'.($thumbStart - 1).'"  rel="nofollow">&lt; Previous</a></li>';
+		$revThumbnailNavOutput .= '<li><a class="thumbNavLink" href="javascript:;" data-revcatname="'.$revCatname.'" data-thumbstart="'.($thumbStart - 1).'"  rel="nofollow">&lt; <span class="revPrevNav">Previous</span></a></li>';
 		
 	}
 	
@@ -3075,7 +3075,7 @@ $string = strtr( $string, $unwanted_array );
 		
 		// $revLink = $revCatname."|".($thumbStart+1);
 		
-		$revThumbnailNavOutput .=  '<li><a class="thumbNavLink" href="javascript:;" data-revcatname="'.$revCatname.'" data-thumbstart="'.($thumbStart+1).'" rel="nofollow">Next &gt;</a></li>';
+		$revThumbnailNavOutput .=  '<li><a class="thumbNavLink" href="javascript:;" data-revcatname="'.$revCatname.'" data-thumbstart="'.($thumbStart+1).'" rel="nofollow"><span class="revNextNav">Next</span> &gt;</a></li>';
 	}
 
 	$revThumbnailNavOutput .=  '</ul></div>';

@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.2.0
+Version: 1.4.2.1
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -271,6 +271,10 @@ function register_mysettings() {
  register_setting( 'bragbook-settings-group', 'revBreastMenuImage' );
  register_setting( 'bragbook-settings-group', 'revBodyMenuImage' );
  register_setting( 'bragbook-settings-group', 'revSkinMenuImage' );
+	 register_setting( 'bragbook-settings-group', 'revFaceMenuImageAlt' );
+ register_setting( 'bragbook-settings-group', 'revBreastMenuImageAlt' );
+ register_setting( 'bragbook-settings-group', 'revBodyMenuImageAlt' );
+ register_setting( 'bragbook-settings-group', 'revSkinMenuImageAlt' );
  
  register_setting( 'bragbook-settings-group', 'revGalNavStyleBorderColor' );
  register_setting( 'bragbook-settings-group', 'revGalNavStyleColor' );
@@ -1304,6 +1308,12 @@ if(get_option( 'revUseWPseo') == 1 || get_option( 'thermiUseWPseo') == 1){
               add_filter( 'wpseo_canonical', 'getCurrentURL' );
               add_filter( 'wpseo_title', 'GetCustomBragbookTitle');
               add_filter( 'wpseo_metadesc', 'GetCustomBragbookDescription');
+			  add_action( 'wp_head', 'printCustomCSS' );
+	
+} else if(get_option( 'revUseWPseo') == 2 || get_option( 'thermiUseWPseo') == 2){
+              add_filter( 'aioseo_canonical_url', 'getCurrentURL' );
+              add_filter( 'aioseo_title', 'GetCustomBragbookTitle');
+              add_filter( 'aioseo_description', 'GetCustomBragbookDescription');
 			  add_action( 'wp_head', 'printCustomCSS' );
 	
 } else {

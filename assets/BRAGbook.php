@@ -417,7 +417,7 @@ $string = strtr( $string, $unwanted_array );
 		$revJumpMenuOutput;
 		
 		$revJumpMenuOutput = '<form name="rev_gallery_list" method="get" action="" id="revgallerychooser">';
-			$revJumpMenuOutput .= '<p><strong>Choose a Gallery: </strong>';
+			$revJumpMenuOutput .= '<p><label for="revCatname"><strong>Choose a Gallery: </strong></label>';
 				if($this->urlRewrite){
 					$revJumpMenuOutput .=  '<select name="revCatname" id="revCatname" class="revJumpMenu" onchange="revenez_jump_menu_procedure()">';
 				} else {
@@ -3142,7 +3142,7 @@ $string = strtr( $string, $unwanted_array );
 				$galleryOutput .= $this->categoryLandingPageWrapClose;
 			} else{
 			$galleryOutput .= $this->imageSetWrapOpen;
-		$galleryOutput .= '<a id="ba" name="ba"></a>';
+		$galleryOutput .= '<a id="ba" name="ba" aria-label="Select New Procedure"></a>';
 		if(isset($this->hideJumpMenu) && $this->hideJumpMenu == 1){}else{$galleryOutput .= $this->revCategoryNavJumpMenu($revCatname);}
 		$galleryOutput .= '<div id="revGalleryHeader">';
 		if($this->myFavsActive == 1){$galleryOutput .=  $this->revFavoriteText($revID);}

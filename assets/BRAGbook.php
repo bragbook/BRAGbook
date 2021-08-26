@@ -1577,7 +1577,7 @@ $string = strtr( $string, $unwanted_array );
 					$widthB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_width'];
 					$heightB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_height'];
 					
-					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 		 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'])){
 			if(isset($this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'])){
@@ -1630,10 +1630,14 @@ $string = strtr( $string, $unwanted_array );
 		for($i=1; $i<10; $i++){
 			
 			$curAngle = $i+1;
-			if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'])){
+			if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl_x3'])){
 				list($widthB, $heightB) = getimagesize($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr']);
 					
 					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl_x3'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+			} else if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'])){
+				list($widthB, $heightB) = getimagesize($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr']);
+					
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'])){
 			if(isset($this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'])){				
 				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure  class="revBAcol1-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'].'"><figcaption itemprop="caption description" style="display:none">Before Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol2-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altA'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_xl'].'"><figcaption itemprop="caption description" style="display:none">After Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol3-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altA'.($i+1)}.'_2" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'].'"><figcaption itemprop="caption description" style="display:none">After 2 Angle '.($i+1).'</figcaption></figure></div>'; 

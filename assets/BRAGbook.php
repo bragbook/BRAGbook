@@ -598,7 +598,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 						
 						//get headline string for Alts
 						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
@@ -649,7 +649,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						}else{$catComboIm = "";}
 						
 						//get headline string for Alts
 						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
@@ -734,7 +734,8 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
+						
 						//get headline string for Alts
 						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
 		
@@ -789,7 +790,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 						
 						//get headline string for Alts
 						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
@@ -887,7 +888,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
@@ -929,7 +930,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 						
 						//get headline string for Alts
 						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
@@ -1054,7 +1055,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
@@ -1107,7 +1108,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
@@ -1689,7 +1690,7 @@ $string = strtr( $string, $unwanted_array );
 }
 		if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
-						}
+						} else{$catComboIm = "";}
 				
 		
 		//BA set 1

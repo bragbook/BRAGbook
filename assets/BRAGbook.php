@@ -610,6 +610,8 @@ $string = strtr( $string, $unwanted_array );
 						} else{
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After  ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
+						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After  ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After " ;}
 						
@@ -617,7 +619,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if($this->showCatSetDetails == 1){
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img  alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -625,7 +627,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -661,12 +663,14 @@ $string = strtr( $string, $unwanted_array );
 						} else{
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
+						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
 						if($showCatSetDetails == 1){	
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 							$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -674,7 +678,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'"  src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'"  src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 							$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -747,7 +751,7 @@ $string = strtr( $string, $unwanted_array );
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
 						
-						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
@@ -757,7 +761,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if($this->showCatSetDetails == 1){
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'"  src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -765,7 +769,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != "") {
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -803,13 +807,15 @@ $string = strtr( $string, $unwanted_array );
 						} else{
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
+						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
 						
 						if($this->showCatSetDetails == 1){	
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -817,7 +823,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							}if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -886,6 +892,8 @@ $string = strtr( $string, $unwanted_array );
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
 						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
+						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
 						} else{$catComboIm = "";}
@@ -897,7 +905,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if($this->showCatSetDetails == 1){
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -905,7 +913,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -942,13 +950,15 @@ $string = strtr( $string, $unwanted_array );
 						} else{
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
+						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 
 						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
 						
 						
 						if($this->showCatSetDetails == 1){	
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 							$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
 							}else {
@@ -956,7 +966,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
+								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></li>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_xl'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
 							}else {
@@ -1053,6 +1063,8 @@ $string = strtr( $string, $unwanted_array );
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
 						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
+						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
 						} else{$catComboIm = "";}
@@ -1064,7 +1076,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if($this->showCatSetDetails == 1){
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet  revSlideSingleCol"><div class="revDetailsDiv"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy"  alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
+								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet  revSlideSingleCol"><div class="revDetailsDiv"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy"  alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet revSlideSingleCol"><div class="revDetailsDiv"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetLeft"><img loading="lazy" alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_sm'].'"></span><span  class="revSlideImageSetRight"><img loading="lazy" alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
 							}else {
@@ -1072,7 +1084,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy" alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div>';
+								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy" alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revSlideImageSetLeft"><img loading="lazy"  alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_sm'].'"></span><span  class="revSlideImageSetRight"><img loading="lazy" alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div>';
 							}else {
@@ -1106,6 +1118,8 @@ $string = strtr( $string, $unwanted_array );
 							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
 						}
 						
+						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
+						
 						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
 						} else{$catComboIm = "";}
@@ -1115,7 +1129,7 @@ $string = strtr( $string, $unwanted_array );
 						
 						if($this->showCatSetDetails == 1){	
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet revSingleCol"><div class="revDetailsDiv"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img loading="lazy" alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
+								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet revSingleCol"><div class="revDetailsDiv"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img loading="lazy" alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet revSlideSingleCol"><div class="revDetailsDiv"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img loading="lazy"  alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_sm'].'"></span><span class="revCatImageSetRight"><img loading="lazy"  alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a>'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revSlideCaseViewLink">View More</a></div></div>';
 							}else {
@@ -1123,7 +1137,7 @@ $string = strtr( $string, $unwanted_array );
 							}
 						} else{
 							if(isset($catComboIm) && $catComboIm != ""){
-								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy"  alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div>';
+								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revSlideImageSetCenter"><img loading="lazy"  alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_xl'].'"></span></a></div>';
 							} else if(isset($catAfterIm) && $catAfterIm !=""){
 								$revCategoryLandingPageImageSetsOutput .=  '<div class="revSlideImageSet"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revSlideImageSetLeft"><img loading="lazy"  alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_sm'].'"></span><span class="revSlideImageSetRight"><img loading="lazy"  alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div>';
 							}else {
@@ -1448,6 +1462,8 @@ $string = strtr( $string, $unwanted_array );
 		}else{
 			if($this->baGallery['ba_set'][$this->revStart]['custom_alttag'] == ""){${'altB'.$i} = $curCatname . " - " . "Before and After ".$i;}else{${'altB'.$i} = $this->baGallery['ba_set'][$this->revStart]['custom_alttag']." - Before and After ".$i;}
 		}
+			
+			if($this->baGallery['ba_set'][$this->revStart]['custom_alttag'] == ""){${'altCombo'.$i} = $curCatname . " - " . "Before and After ".$i;}else{${'altCombo'.$i} = $this->baGallery['ba_set'][$this->revStart]['custom_alttag']." - Before and After ".$i;}
 		
 		if($this->baGallery['ba_set'][$this->revStart]['custom_alttag'] == ""){${'altA'.$i} = $curCatname . " - " . "After ".$i;}else{${'altA'.$i} = $this->baGallery['ba_set'][$this->revStart]['custom_alttag']." - ".isset($time1)." After ".$i ;}
 		
@@ -1532,12 +1548,12 @@ $string = strtr( $string, $unwanted_array );
 				$widthB = $this->baGallery['ba_set'][$this->revStart]['image_combo_hr_width'];
 				$heightB = $this->baGallery['ba_set'][$this->revStart]['image_combo_hr_height'];
 
-				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl_x3'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
+				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl_x3'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'])){
 				$widthB = $this->baGallery['ba_set'][$this->revStart]['image_combo_hr_width'];
 				$heightB = $this->baGallery['ba_set'][$this->revStart]['image_combo_hr_height'];
 
-				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
+				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
 			}else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after_2_xl'])){
 			$widthB = $this->baGallery['ba_set'][$this->revStart]['image_before_hr_width'];
 			$heightB = $this->baGallery['ba_set'][$this->revStart]['image_before_hr_height'];
@@ -1570,7 +1586,7 @@ $string = strtr( $string, $unwanted_array );
 					$widthB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_width'];
 					$heightB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_height'];
 					
-					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_xl_x3'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altCombo'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_xl_x3'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 		 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'])){
 				
@@ -1578,7 +1594,7 @@ $string = strtr( $string, $unwanted_array );
 					$widthB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_width'];
 					$heightB = $this->baGallery['ba_set'][$this->revStart]['image_combo'.$curAngle.'_hr_height'];
 					
-					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altCombo'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"></a><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 		 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'])){
 			if(isset($this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'])){
@@ -1617,9 +1633,9 @@ $string = strtr( $string, $unwanted_array );
 		
 			//BA set 1
 			if(isset($this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl_x3'])){
-				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl_x3'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
+				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl_x3'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'])){
-				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
+				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle 1</figcaption></figure></div>'; 
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after_2_xl'])){
 			$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure  class="revBAcol1-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before_xl'].'"><figcaption itemprop="caption description" style="display:none">Before Angle 1</figcaption></figure><figure  class="revBAcol2-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_xl'].'"><figcaption itemprop="caption description" style="display:none">After Angle 1</figcaption></figure><figure  class="revBAcol3-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.$altA1_2.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_2_xl'].'"><figcaption itemprop="caption description" style="display:none">After 2 Angle 1</figcaption></figure></div>'; 
 		} else if($this->baGallery['ba_set'][$this->revStart]['image_after_xl']){
@@ -1634,11 +1650,11 @@ $string = strtr( $string, $unwanted_array );
 			if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl_x3'])){
 				list($widthB, $heightB) = getimagesize($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr']);
 					
-					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl_x3'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altCombo'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl_x3'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'])){
 				list($widthB, $heightB) = getimagesize($this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_hr']);
 					
-					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
+					$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure class="revBAcol" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altCombo'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle'.$curAngle.'_combo_xl'].'"><figcaption itemprop="caption description" style="display:none">Before / After Angle '.($i+1).'</figcaption></figure></div>';
 			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'])){
 			if(isset($this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'])){				
 				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure  class="revBAcol1-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_xl'].'"><figcaption itemprop="caption description" style="display:none">Before Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol2-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altA'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_xl'].'"><figcaption itemprop="caption description" style="display:none">After Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol3-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><img alt="'.${'altA'.($i+1)}.'_2" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_xl'].'"><figcaption itemprop="caption description" style="display:none">After 2 Angle '.($i+1).'</figcaption></figure></div>'; 
@@ -1691,11 +1707,13 @@ $string = strtr( $string, $unwanted_array );
 		if(isset($this->baGallery['ba_set'][$x]['angle1_combo_xl']) && $this->baGallery['ba_set'][$x]['angle1_combo_xl'] != ""){
 							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_xl'];
 						} else{$catComboIm = "";}
+		
+		if($this->baGallery['ba_set'][$this->revStart]['custom_alttag'] == ""){${'altCombo'.$i} = "Before and After".$i;}else{${'altCombo'.$i} = $this->baGallery['ba_set'][$this->revStart]['custom_alttag']." - Before and After".$i;}
 				
 		
 		//BA set 1
 		if(isset($catComboIm) && $catComboIm != "") {
-			$revImageSetOutput .= '<div class="revBArow"><div class="revBAcol"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"></div><div class="clearfixer"></div></div>'; 
+			$revImageSetOutput .= '<div class="revBArow"><div class="revBAcol"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['angle1_combo_xl'].'"></div><div class="clearfixer"></div></div>'; 
 		} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after_2_xl'])){
 			$revImageSetOutput .= '<div class="revBArow"><div class="revBAcol1-3"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before_xl'].'"></div><div class="revBAcol2-3"><img alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_xl'].'"></div><div class="revBAcol3-3"><img alt="'.$altA1_2.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_2_xl'].'"></div><div class="clearfixer"></div></div>'; 
 		} else if($this->baGallery['ba_set'][$this->revStart]['image_after_xl']){$revImageSetOutput .= '<div class="revBArow"><div class="revBAcol1"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before_xl'].'"></div><div class="revBAcol2"><img alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_xl'].'"></div><div class="clearfixer"></div></div>'; 

@@ -3,7 +3,7 @@
 Plugin Name: BRAGbook Gallery
 Plugin URI: http://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the Bragbook before and after gallery from Candace Crowe Design.
-Version: 1.4.2.3
+Version: 1.4.2.4
 Author: Candace Crowe Design
 Author URI: http://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -238,6 +238,10 @@ function register_mysettings() {
 			  
               register_setting( 'bragbook-settings-group', 'revUrlRewrite' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription' );
+              register_setting( 'bragbook-settings-group', 'revDefaultDescription2' );
+              register_setting( 'bragbook-settings-group', 'revDefaultDescription3' );
+              register_setting( 'bragbook-settings-group', 'revDefaultDescription4' );
+              register_setting( 'bragbook-settings-group', 'revDefaultDescription5' );
               register_setting( 'bragbook-settings-group', 'revNotFound' );
               register_setting( 'bragbook-settings-group', 'revThumbLimit' );
               register_setting( 'bragbook-settings-group', 'revLandingHeadline' );
@@ -249,6 +253,10 @@ function register_mysettings() {
 			  register_setting( 'bragbook-settings-group', 'revClickToZoomActive' );
 			  register_setting( 'bragbook-settings-group', 'revThumbLimit' );
               register_setting( 'bragbook-settings-group', 'revLandingTitle' );
+              register_setting( 'bragbook-settings-group', 'revLandingTitle2' );
+              register_setting( 'bragbook-settings-group', 'revLandingTitle3' );
+              register_setting( 'bragbook-settings-group', 'revLandingTitle4' );
+              register_setting( 'bragbook-settings-group', 'revLandingTitle5' );
               register_setting( 'bragbook-settings-group', 'revRevisionActive' );
 			  register_setting( 'bragbook-settings-group', 'revMenActive' );
 			  register_setting( 'bragbook-settings-group', 'revShowCatSetDetails' );	
@@ -479,7 +487,7 @@ function bragbook_start(){
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
               //Default page description if custom description not used
-              $revGallery->defaultDescription = get_option( 'revDefaultDescription', 'Plastic surgery before and after images');
+              $revGallery->defaultDescription = get_option( 'revDefaultDescription'.$galNum, 'Plastic surgery before and after images');
               //URL for 404 not found page
               $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
               //Number of thumbnail sets to display at one time. Leave blank if you want to show all
@@ -737,7 +745,7 @@ function bragbook_ajax_start(){
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
               //Default page description if custom description not used
-              $revGallery->defaultDescription = get_option( 'revDefaultDescription', 'Plastic surgery before and after images');
+              $revGallery->defaultDescription = get_option( 'revDefaultDescription'.$galNum, 'Plastic surgery before and after images');
               //URL for 404 not found page
               $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
               //Number of thumbnail sets to display at one time. Leave blank if you want to show all
@@ -1112,7 +1120,7 @@ function bragbook_home_menu_fetch($galNum=""){
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );
               //Default page description if custom description not used
-              $revGallery->defaultDescription = get_option( 'revDefaultDescription', 'Plastic surgery before and after images');
+              $revGallery->defaultDescription = get_option( 'revDefaultDescription'.$galNum, 'Plastic surgery before and after images');
               //URL for 404 not found page
               $revGallery->notFoundPage = get_option( 'revNotFound', '/404' );
               //Number of thumbnail sets to display at one time. Leave blank if you want to show all

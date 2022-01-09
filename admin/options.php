@@ -103,8 +103,8 @@ jQuery(document).ready(function($){
 	}
 </style>
 <div class="wrap">
-  <h2>BRAGbook Before &amp; After Gallery</h2>
-  <p>To install the BRAGbook create a page that you would like to use as the base URL and place the following shortcode on it: <span style="color:red">[bragbook_shortcode]</span> </p>
+  <h2>BRAG book Before &amp; After Gallery</h2>
+  <p>To install the BRAG book create a page that you would like to use as the base URL and place the following shortcode on it: <span style="color:red">[bragbook_shortcode]</span> </p>
   <p>Configure the options below to meet the needs of your gallery installation. <a href="https://www.bragbook.gallery/web-assets/downloads/BRAGbook-Wordpress-Plugin-Guide-v1.3.8.pdf">Click here for the full install manual.</a></p>
   <form method="post" action="options.php">
     <?php settings_fields( 'bragbook-settings-group' ); ?>
@@ -124,14 +124,14 @@ jQuery(document).ready(function($){
           <div class="postbox " id="basicOptions">
 			  
             <div class="postbox-header">
-              <h2 class="sortable-handle"><span>BRAGbook Basic Options <small>(required)</small></span></h2>
+              <h2 class="sortable-handle"><span>BRAG book Basic Options <small>(required)</small></span></h2>
               <div class="handle-actions hide-if-no-js">
                 <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Excerpt</span><span class="toggle-indicator" aria-hidden="true"></span></button>
               </div>
             </div>
 			  
             <div class="inside">
-              <p>The API key and client ID can be found in the BRAGbook dashboard under "developer tools." Gallery page name and ID should match the page that you placed the shortcode on. </p>
+              <p>The API key and client ID can be found in the BRAG book dashboard under "developer tools." Gallery page name and ID should match the page that you placed the shortcode on. </p>
               <table class="form-table">
                 <tr valign="top">
                   <th scope="row">API Key</th>
@@ -216,7 +216,7 @@ jQuery(document).ready(function($){
           </div>
           <div class="postbox closed" id="secondaryinstalls">
             <div class="postbox-header">
-              <h2 class="sortable-handle"><span>BRAGbook Secondary Installs<small> (optional)</small></span></h2>
+              <h2 class="sortable-handle"><span>BRAG book Secondary Installs<small> (optional)</small></span></h2>
               <div class="handle-actions hide-if-no-js">
                 <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Excerpt</span><span class="toggle-indicator" aria-hidden="true"></span></button>
               </div>
@@ -779,7 +779,7 @@ jQuery(document).ready(function($){
           </div>
           <div class="postbox closed" id="test2">
             <div class="postbox-header">
-              <h2 class="sortable-handle"><span>BRAGbook Advanced Options<small> (optional)</small></span></h2>
+              <h2 class="sortable-handle"><span>BRAG book Advanced Options<small> (optional)</small></span></h2>
               <div class="handle-actions hide-if-no-js">
                 <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Excerpt</span><span class="toggle-indicator" aria-hidden="true"></span></button>
               </div>

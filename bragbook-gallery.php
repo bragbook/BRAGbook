@@ -186,8 +186,8 @@ register_deactivation_hook( __FILE__, 'bragbook_deactivate' );
  
 //admin section
 function bragbook_plugin_menu(){
-	 add_menu_page( 'BRAGbook Gallery', 'BRAGbook', 'nosuchcapability', 'bragbook-gallery'  );
-	 add_submenu_page( 'bragbook-gallery', 'BRAGbook General Settings', 'BRAGbook Settings', 'edit_others_posts', 'bragbook-gallery-settings', 'bragbook_plugin_options');
+	 add_menu_page( 'BRAG book Gallery', 'BRAG book', 'nosuchcapability', 'bragbook-gallery'  );
+	 add_submenu_page( 'bragbook-gallery', 'BRAG book General Settings', 'BRAG book Settings', 'edit_others_posts', 'bragbook-gallery-settings', 'bragbook_plugin_options');
 	
 	
               //add_options_page('BRAGbook Plugin Options', 'BRAGbook Plugin', 'manage_options', 'bragbook-plugin-menu', 'bragbook_plugin_options');
@@ -950,7 +950,7 @@ function bragbook_slider_list($catID, $limit, $start, $title, $details){
 					$var_revCatname = ucwords(str_replace('-', ' ', $var_revCatname));
 					$catSet = $revGallery->revSetProcedureID($var_revCatname, 1);
 					if($catSet == 1){
-						return '<p class="bbCarouselError"><strong>BRAGbook Carousel Error:</strong> Gallery category is empty or does not exist</p>';
+						return '<p class="bbCarouselError"><strong>BRAG book Carousel Error:</strong> Gallery category is empty or does not exist</p>';
 					} 
 						
 					
@@ -1007,7 +1007,7 @@ function bragbook_category_list($catID, $limit, $start, $title, $details){
 					$var_revCatname = ucwords(str_replace('-', ' ', $var_revCatname));	
 					$catSet = $revGallery->revSetProcedureID($var_revCatname, 1);
 					if($catSet == 1){
-						return '<p class="bbCarouselError"><strong>BRAGbook Category Error:</strong> Gallery category is empty or does not exist</p>';
+						return '<p class="bbCarouselError"><strong>BRAG book Category Error:</strong> Gallery category is empty or does not exist</p>';
 					} 
 					$revGallery->getImageFeed();
 					return $revGallery->revCategoryList($var_revCatname, $var_categorySetsStart, $var_revHead);

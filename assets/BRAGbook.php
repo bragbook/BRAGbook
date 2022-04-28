@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.2.9
+//BRAGbook™ 1.4.3.0
 //Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.

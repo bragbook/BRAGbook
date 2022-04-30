@@ -1,12 +1,12 @@
 <?php
-//BRAGbook™ 1.4.3.1
-//Copyright © 2013-2015 | Candace Crowe Design | All Rights Reserved | Patent Pending
+//BRAGbook™ 1.4.3.2
+//Copyright © 2013-2022 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
 
 	
 //session_start();
-class revGallery{
+class revGallery {
 	
 	//Default Variables
 	var $baseUrl = "/gallery/"; //the directory the gallery resides at relative to the home page
@@ -120,18 +120,19 @@ header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
 //get json file for category feed
 	function getCatFeed(){
 		//get the JSON feed for the categories and decode them to a php array
-				$catsJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_cat_feed/'.$this->clientid.'/');
+				$catsJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_cat_feed/index.php?clientid='.$this->clientid);
 				$this->baCats = json_decode($catsJson, true);
 	}
 	
 	//get json file for category feed
 	function getImageFeed(){
 				if(isset($_SESSION['patientid']) && $_SESSION['patientid']!= ""){
-		$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/'.$_SESSION['patientid'].'/');
+		$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID.'&pid='.$_SESSION['patientid']);
+      
 		} else if(isset($this->categoryID)){
-					$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/');
+					$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID);
 				} else{
-					$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
+					$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid);
 				}		
 				$this->baGallery = json_decode($imagesJson, true);
 				$this->baGallery2 = json_decode($imagesJson, true);

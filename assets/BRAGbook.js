@@ -1,6 +1,6 @@
 // JavaScript Document
 
-//BRAGbook™ 1.4.3.2
+//BRAG book™ 1.4.3.2
 //© copyright 2013-2022 Candace Crowe Design
 
 function reloadPage() {
@@ -70,7 +70,7 @@ revJquery(document).ready(function () {
 
 	//create function and listener for messages from iframe
 	testResponse = function (e) {
-		if (e.origin == "https://www.bragbook.gallery") {
+		if (e.origin == "https://dashboard.candacecrowe.com") {
 			//alert(e.data);
 			statusVar = e.data;
 			if (statusVar.status == "logout") {

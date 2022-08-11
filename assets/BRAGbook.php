@@ -81,7 +81,19 @@ class revGallery {
 	var $hideJumpMenu = ""; //variable to hide jump menu
 	var $hideMainMenu = ""; //variable to hide main menu
 	var $showCatSetDetails = ""; //variable to show details on category page
-
+	
+	// patch for file_get contents - D.S 8/4/2022
+	function get_data($url)
+	{
+	  $ch = curl_init();
+	  $timeout = 5;
+	  curl_setopt($ch,CURLOPT_URL,$url);
+	  curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+	  $data = curl_exec($ch);
+	  curl_close($ch);
+	  return $data;
+	}
 	        
     function getS3Url($oldPath) {   
          $s3BucketBaseUrl = 'https://gallery-dashboard.s3.amazonaws.com';
@@ -101,10 +113,10 @@ if($patientid) // Someone trying to log in?
     $_SESSION['patientUser'] = $username;
 	$_SESSION['patientsig'] = $sig;
 	
-	header("Location: https://www.bragbook.gallery/myfavs/?favid=".$favid."&patientsig=".$sig."&freshlogin=true");
+	header("Location: https://dashboard.candacecrowe.com/myfavs/?favid=".$favid."&patientsig=".$sig."&freshlogin=true");
   }
 }else{
-header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
+header("Location: https://dashboard.candacecrowe.com/myfavs/?pid=patientlogout");
 }
 //exit(); 
  }
@@ -113,26 +125,26 @@ header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
  function patientLogout(){
 	 
 		session_destroy();
-		//header("Location: https://www.bragbook.gallery/myfavs/?clientlogout=true");
+		//header("Location: https://dashboard.candacecrowe.com/myfavs/?clientlogout=true");
 		//exit(); 
  }
 
 //get json file for category feed
 	function getCatFeed(){
 		//get the JSON feed for the categories and decode them to a php array
-				$catsJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_cat_feed/index.php?clientid='.$this->clientid);
+				$catsJson = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_cat_feed/index.php?clientid='.$this->clientid);
 				$this->baCats = json_decode($catsJson, true);
 	}
 	
 	//get json file for category feed
 	function getImageFeed(){
 				if(isset($_SESSION['patientid']) && $_SESSION['patientid']!= ""){
-		$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID.'&pid='.$_SESSION['patientid']);
+		$imagesJson = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID.'&pid='.$_SESSION['patientid']);
       
 		} else if(isset($this->categoryID)){
-					$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID);
+					$imagesJson = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid.'&categoryid='.$this->categoryID);
 				} else{
-					$imagesJson = file_get_contents('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid);
+					$imagesJson = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid);
 				}		
 				$this->baGallery = json_decode($imagesJson, true);
 				$this->baGallery2 = json_decode($imagesJson, true);
@@ -220,7 +232,7 @@ header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
 				
 				if($this->revisionActive == 1 || $this->menActive == 1){
 				//create list of all images so drop down nav with revision categories can be properly generated
-					$imagesJson2 = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
+					$imagesJson2 = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/'.$this->clientid.'/');
 					$this->fullGallery = json_decode($imagesJson2, true);
 				}
 
@@ -1733,15 +1745,15 @@ $string = strtr( $string, $unwanted_array );
 						
 		if($this->baGallery['ba_set'][$this->revStart]['favadded'] == "1"){
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
 			} else {
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">View MyFavorites</a>';
 			}
 		} else {
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&favid='.$this->baGallery['ba_set'][$this->revStart]['oid'].'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">Add to Favorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->groupclientid.'&favid='.$this->baGallery['ba_set'][$this->revStart]['oid'].'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">Add to Favorites</a>';
 			}else {
-				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&favid='.$this->baGallery['ba_set'][$this->revStart]['oid'].'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">Add to Favorites</a>';
+				$revFavoriteButtonOutput .= '<a class="revFavLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->clientid.'&favid='.$this->baGallery['ba_set'][$this->revStart]['oid'].'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl.'" rel="nofollow">Add to Favorites</a>';
 			}
 		}
 		return $revFavoriteButtonOutput;
@@ -1755,22 +1767,22 @@ $string = strtr( $string, $unwanted_array );
 		
 		if($this->baGallery['ba_set'][$this->revStart]['favadded'] == "1"){
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
-				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+				$revFavoriteLink .= 'https://dashboard.candacecrowe.com/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
 			} else {
-				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+				$revFavoriteLink .= 'https://dashboard.candacecrowe.com//myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
 			}
 		} else {
 			if(isset($this->groupclientid) && $this->groupclientid != ""){
-				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+				$revFavoriteLink .= 'https://dashboard.candacecrowe.com/myfavs/?client='.$this->groupclientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
 			}else {
-				$revFavoriteLink .= 'https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
+				$revFavoriteLink .= 'https://dashboard.candacecrowe.com/myfavs/?client='.$this->clientid.'&patientsig='.$_SESSION['patientsig'].'&baseurl='.$this->baseUrl;
 			}
 		}
 		
 		if($_SESSION['patientsig'] != ""){
-			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">View MyFavorites</a></p></div>';
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://dashboard.candacecrowe.com/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">View MyFavorites</a></p></div>';
 		} else{
-			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://www.bragbook.gallery/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">Create a MyFavorites account</a> and save any before and afters you think you might like to use as examples to show us.</p></div>';
+			$revFavoriteTextOutput = '<div id="myFavsHeader"><img id="myFavsLogo" alt="MyFavorites Logo" src="https://dashboard.candacecrowe.com/myfavs/myfavs-logo.png"><p><a href="'.$revFavoriteLink.'" class="revLoginLaunch" rel="nofollow">Create a MyFavorites account</a> and save any before and afters you think you might like to use as examples to show us.</p></div>';
 		}
 		
 		
@@ -1783,10 +1795,10 @@ $string = strtr( $string, $unwanted_array );
 	function revLoginButton(){
 				
 		if(isset($_SESSION['patientsig'])){
-			return '<span class="revLogin">Welcome '.$_SESSION['patientUser'].'! <a class="revLoginLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.isset($_SESSION['patientsig']).'&baseurl='.$this->baseUrl.'" rel="nofollow">View Favorites</a></span>';
+			return '<span class="revLogin">Welcome '.$_SESSION['patientUser'].'! <a class="revLoginLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->clientid.'&patientsig='.isset($_SESSION['patientsig']).'&baseurl='.$this->baseUrl.'" rel="nofollow">View Favorites</a></span>';
 
 		} else {
-			return '<span class="revLogin"><a class="revLoginLaunch" href="https://www.bragbook.gallery/myfavs/?client='.$this->clientid.'&patientsig='.isset($_SESSION['patientsig']).'&baseurl='.$this->baseUrl.'" rel="nofollow">Login to Favorites</a></span>';
+			return '<span class="revLogin"><a class="revLoginLaunch" href="https://dashboard.candacecrowe.com/myfavs/?client='.$this->clientid.'&patientsig='.isset($_SESSION['patientsig']).'&baseurl='.$this->baseUrl.'" rel="nofollow">Login to Favorites</a></span>';
 		}
 				
 	}
@@ -2041,7 +2053,7 @@ $string = strtr( $string, $unwanted_array );
 	
 	//create copyright notice
 	function revCopyright(){
-		return "<div class=\"revCopyright\">Before and after gallery is powered by <a href=\"http://www.candacecrowe.com/bragbook/\">BRAG book&trade;</a></div>";
+		return "<div class=\"revCopyright\">Before and after gallery is powered by <a href=\"https://www.candacecrowe.com/bragbook/\">BRAG book&trade;</a></div>";
 	}
 	
 	//create landing page

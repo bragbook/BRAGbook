@@ -96,7 +96,7 @@ class revGallery {
 	}
 	        
     function getS3Url($oldPath) {   
-         $s3BucketBaseUrl = 'https://gallery-dashboard.s3.amazonaws.com';
+         $s3BucketBaseUrl = 'https://ccd-dashboard.s3.amazonaws.com';
          return str_replace(["https://www.bragbook.gallery"], $s3BucketBaseUrl, $oldPath);
     }
 	

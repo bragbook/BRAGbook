@@ -1108,21 +1108,17 @@ a[class*='revlightcase-icon-'].revlightcase-icon-pause, a[class*='revlightcase-i
 {
     font-size: 0;
     line-height: 0;
-
     position: absolute;
     top: 50%;
-
+    z-index: 99;
     display: block;
-
     width: 20px;
     height: 20px;
     padding: 0;
     -webkit-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     transform: translate(0, -50%);
-
     cursor: pointer;
-
     color: transparent;
     border: none;
     outline: none;

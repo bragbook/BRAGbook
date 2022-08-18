@@ -232,7 +232,7 @@ header("Location: https://dashboard.candacecrowe.com/myfavs/?pid=patientlogout")
 				
 				if($this->revisionActive == 1 || $this->menActive == 1){
 				//create list of all images so drop down nav with revision categories can be properly generated
-					$imagesJson2 = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/'.$this->clientid.'/');
+					$imagesJson2 = $this->get_data('https://dashboard.candacecrowe.com/myfavs/ba_feed/index.php?clientid='.$this->clientid);
 					$this->fullGallery = json_decode($imagesJson2, true);
 				}
 

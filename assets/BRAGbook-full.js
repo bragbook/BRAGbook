@@ -1,7 +1,7 @@
 // JavaScript Document
 
-//BRAG book™ 1.4.3.3
-//© copyright 2022 Candace Crowe Design
+//BRAGbook™ 1.4.0.9
+//© copyright 2013 Candace Crowe Design
 
 function reloadPage() {
 	location.reload();

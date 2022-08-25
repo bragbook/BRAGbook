@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: BRAG book Gallery
-Plugin URI: https://dashboard.candacecrowe.com/wp-plugin/
+Plugin URI: https://www.bragbook.gallery/wp-plugin/
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.4.3.3
+Version: 1.4.3.4
 Author: Candace Crowe Design
-Author URI: http://www.candacecrowe.com/
+Author URI: https://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
 */
  

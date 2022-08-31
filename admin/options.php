@@ -105,7 +105,7 @@ jQuery(document).ready(function($){
 <div class="wrap">
   <h2>BRAG book Before &amp; After Gallery</h2>
   <p>To install the BRAG book create a page that you would like to use as the base URL and place the following shortcode on it: <span style="color:red">[bragbook_shortcode]</span> </p>
-  <p>Configure the options below to meet the needs of your gallery installation. <a href="https://www.bragbook.gallery/web-assets/downloads/BRAGbook-Wordpress-Plugin-Guide-v1.3.8.pdf">Click here for the full install manual.</a></p>
+  <p>Configure the options below to meet the needs of your gallery installation. <a href="https://github.com/bragbook/BRAGbook/wiki/9.-Additional-Short-Codes">Click here</a> for more shortcodes. <a href="https://github.com/bragbook/BRAGbook/wiki">Click here for the full install manual.</a></p>
   <form method="post" action="options.php">
     <?php settings_fields( 'bragbook-settings-group' ); ?>
     <?php do_settings_sections( 'bragbook-settings-group' ); ?>

@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.3.4
+//BRAGbook™ 1.4.3.5
 //Copyright © 2013-2022 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -82,16 +82,26 @@ class revGallery{
 	var $hideMainMenu = ""; //variable to hide main menu
 	var $showCatSetDetails = ""; //variable to show details on category page
 	
+//	patch for file_get contents - D.S 8/4/2022
+	function get_data($url)
+	{
+	  $ch = curl_init();
+	  $timeout = 5;
+	  curl_setopt($ch,CURLOPT_URL,$url);
+	  curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+	  $data = curl_exec($ch);
+	  curl_close($ch);
+	  return $data;
+	}		
 	
-	
- //log patient in to system
- function patientLogin($sig,$patientid,$username,$favid){
+//	log patient in to system
+ 	function patientLogin($sig,$patientid,$username,$favid){
 
 if($patientid) // Someone trying to log in?
 {
   // See if they have the right signature
   if(md5($patientid.$username.$this->MySecretKey) == $sig) {
-	  
 	  
     $_SESSION['patientid'] = $patientid;
     $_SESSION['patientUser'] = $username;
@@ -116,18 +126,18 @@ header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
 //get json file for category feed
 	function getCatFeed(){
 		//get the JSON feed for the categories and decode them to a php array
-				$catsJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_cat_feed/'.$this->clientid.'/');
+				$catsJson =  $this->get_data('https://www.bragbook.gallery/myfavs/ba_cat_feed/'.$this->clientid.'/');
 				$this->baCats = json_decode($catsJson, true);
 	}
 	
 	//get json file for category feed
 	function getImageFeed(){
 				if(isset($_SESSION['patientid']) && $_SESSION['patientid']!= ""){
-		$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/'.$_SESSION['patientid'].'/');
+		$imagesJson =  $this->get_data('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/'.$_SESSION['patientid'].'/');
 		} else if(isset($this->categoryID)){
-					$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/');
+					$imagesJson =  $this->get_data('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/'.$this->categoryID.'/');
 				} else{
-					$imagesJson = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
+					$imagesJson =  $this->get_data('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
 				}		
 				$this->baGallery = json_decode($imagesJson, true);
 				$this->baGallery2 = json_decode($imagesJson, true);
@@ -215,7 +225,7 @@ header("Location: https://www.bragbook.gallery/myfavs/?pid=patientlogout");
 				
 				if($this->revisionActive == 1 || $this->menActive == 1){
 				//create list of all images so drop down nav with revision categories can be properly generated
-					$imagesJson2 = file_get_contents('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
+					$imagesJson2 =  $this->get_data('https://www.bragbook.gallery/myfavs/ba_feed/'.$this->clientid.'/');
 					$this->fullGallery = json_decode($imagesJson2, true);
 				}
 

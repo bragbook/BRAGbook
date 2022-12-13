@@ -858,6 +858,6 @@ jQuery(document).ready(function($){
       </div>
     </div>
     <input name="bragbook_settings_have_changed" type="hidden" value="1" />
-    <?php submit_button(); ?>
+    <?php submit_button(); ?> 
   </form>
 </div>

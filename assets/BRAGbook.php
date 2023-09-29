@@ -1,5 +1,5 @@
 <?php
-//BRAGbook™ 1.4.3.7
+//BRAGbook™ 1.4.4.0
 //Copyright © 2013-2022 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
@@ -318,22 +318,24 @@ $string = strtr( $string, $unwanted_array );
 			$recordExists = 1;
 		} else{
 			$recordExists = 0;
-		}
-				for ($x=0; $x<count($this->baCats['cat_set']); $x++){
-					if($this->cleanCat($this->baCats['cat_set'][$x]['category_name']) == $this->cleanCat($revCatname)){
-						$this->categoryID = $this->baCats['cat_set'][$x]['category_id'];
-						$recordExists = 1;
-					}
+        }
+        if ($this->baCats['cat_set']) {
+			for ($x=0; $x<count($this->baCats['cat_set']); $x++){
+				if($this->cleanCat($this->baCats['cat_set'][$x]['category_name']) == $this->cleanCat($revCatname)){
+					$this->categoryID = $this->baCats['cat_set'][$x]['category_id'];
+					$recordExists = 1;
 				}
-				if($recordExists != 1){
-					if($redirectionOff == 1){
-						return 1;
-					}else{
-						header("Location: $this->notFoundPage"); /* Redirect browser */
-					exit();
-					}
-					
+			}
+			if($recordExists != 1){
+				if($redirectionOff == 1){
+					return 1;
+				}else{
+					header("Location: $this->notFoundPage"); /* Redirect browser */
+				    exit();
 				}
+				
+            }
+        }
 	}
 	
 	
@@ -3425,7 +3427,7 @@ $string = strtr( $string, $unwanted_array );
 		
 		$revBaSetsSitemapOutput = array();
 		$revCatname = $this->cleanCat($revCatname);
-		$recordLimit = count($this->baGallery['ba_set']);
+		$recordLimit = $this->baGallery['ba_set'] ? count($this->baGallery['ba_set']) : 0;
 
 		for ($x=0; $x<$recordLimit; $x++){
 				if(isset($this->baGallery['ba_set'][$x]['oid'])){

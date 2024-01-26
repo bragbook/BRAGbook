@@ -574,6 +574,7 @@ jQuery(document).ready(function($){
                       <option value="" <?php if(get_option('revUseWPseo') == "" || get_option('revUseWPseo') == 0){ echo 'selected="selected"'; } ?>>No SEO Plugins</option>
                       <option value="1" <?php if(get_option('revUseWPseo') == "1"){ echo 'selected="selected"'; } ?>>Yoast WP SEO</option>
                       <option value="2" <?php if(get_option('revUseWPseo') == "2"){ echo 'selected="selected"'; } ?>>All In One SEO</option>
+                      <option value="3" <?php if(get_option('revUseWPseo') == "3"){ echo 'selected="selected"'; } ?>>Rank Math</option>
                     </select>
 					</td>
                 </tr>

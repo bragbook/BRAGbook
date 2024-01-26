@@ -3,7 +3,7 @@
 Plugin Name: BRAG book Gallery
 Plugin URI: https://github.com/bragbook/BRAGbook/releases/latest
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.4.4.0
+Version: 1.5
 Author: Candace Crowe Design
 Author URI: https://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -22,13 +22,13 @@ register_activation_hook(__FILE__,'bragbook_plugin_install');
  
 function bragbook_plugin_styles(){
  if(get_option( 'revClickToZoomActive',0) == 1){
-    wp_register_style('photoswipe_style',plugin_dir_url( __FILE__ ).'assets/photoswipe.css',array());
+    wp_register_style('photoswipe_style',plugin_dir_url( __FILE__ ).'assets/photoswipe.min.css',array());
     wp_enqueue_style('photoswipe_style');
 
-    wp_register_style('photoswipe_skin_style',plugin_dir_url( __FILE__ ).'assets/default-skin/default-skin.css',array());
+    wp_register_style('photoswipe_skin_style',plugin_dir_url( __FILE__ ).'assets/default-skin/default-skin.min.css',array());
     wp_enqueue_style('photoswipe_skin_style');
   }
-     wp_register_style('bragbook_plugin_style',plugin_dir_url( __FILE__ ).'assets/BRAGbook.css');
+     wp_register_style('bragbook_plugin_style',plugin_dir_url( __FILE__ ).'assets/BRAGbook.min.css');
      wp_enqueue_style('bragbook_plugin_style');
   
       
@@ -52,7 +52,7 @@ function bragbook_plugin_scripts(){
 
     }
   
-  wp_register_script('bragbook_plugin_script',plugin_dir_url( __FILE__ ).'assets/BRAGbook.js',array( 'jquery' ), '1.0', true );
+  wp_register_script('bragbook_plugin_script',plugin_dir_url( __FILE__ ).'assets/BRAGbook.min.js',array( 'jquery' ), '1.0', true );
   $wp_vars = array(
       'ajax_url' => admin_url( 'admin-ajax.php' ) ,
     );
@@ -371,8 +371,7 @@ function bragbook_plugin_options(){
 function wpseo_129955_admin_scripts($suffix) {
     if($suffix == 'bragbook_page_bragbook-gallery-settings'){
         wp_enqueue_script( 'postbox' );
-        wp_enqueue_script( 'postbox-edit', plugin_dir_url( __FILE__ ).'/admin/postbox-edit.js', array('jquery', 'postbox') );
-    //wp_enqueue_script( 'iris',plugin_dir_url( __FILE__ ).'assets/bb-color-picker.min.js' );
+        wp_enqueue_script( 'postbox-edit', plugin_dir_url( __FILE__ ).'/admin/postbox-edit.min.js', array('jquery', 'postbox') );
     }
 }
 add_action( 'admin_enqueue_scripts', 'wpseo_129955_admin_scripts' );
@@ -1519,6 +1518,12 @@ if(get_option( 'revUseWPseo') == 1 || get_option( 'thermiUseWPseo') == 1){
               add_filter( 'aioseo_canonical_url', 'getCurrentURL' );
               add_filter( 'aioseo_title', 'GetCustomBragbookTitle');
               add_filter( 'aioseo_description', 'GetCustomBragbookDescription');
+        add_action( 'wp_head', 'printCustomCSS' );
+  
+} else if(get_option( 'revUseWPseo') == 3 || get_option( 'thermiUseWPseo') == 3){
+              add_filter( 'rank_math/frontend/canonical', 'getCurrentURL' );
+              add_filter( 'rank_math/frontend/title', 'GetCustomBragbookTitle');
+              add_filter( 'rank_math/frontend/description', 'GetCustomBragbookDescription');
         add_action( 'wp_head', 'printCustomCSS' );
   
 } else {

@@ -474,11 +474,8 @@ function bragbook_start(){
     //}
 
               //The directory the gallery resides at relative to the home. Be sure to include forward slash at beginning and end.
-              //if (substr($_SERVER['HTTP_HOST'], 0, 4) == "www."){$addwww = "";} else {$addwww = "www.";}
-        $pageURL = 'http';
-        if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-         $pageURL .= "://";
-              $revGallery->baseUrl = $pageURL.$_SERVER['HTTP_HOST']."/".get_option( 'revBaseUrl'.$galNum, 'gallery' )."/";
+              /$pageURL = 'https://';
+              $revGallery->baseUrl = $pageURL . $_SERVER['HTTP_HOST'] . "/" . get_option('revBaseUrl' . $galNum, 'gallery') . "/";
        
               //Determines if URL rewrites are on or not. Set true or false.
               $revGallery->urlRewrite = get_option( 'revUrlRewrite', 1 );

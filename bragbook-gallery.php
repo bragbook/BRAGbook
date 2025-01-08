@@ -3,7 +3,7 @@
 Plugin Name: BRAG book Gallery
 Plugin URI: https://github.com/bragbook/BRAGbook/releases/latest
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.5
+Version: 1.6
 Author: Candace Crowe Design
 Author URI: https://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -435,29 +435,54 @@ function bragbook_start(){
   
   
   
-              global $wp_query;
-             
-              $revGallery = new revGallery;
-        
-         //get query variables
-        $queryURL = @parse_url( html_entity_decode( esc_url( add_query_arg( $arr_params ) ) ) );
-        parse_str( @$queryURL['query'], $getVar );
-        $var_revCatname = @$getVar['revCatname'];
-        $var_getCategorySets = @$getVar['getCategorySets'];
-        $var_categorySetsStart = @$getVar['categorySetsStart'];
-        $var_patientlogout = @$getVar['patientlogout'];
-        $var_sig = @$getVar['sig'];
-        $var_patientsig = @$getVar['patientSig'];
-        $var_patientid = @$getVar['patientid'];
-        $var_username = @$getVar['username'];
-        $var_favid = @$getVar['favid'];
-        $var_getFavButton = @$getVar['getFavButton'];
-        $var_getLoginButton = @$getVar['getLoginButton'];
-        $var_getLoginText = @$getVar['getLoginText'];
-        $var_getThumbnails = @$getVar['getThumbnails'];
-        $var_thumbStart = @$getVar['thumbStart'];
+
   
+      global $wp_query;
       
+      $revGallery = new revGallery;
+
+     // Ensure $arr_params is defined as an array
+     $arr_params = $arr_params ?? [];
+     
+     // Safely parse the query URL
+     $queryURL = @parse_url(html_entity_decode(esc_url(add_query_arg($arr_params))));
+     
+     // Initialize $getVar as an empty array
+     $getVar = [];
+     if (isset($queryURL['query'])) {
+         parse_str($queryURL['query'], $getVar);
+     }
+     
+     // Extract variables safely using null coalescing operator
+     $var_revCatname = $getVar['revCatname'] ?? null;
+     $var_getCategorySets = $getVar['getCategorySets'] ?? null;
+     $var_categorySetsStart = $getVar['categorySetsStart'] ?? null;
+     $var_patientlogout = $getVar['patientlogout'] ?? null;
+     $var_sig = $getVar['sig'] ?? null;
+     $var_patientsig = $getVar['patientSig'] ?? null;
+     $var_patientid = $getVar['patientid'] ?? null;
+     $var_username = $getVar['username'] ?? null;
+     $var_favid = $getVar['favid'] ?? null;
+     $var_getFavButton = $getVar['getFavButton'] ?? null;
+     $var_getLoginButton = $getVar['getLoginButton'] ?? null;
+     $var_getLoginText = $getVar['getLoginText'] ?? null;
+     $var_getThumbnails = $getVar['getThumbnails'] ?? null;
+     $var_thumbStart = $getVar['thumbStart'] ?? null;
+     
+     // Initialize other variables to avoid undefined warnings
+     $revsNum = $revsNum ?? 0; // Default to 0 if undefined
+     $menNum = $menNum ?? 0; // Default to 0 if undefined
+     $menRevsNum = $menRevsNum ?? 0; // Default to 0 if undefined
+     $revImageSetOutput = $revImageSetOutput ?? ''; // Default to empty string
+     
+     
+     // Placeholder for additional code logic
+     // For example, using $revImageSetOutput for gallery rendering
+     if (!empty($revImageSetOutput)) {
+         echo $revImageSetOutput; // Output the processed image set
+     }
+
+
  
               //Global Gallery Variables
              
@@ -474,7 +499,7 @@ function bragbook_start(){
     //}
 
               //The directory the gallery resides at relative to the home. Be sure to include forward slash at beginning and end.
-              /$pageURL = 'https://';
+              $pageURL = 'https://';
               $revGallery->baseUrl = $pageURL . $_SERVER['HTTP_HOST'] . "/" . get_option('revBaseUrl' . $galNum, 'gallery') . "/";
        
               //Determines if URL rewrites are on or not. Set true or false.

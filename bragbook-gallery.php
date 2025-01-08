@@ -679,33 +679,55 @@ function bragbook_ajax_start(){
     global $revGalleryOutput;
   
   
-   $queryURL = @parse_url( html_entity_decode( esc_url( add_query_arg( $arr_params ) ) ) );
-        parse_str( @$queryURL['query'], $getVar );
-             $curURL = urldecode(@$getVar['revCurURL']);
-       $curURL = explode("/", $curURL);
-  
+// Initialize $arr_params as an empty array if not already set
+$arr_params = $arr_params ?? [];
 
-              if(isset($_REQUEST['page_id'])){
-                             $curPageid = $_REQUEST['page_id'];
-              } else {
-              $curPageid = "x";
-              }
-             
-              if(isset($curURL[3])){$curURL1 = $curURL[3];} else {$curURL1 = "revnone";}
-              if(isset($curURL[4])){$curURL2 = $curURL[4];} else {$curURL2 = "revnone";}
-    if (get_option( 'revBaseUrl2', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl2', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl2', 'gallery' ) || $curPageid == get_option( 'revPageId2'))){
+// Safely parse the query URL
+$queryURL = @parse_url(html_entity_decode(esc_url(add_query_arg($arr_params))));
+parse_str($queryURL['query'] ?? '', $getVar);
+
+// Extract current URL parts
+$curURL = urldecode($getVar['revCurURL'] ?? 'revnone');
+$curURL = explode("/", $curURL);
+
+if (isset($_REQUEST['page_id'])) {
+    $curPageid = $_REQUEST['page_id'];
+} else {
+    $curPageid = "x";
+}
+
+$curURL1 = $curURL[3] ?? "revnone";
+$curURL2 = $curURL[4] ?? "revnone";
+
+// Determine gallery number
+if (get_option('revBaseUrl2', '') != "" &&
+    ($curURL1 == get_option('revBaseUrl2', 'gallery') || 
+     $curURL2 == get_option('revBaseUrl2', 'gallery') || 
+     $curPageid == get_option('revPageId2'))
+) {
     $galNum = "2";
-  }else if (get_option( 'revBaseUrl3', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl3', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl3', 'gallery' ) || $curPageid == get_option( 'revPageId3'))){
+} elseif (get_option('revBaseUrl3', '') != "" &&
+          ($curURL1 == get_option('revBaseUrl3', 'gallery') || 
+           $curURL2 == get_option('revBaseUrl3', 'gallery') || 
+           $curPageid == get_option('revPageId3'))
+) {
     $galNum = "3";
-  }else if(get_option( 'revBaseUrl4', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl4', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl4', 'gallery' ) || $curPageid == get_option( 'revPageId4'))){
+} elseif (get_option('revBaseUrl4', '') != "" &&
+          ($curURL1 == get_option('revBaseUrl4', 'gallery') || 
+           $curURL2 == get_option('revBaseUrl4', 'gallery') || 
+           $curPageid == get_option('revPageId4'))
+) {
     $galNum = "4";
-  }else if(get_option( 'revBaseUrl5', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5'))) {
+} elseif (get_option('revBaseUrl5', '') != "" &&
+          ($curURL1 == get_option('revBaseUrl5', 'gallery') || 
+           $curURL2 == get_option('revBaseUrl5', 'gallery') || 
+           $curPageid == get_option('revPageId5'))
+) {
     $galNum = "5";
-  
-  } else{
+} else {
     $galNum = "";
-  }
-  
+}
+
   
   
               global $wp_query;

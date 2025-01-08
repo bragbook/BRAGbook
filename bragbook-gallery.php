@@ -678,83 +678,64 @@ function bragbook_ajax_start(){
     global $revCustomCSS;
     global $revGalleryOutput;
   
-  
-// Initialize $arr_params as an empty array if not already set
-$arr_params = $arr_params ?? [];
+// Initialize necessary variables
+$arr_params = $arr_params ?? []; // Default to an empty array
+$getVar = []; // Ensure $getVar is an array
 
 // Safely parse the query URL
-$queryURL = @parse_url(html_entity_decode(esc_url(add_query_arg($arr_params))));
-parse_str($queryURL['query'] ?? '', $getVar);
-
-// Extract current URL parts
-$curURL = urldecode($getVar['revCurURL'] ?? 'revnone');
-$curURL = explode("/", $curURL);
-
-if (isset($_REQUEST['page_id'])) {
-    $curPageid = $_REQUEST['page_id'];
-} else {
-    $curPageid = "x";
+$queryURL = parse_url(html_entity_decode(esc_url(add_query_arg($arr_params))));
+if (isset($queryURL['query'])) {
+    parse_str($queryURL['query'], $getVar);
 }
 
-$curURL1 = $curURL[3] ?? "revnone";
-$curURL2 = $curURL[4] ?? "revnone";
+// Extract URL parts and sanitize inputs
+$curURL = explode("/", urldecode($getVar['revCurURL'] ?? 'revnone'));
+$curPageid = filter_input(INPUT_REQUEST, 'page_id', FILTER_SANITIZE_STRING) ?? 'x';
+
+$curURL1 = $curURL[3] ?? 'revnone';
+$curURL2 = $curURL[4] ?? 'revnone';
+
+// Helper function to get gallery number
+function getGalleryNumber(string $baseOption, string $pageIdOption, string $curURL1, string $curURL2, string $curPageid): ?string {
+    $baseUrl = get_option($baseOption, '');
+    $pageId = get_option($pageIdOption, 'gallery');
+
+    if ($baseUrl !== '' && ($curURL1 === $baseUrl || $curURL2 === $baseUrl || $curPageid === $pageId)) {
+        return substr($baseOption, -1); // Extract the number from the baseOption key
+    }
+
+    return null;
+}
 
 // Determine gallery number
-if (get_option('revBaseUrl2', '') != "" &&
-    ($curURL1 == get_option('revBaseUrl2', 'gallery') || 
-     $curURL2 == get_option('revBaseUrl2', 'gallery') || 
-     $curPageid == get_option('revPageId2'))
-) {
-    $galNum = "2";
-} elseif (get_option('revBaseUrl3', '') != "" &&
-          ($curURL1 == get_option('revBaseUrl3', 'gallery') || 
-           $curURL2 == get_option('revBaseUrl3', 'gallery') || 
-           $curPageid == get_option('revPageId3'))
-) {
-    $galNum = "3";
-} elseif (get_option('revBaseUrl4', '') != "" &&
-          ($curURL1 == get_option('revBaseUrl4', 'gallery') || 
-           $curURL2 == get_option('revBaseUrl4', 'gallery') || 
-           $curPageid == get_option('revPageId4'))
-) {
-    $galNum = "4";
-} elseif (get_option('revBaseUrl5', '') != "" &&
-          ($curURL1 == get_option('revBaseUrl5', 'gallery') || 
-           $curURL2 == get_option('revBaseUrl5', 'gallery') || 
-           $curPageid == get_option('revPageId5'))
-) {
-    $galNum = "5";
-} else {
-    $galNum = "";
-}
+$galNum = getGalleryNumber('revBaseUrl2', 'revPageId2', $curURL1, $curURL2, $curPageid) ??
+          getGalleryNumber('revBaseUrl3', 'revPageId3', $curURL1, $curURL2, $curPageid) ??
+          getGalleryNumber('revBaseUrl4', 'revPageId4', $curURL1, $curURL2, $curPageid) ??
+          getGalleryNumber('revBaseUrl5', 'revPageId5', $curURL1, $curURL2, $curPageid) ??
+          '';
 
-  
-  
-              global $wp_query;
-             
-              $revGallery = new revGallery;
-        
-         //get query variables
-       
-        $var_revCatname = @$getVar['revCatname'];
-        $var_getCategorySets = @$getVar['getCategorySets'];
-        $var_categorySetsStart = @$getVar['categorySetsStart'];
-        $var_patientlogout = @$getVar['patientlogout'];
-        $var_sig = @$getVar['sig'];
-  
-        if(isset($getVar['patientSig']) && $getVar['patientSig'] != ""){$var_patientsig = @$getVar['patientSig'];} else if(isset($_SESSION['patientsig'])){$var_patientsig = $_SESSION['patientsig'];}else{$var_patientsig = "";}
-  
-  if(isset($getVar['username']) && $getVar['username'] != ""){$var_username = @$getVar['username'];} else if(isset($_SESSION['username'])){$var_username = $_SESSION['username'];}else{$var_username = "";}
-  
-  if(isset($getVar['patientid']) && $getVar['patientid'] != ""){$var_patientid = @$getVar['patientid'];} else if(isset($_SESSION['patientid'])){$var_patientid = $_SESSION['patientid'];}else{$var_patientid = "";}
-        
-        
-        $var_favid = @$getVar['favid'];
-        $var_getFavButton = @$getVar['getFavButton'];
-        $var_getLoginButton = @$getVar['getLoginButton'];
-        $var_getLoginText = @$getVar['getLoginText'];
-        $var_getThumbnails = @$getVar['getThumbnails'];
-        $var_thumbStart = @$getVar['thumbStart'];
+// Initialize $revGallery
+global $wp_query;
+$revGallery = new revGallery();
+
+// Extract additional query variables
+$var_revCatname = $getVar['revCatname'] ?? null;
+$var_getCategorySets = $getVar['getCategorySets'] ?? null;
+$var_categorySetsStart = $getVar['categorySetsStart'] ?? null;
+$var_patientlogout = $getVar['patientlogout'] ?? null;
+$var_sig = $getVar['sig'] ?? null;
+
+// Safely fetch session-based or query-based variables
+$var_patientsig = $getVar['patientSig'] ?? $_SESSION['patientsig'] ?? '';
+$var_username = $getVar['username'] ?? $_SESSION['username'] ?? '';
+$var_patientid = $getVar['patientid'] ?? $_SESSION['patientid'] ?? '';
+$var_favid = $getVar['favid'] ?? null;
+$var_getFavButton = $getVar['getFavButton'] ?? null;
+$var_getLoginButton = $getVar['getLoginButton'] ?? null;
+$var_getLoginText = $getVar['getLoginText'] ?? null;
+$var_getThumbnails = $getVar['getThumbnails'] ?? null;
+$var_thumbStart = $getVar['thumbStart'] ?? null;
+
   
       
  

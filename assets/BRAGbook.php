@@ -1,6 +1,6 @@
 <?php
-//BRAGbook™ 1.4.5
-//Copyright © 2013-2024 | Candace Crowe Design | All Rights Reserved | Patent Pending
+//BRAGbook™ 1.6
+//Copyright © 2013-2025 | Candace Crowe Design | All Rights Reserved | Patent Pending
 
 //Licensee acknowledges that the Software is entitled to protection under the copyright laws of the United States, and agrees that it shall not remove any copyright or other proprietary notices from the Software. Licensee further acknowledges that the existence or lack of a copyright notice shall not cause the Software to be in the public domain or to be other than an unpublished work with all rights reserved under the copyright laws.
 
@@ -424,292 +424,181 @@ $string = strtr( $string, $unwanted_array );
 	
 
 	//create jump menu to navigate gallery categories
-	function revCategoryNavJumpMenu($revCatname){
-		
-		$revJumpMenuOutput;
-		
-		$revJumpMenuOutput = '<form name="rev_gallery_list" method="get" action="" id="revgallerychooser">';
-			$revJumpMenuOutput .= '<p><label for="revCatname"><strong>Choose a Gallery: </strong></label>';
-				if($this->urlRewrite){
-					$revJumpMenuOutput .=  '<select name="revCatname" id="revCatname" class="revJumpMenu" onchange="revenez_jump_menu_procedure()">';
-				} else {
-					$revJumpMenuOutput .=  '<select name="revCatname" id="revCatname" class="revJumpMenu" onchange="revenez_jump_menu_procedure_norewrite()">';
-				}
-				if(!isset($revCatname)){
-					$revJumpMenuOutput .=  '<option>Select Category</option>';
-				}
-					for ($x=0; $x<count($this->baCats['cat_set']); $x++){
-						
-						if($this->cleanCat($revCatname) == $this->cleanCat($this->baCats['cat_set'][$x]['category_name'])){
-							$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'" data-procedurevar="'.str_replace(' ', '-', $this->baCats['cat_set'][$x]['category_name']).'" selected="selected">'. $this->baCats['cat_set'][$x]['category_name'].'</option>';
-							
-								//check if a set for this category revision has a revision and create second category
+	function revCategoryNavJumpMenu($revCatname) {
+		// Initialize the output variable
+		$revJumpMenuOutput = '';
+	
+		// Start the form
+		$revJumpMenuOutput .= '<form name="rev_gallery_list" method="get" action="" id="revgallerychooser">';
+		$revJumpMenuOutput .= '<p><label for="revCatname"><strong>Choose a Gallery: </strong></label>';
+	
+		// Choose the correct onchange procedure based on URL rewrite setting
+		if ($this->urlRewrite) {
+			$revJumpMenuOutput .= '<select name="revCatname" id="revCatname" class="revJumpMenu" onchange="revenez_jump_menu_procedure()">';
+		} else {
+			$revJumpMenuOutput .= '<select name="revCatname" id="revCatname" class="revJumpMenu" onchange="revenez_jump_menu_procedure_norewrite()">';
+		}
+	
+		// Add default "Select Category" option if $revCatname is not set
+		if (!isset($revCatname)) {
+			$revJumpMenuOutput .= '<option>Select Category</option>';
+		}
+	
+		// Loop through categories
+		for ($x = 0; $x < count($this->baCats['cat_set']); $x++) {
 			$currentCatID = $this->baCats['cat_set'][$x]['category_id'];
-			
-			for ($i=0; $i<count($this->revisionSetsFull); $i++){
-				if($this->revisionSetsFull[$i][1] == $currentCatID){
-					$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-revision">'.$this->baCats['cat_set'][$x]['category_name'].' - Revision</option>';
-					break;
-				}
+			$categoryName = $this->baCats['cat_set'][$x]['category_name'];
+			$cleanedCatName = $this->cleanCat($categoryName);
+	
+			// Check if the current category matches the selected category
+			if ($this->cleanCat($revCatname) === $cleanedCatName) {
+				$revJumpMenuOutput .= '<option value="#" data-baseurl="' . $this->baseUrl . '" data-sectionvar="' . $cleanedCatName . '" data-procedurevar="' . str_replace(' ', '-', $categoryName) . '" selected="selected">' . $categoryName . '</option>';
+			} else {
+				$revJumpMenuOutput .= '<option value="#" data-baseurl="' . $this->baseUrl . '" data-sectionvar="' . $cleanedCatName . '">' . $categoryName . '</option>';
 			}
-			
-			//check if a set for this category has a male and create second category
-			for ($i=0; $i<count($this->menSetsFull); $i++){
-				if($this->menSetsFull[$i][1] == $currentCatID && $currentCatID != 18){
-					//print_r($this->menSetsFull);
-					$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-for-men">'.$this->baCats['cat_set'][$x]['category_name'].' For Men</option>';
-					break;
-				}
-			}
-			
-			//check if a set for this category has a male revision and create second category
-			for ($i=0; $i<count($this->menRevisionSetsFull); $i++){
-				if($this->menRevisionSetsFull[$i][1] == $currentCatID && $currentCatID != 18){
-					$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-for-men-revision">'.$this->baCats['cat_set'][$x]['category_name'].' For Men - Revision</option>';
-					break;
-				}
-			}
-							
-						} else {
-							if($this->revisionActive == 1){
-							$revsNum = 0;
-							$currentCatID = $this->baCats['cat_set'][$x]['category_id'];
-							$mainCatCount = 0;
-							for ($i=0; $i<count($this->fullGallery['ba_set']); $i++){
-								if($this->fullGallery['ba_set'][$i]['category'] == $currentCatID){
-									$mainCatCount++;
-								}
-							}
-							for ($i=0; $i<count($this->revisionSetsFull); $i++){
-				if($this->revisionSetsFull[$i][1] == $currentCatID){
+	
+			// Initialize counters for revisions, men, and men revisions
+			$revsNum = 0;
+			$menNum = 0;
+			$menRevsNum = 0;
+	
+			// Check for revisions
+			foreach ($this->revisionSetsFull as $revisionSet) {
+				if ($revisionSet[1] === $currentCatID) {
 					$revsNum++;
-					}
 				}
-							}
-							
-							if($this->menActive == 1){
-							$menNum = 0;
-							$currentCatID = $this->baCats['cat_set'][$x]['category_id'];
-							$mainCatCount2 = 0;
-							for ($i=0; $i<count($this->fullGallery['ba_set']); $i++){
-								if($this->fullGallery['ba_set'][$i]['category'] == $currentCatID && $currentCatID != 18){
-									$mainCatCount2++;
-								}
-							}
-							for ($i=0; $i<count($this->menSetsFull); $i++){
-				if($this->menSetsFull[$i][1] == $currentCatID){
+			}
+	
+			// Check for men's categories
+			foreach ($this->menSetsFull as $menSet) {
+				if ($menSet[1] === $currentCatID && $currentCatID != 18) {
 					$menNum++;
-					}
 				}
-							}
-							
-							if($this->menActive == 1 && $this->revisionActive == 1){
-							$menRevsNum = 0;
-							$currentCatID = $this->baCats['cat_set'][$x]['category_id'];
-							$mainCatCount3 = 0;
-							for ($i=0; $i<count($this->fullGallery['ba_set']); $i++){
-								if($this->fullGallery['ba_set'][$i]['category'] == $currentCatID && $currentCatID != 18){
-									$mainCatCount3++;
-								}
-							}
-							for ($i=0; $i<count($this->menRevisionSetsFull); $i++){
-				if($this->menRevisionSetsFull[$i][1] == $currentCatID){
+			}
+	
+			// Check for men's revisions
+			foreach ($this->menRevisionSetsFull as $menRevisionSet) {
+				if ($menRevisionSet[1] === $currentCatID && $currentCatID != 18) {
 					$menRevsNum++;
-					}
-					
-				}
-							}
-							
-							
-							if(($revsNum == 1 && $mainCatCount == 1) || ($menNum == 1 && $mainCatCount2 == 1)|| ($menRevsNum == 1 && $mainCatCount3 == 1)){
-								$revJumpMenuOutput .=  $this->cleanCat($this->baCats['cat_set'][$x]['category_name']);
-							}else{
-							$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'">'.$this->baCats['cat_set'][$x]['category_name'].'</option>';
-							}
-							
-							//check if a set for this category revision has a revision and create second category
-			
-			for ($i=0; $i<count($this->revisionSetsFull); $i++){
-				if($this->revisionSetsFull[$i][1] == $currentCatID){
-					if($this->cleanCat($revCatname) == $this->cleanCat($this->baCats['cat_set'][$x]['category_name'].'-revision')){ $selectThis = ' selected="selected"';}else{$selectThis = '';}
-					
-					$revJumpMenuOutput .=  '<option value="#" '.$selectThis.' data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-revision">'.$this->baCats['cat_set'][$x]['category_name'].' - Revision</option>';
-					break;
 				}
 			}
-			
-			//check if for men for current category
-			for ($i=0; $i<count($this->menSetsFull); $i++){
-				if($this->menSetsFull[$i][1] == $currentCatID && $currentCatID != 18) {
-					if($this->cleanCat($revCatname) == $this->cleanCat($this->baCats['cat_set'][$x]['category_name'].'-for-men')){ $selectThis = ' selected="selected"';}else{$selectThis = '';}
-					
-					$revJumpMenuOutput .=  '<option value="#" data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-for-men" '.$selectThis.'>'.$this->baCats['cat_set'][$x]['category_name'].' For Men</option>';
-					break;
-				}
+	
+			// Add options for revisions, men's categories, and men's revisions
+			if ($revsNum > 0) {
+				$revJumpMenuOutput .= '<option value="#" data-baseurl="' . $this->baseUrl . '" data-sectionvar="' . $cleanedCatName . '-revision">' . $categoryName . ' - Revision</option>';
 			}
-			
-			//check if for men revision for current category
-			for ($i=0; $i<count($this->menRevisionSetsFull); $i++){
-				if($this->menRevisionSetsFull[$i][1] == $currentCatID && $currentCatID != 18){
-					if($this->cleanCat($revCatname) == $this->cleanCat($this->baCats['cat_set'][$x]['category_name'].'-for-men-revision')){ $selectThis = ' selected="selected"';}else{$selectThis = '';}
-					
-					$revJumpMenuOutput .=  '<option value="#"  data-baseurl="'.$this->baseUrl.'" data-sectionvar="'.$this->cleanCat($this->baCats['cat_set'][$x]['category_name']).'-for-men-revision" '.$selectThis.'>'.$this->baCats['cat_set'][$x]['category_name'].' For Men - Revision</option>';
-					break;
-				}
+	
+			if ($menNum > 0) {
+				$revJumpMenuOutput .= '<option value="#" data-baseurl="' . $this->baseUrl . '" data-sectionvar="' . $cleanedCatName . '-for-men">' . $categoryName . ' For Men</option>';
 			}
-							
-							
-						}
-						
-					}
-				$revJumpMenuOutput .=  '</select>';
-			$revJumpMenuOutput .=  '</p>';
-		$revJumpMenuOutput .=  '</form>';
-		
+	
+			if ($menRevsNum > 0) {
+				$revJumpMenuOutput .= '<option value="#" data-baseurl="' . $this->baseUrl . '" data-sectionvar="' . $cleanedCatName . '-for-men-revision">' . $categoryName . ' For Men - Revision</option>';
+			}
+		}
+	
+		// Close the select and form
+		$revJumpMenuOutput .= '</select>';
+		$revJumpMenuOutput .= '</p>';
+		$revJumpMenuOutput .= '</form>';
+	
+		// Return the output
 		return $revJumpMenuOutput;
-
 	}
+
 	
 	//Create landing page for categories
-	function revCategoryLandingPage($revCatname){
+	function revCategoryLandingPage($revCatname) {
+		// Clean up the category name
 		$revCatname = $this->cleanCat($revCatname);
-		
-		$revCatLandingPageOutput;
-		
-		$revCatLandingPageOutput = "<div id=\"revCategoryPageConDiv\">";
-		
-
-		
-		if(isset($this->categoryImageSetLimit) && $this->categoryImageSetLimit != 0 && $this->categoryImageSetLimit != "" ){
-			if($this->categoryImageSetLimit < count($this->baGallery['ba_set'])){
-			$recordLimit = $this->categoryImageSetLimit;
-			} else{
-			$recordLimit = count($this->baGallery['ba_set']);	
-			}
+	
+		// Initialize the output
+		$revCatLandingPageOutput = '<div id="revCategoryPageConDiv">';
+	
+		// Determine the record limit
+		if (isset($this->categoryImageSetLimit) && $this->categoryImageSetLimit != 0 && $this->categoryImageSetLimit != "") {
+			$recordLimit = min($this->categoryImageSetLimit, count($this->baGallery['ba_set']));
 		} else {
 			$recordLimit = count($this->baGallery['ba_set']);
 		}
-		
-		
-
-		$revCatLandingPageOutput = '<div><ul id="revCategoryImageSets">';
-			for ($x=0; $x<$recordLimit; $x++){
-				if(isset($this->baGallery['ba_set'][$x]['oid'])){
-					if($this->urlRewrite == true){  
-						if(isset($this->baGallery['ba_set'][$x]['permalink'])){
-							$revLink = $this->baGallery['ba_set'][$x]['permalink'];
-						} else {
-							$revLink = $this->baGallery['ba_set'][$x]['oid'];
-						}
-						
-						if(isset($this->baGallery['ba_set'][$x]['image_after_2_hr']) && $this->baGallery['ba_set'][$x]['image_after_2_hr'] != ""){
-							$catAfterIm = $this->baGallery['ba_set'][$x]['image_after_2_hr'];	
-						} else{
-							$catAfterIm = $this->baGallery['ba_set'][$x]['image_after_hr'];	
-						}
-						
-						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_hr']) && $this->baGallery['ba_set'][$x]['angle1_combo_hr'] != ""){
-							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_hr'];
-						} else{$catComboIm = "";}
-						
-						//get headline string for Alts
-						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
-		
-						//set custom ALT tags
-
-						if(isset($catAfterIm) && $catAfterIm !=""){
-							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before";}
-						} else{
-							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After  ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
-						}
-						
-						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
-
-						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After  ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After " ;}
-						
-						$revHead = '<h2>'.str_replace('Revision', '- Revision',ucwords(str_replace('-', ' ', $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid'])))).' </h2>';
-						
-						if($this->showCatSetDetails == 1){
-							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_hr'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							} else if(isset($catAfterIm) && $catAfterIm !=""){
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span><span  class="revCatImageSetRight"><img  alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							}else {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							}
-						} else{
-							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_hr'].'"></span></a></li>';
-							} else if(isset($catAfterIm) && $catAfterIm !=""){
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span><span  class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
-							}else {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.$revCatname.'/'.$revLink.'/'.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span></a></li>';
-							}
-							
-						}
-						
-						} else {
-							if(isset($this->baGallery['ba_set'][$x]['permalink'])){
-							$revLink = $this->baGallery['ba_set'][$x]['permalink'];
-						} else {
-							$revLink = $this->baGallery['ba_set'][$x]['oid'];
-						}
-						
-						if(isset($this->baGallery['ba_set'][$x]['image_after_2_hr']) && $this->baGallery['ba_set'][$x]['image_after_2_hr'] != ""){
-							$catAfterIm = $this->baGallery['ba_set'][$x]['image_after_2_hr'];	
-						} else{
-							$catAfterIm = $this->baGallery['ba_set'][$x]['image_after_hr'];	
-						}	
-						
-						if(isset($this->baGallery['ba_set'][$x]['angle1_combo_hr']) && $this->baGallery['ba_set'][$x]['angle1_combo_hr'] != ""){
-							$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_hr'];
-						}else{$catComboIm = "";}
-						
-						//get headline string for Alts
-						$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
-		
-						//set custom ALT tags
-
-						if(isset($catAfterIm) && $catAfterIm !=""){
-							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before";}
-						} else{
-							if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altB1 = $curCatname . " - " . "Before and After ";}else{${'altB1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
-						}
-						
-						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altCombo1 = $curCatname . " - " . "Before and After  ";}else{${'altCombo1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - Before and After";}
-
-						if($this->baGallery['ba_set'][$x]['custom_alttag'] == ""){$altA1 = $curCatname . " - " . "After ";}else{${'altA1'} = $this->baGallery['ba_set'][$x]['custom_alttag']." - After" ;}
-						
-						if($showCatSetDetails == 1){	
-							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'" src="'.$this->baGallery['ba_set'][$x]['angle1_combo_hr'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							} else if(isset($catAfterIm) && $catAfterIm !=""){
-							$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							}else {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet  revSingleCol"><div class="revCatCol1"><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span></a></div><div class="revCatCol2">'.$revHead.'<p>'.$this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150).'</p><a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'" class="revCaseViewLink">View More</a></div></li>';
-							}
-						} else{
-							if(isset($catComboIm) && $catComboIm != "") {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altCombo1.'"  src="'.$this->baGallery['ba_set'][$x]['angle1_combo_hr'].'"></span></a></li>';
-							} else if(isset($catAfterIm) && $catAfterIm !=""){
-							$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetLeft"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span><span class="revCatImageSetRight"><img alt="'.$altA1.'" src="'.$catAfterIm.'"></span></a></li>';
-							}else {
-								$revCatLandingPageOutput .=  '<li class="revCatImageSet revDoubleCol">'.$revHead.'<a href="'.$this->baseUrl.'?revCatname='.$revCatname.'&revStart='.$revLink.$this->galleryAnchor.'"><span class="revCatImageSetCenter"><img alt="'.$altB1.'"  src="'.$this->baGallery['ba_set'][$x]['image_before_hr'].'"></span></a></li>';
-							}
-						}
-						
-						
-						
-						}
-					}
-				}	
-				
-				$revCatLandingPageOutput .=  '<li class="revCatImageSet" style="display:none"><a class="revJscroll-next" href="'.$this->baseUrl.'?revCatname='.$revCatname.'&getCategorySets=1&categorySetsStart=1" rel="nofollow">More</a></li>';
-				
 	
-  		$revCatLandingPageOutput .=  '</ul><div class="clearfixer"></div></div>';
+		// Begin the category image sets
+		$revCatLandingPageOutput .= '<div><ul id="revCategoryImageSets">';
+	
+		for ($x = 0; $x < $recordLimit; $x++) {
+			if (isset($this->baGallery['ba_set'][$x]['oid'])) {
+				// Set variables with checks for existence
+				$revLink = $this->baGallery['ba_set'][$x]['permalink'] ?? $this->baGallery['ba_set'][$x]['oid'];
+				$catAfterIm = $this->baGallery['ba_set'][$x]['image_after_2_hr'] ?? ($this->baGallery['ba_set'][$x]['image_after_hr'] ?? "");
+				$catComboIm = $this->baGallery['ba_set'][$x]['angle1_combo_hr'] ?? "";
+				$curCatname = $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']);
+	
+				// Set custom ALT tags
+				$altB1 = $this->baGallery['ba_set'][$x]['custom_alttag'] == "" 
+					? "$curCatname - Before" 
+					: $this->baGallery['ba_set'][$x]['custom_alttag'] . " - Before";
+	
+				$altCombo1 = $this->baGallery['ba_set'][$x]['custom_alttag'] == "" 
+					? "$curCatname - Before and After" 
+					: $this->baGallery['ba_set'][$x]['custom_alttag'] . " - Before and After";
+	
+				$altA1 = $this->baGallery['ba_set'][$x]['custom_alttag'] == "" 
+					? "$curCatname - After" 
+					: $this->baGallery['ba_set'][$x]['custom_alttag'] . " - After";
+	
+				// Generate the headline
+				$revHead = '<h2>' . str_replace('Revision', '- Revision', ucwords(str_replace('-', ' ', $this->revGetHeadline($revCatname, $this->baGallery['ba_set'][$x]['oid']))) . '</h2>');
+	
+				// Show category set details
+				if ($this->showCatSetDetails == 1) {
+					if (!empty($catComboIm)) {
+						$revCatLandingPageOutput .= '<li class="revCatImageSet revSingleCol">
+							<div class="revCatCol1">
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '">
+									<span class="revCatImageSetCenter"><img alt="' . $altCombo1 . '" src="' . $catComboIm . '"></span>
+								</a>
+							</div>
+							<div class="revCatCol2">' . $revHead . '<p>' . $this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150) . '</p>
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '" class="revCaseViewLink">View More</a>
+							</div>
+						</li>';
+					} elseif (!empty($catAfterIm)) {
+						$revCatLandingPageOutput .= '<li class="revCatImageSet revSingleCol">
+							<div class="revCatCol1">
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '">
+									<span class="revCatImageSetLeft"><img alt="' . $altB1 . '" src="' . $this->baGallery['ba_set'][$x]['image_before_hr'] . '"></span>
+									<span class="revCatImageSetRight"><img alt="' . $altA1 . '" src="' . $catAfterIm . '"></span>
+								</a>
+							</div>
+							<div class="revCatCol2">' . $revHead . '<p>' . $this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150) . '</p>
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '" class="revCaseViewLink">View More</a>
+							</div>
+						</li>';
+					} else {
+						$revCatLandingPageOutput .= '<li class="revCatImageSet revSingleCol">
+							<div class="revCatCol1">
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '">
+									<span class="revCatImageSetCenter"><img alt="' . $altB1 . '" src="' . $this->baGallery['ba_set'][$x]['image_before_hr'] . '"></span>
+								</a>
+							</div>
+							<div class="revCatCol2">' . $revHead . '<p>' . $this->truncate($this->revPatientDetailPreview($this->baGallery['ba_set'][$x]['oid']), 150) . '</p>
+								<a href="' . $this->baseUrl . $revCatname . '/' . $revLink . '/' . $this->galleryAnchor . '" class="revCaseViewLink">View More</a>
+							</div>
+						</li>';
+					}
+				}
+			}
+		}
+	
+		// Add "More" link and close list
+		$revCatLandingPageOutput .= '<li class="revCatImageSet" style="display:none">
+			<a class="revJscroll-next" href="' . $this->baseUrl . '?revCatname=' . $revCatname . '&getCategorySets=1&categorySetsStart=1" rel="nofollow">More</a>
+		</li>';
+		$revCatLandingPageOutput .= '</ul><div class="clearfixer"></div></div>';
+	
 		return $revCatLandingPageOutput;
 	}
+
 	
 	function revCategoryLandingPageImageSets($revCatname, $categorySetsStart){
 		$revCatname = $this->cleanCat($revCatname);
@@ -1447,9 +1336,10 @@ $string = strtr( $string, $unwanted_array );
 	//create patient image set
 	function revImageSet($revCatname,$revID){
 		$this->revGetStart($revID);
+		// Initialize output variable
+		$revImageSetOutput = '';
 		
-		
-		$revImageSetOutput;
+		//$revImageSetOutput;
 		
 		
 		
@@ -1560,7 +1450,7 @@ $string = strtr( $string, $unwanted_array );
 			
 			
 			$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure  class="revBAcol1-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_before_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.$altB1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before_hr'].'"></a><figcaption itemprop="caption description" style="display:none">Before Angle 1</figcaption></figure><figure  class="revBAcol2-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_after_hr'].'" itemprop="contentUrl" data-size="'.$widthA.'x'.$heightA.'" class="psLink"><img alt="'.$altA1.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_hr'].'"></a><figcaption itemprop="caption description" style="display:none">After Angle 1</figcaption></figure><figure  class="revBAcol3-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_after_2_hr'].'" itemprop="contentUrl" data-size="'.$widthA2.'x'.$heightA2.'" class="psLink"><img alt="'.$altA1_2.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after_2_hr'].'"></a><figcaption itemprop="caption description" style="display:none">After 2 Angle 1</figcaption></figure></div>'; 
-		} else if($this->baGallery['ba_set'][$this->revStart]['image_after_hr']){
+		} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after_hr'])){
 			$widthB = $this->baGallery['ba_set'][$this->revStart]['image_before_hr_width'];
 			$heightB = $this->baGallery['ba_set'][$this->revStart]['image_before_hr_height'];
 			$widthA = $this->baGallery['ba_set'][$this->revStart]['image_after_hr_width'];
@@ -1603,7 +1493,7 @@ $string = strtr( $string, $unwanted_array );
 				
 				$revImageSetOutput .= '<div class="revBArow revBA-gallery" itemscope itemtype="http://schema.org/ImageGallery"><figure  class="revBAcol1-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_hr'].'" itemprop="contentUrl" data-size="'.$widthB.'x'.$heightB.'" class="psLink"><img alt="'.${'altB'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_hr'].'"></a><figcaption itemprop="caption description" style="display:none">Before Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol2-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_hr'].'" itemprop="contentUrl" data-size="'.$widthA.'x'.$heightA.'" class="psLink"><img alt="'.${'altA'.($i+1)}.'" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_hr'].'"></a><figcaption itemprop="caption description" style="display:none">After Angle '.($i+1).'</figcaption></figure><figure  class="revBAcol3-3"  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"><a href="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_hr'].'" itemprop="contentUrl" data-size="'.$widthA2.'x'.$heightA2.'" class="psLink"><img alt="'.${'altA'.($i+1)}.'_2" src="'.$this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_2_hr'].'"></a><figcaption itemprop="caption description" style="display:none">After 2 Angle '.($i+1).'</figcaption></figure></div>'; 
 		 }
-			} else if($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_hr']){
+			} else if(isset($this->baGallery['ba_set'][$this->revStart]['image_after'.$i.'_hr'])){
 				if(isset($this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_hr'])){
 					$widthB = $this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_hr_width'];
 					$heightB = $this->baGallery['ba_set'][$this->revStart]['image_before'.$i.'_hr_height'];
@@ -1808,44 +1698,49 @@ $string = strtr( $string, $unwanted_array );
 	   return($text);
 	}
 	
-	//get Detail snippet 
-	function revPatientDetailPreview($revID){
-		$revPatientInfoOutput;
+	// Get detail snippet
+	function revPatientDetailPreview($revID) {
+		// Initialize output variable
+		$revPatientInfoOutput = '';
+	
+		// Ensure the required data is set
 		$this->revGetStart($revID);
-		
-			//write contents of details attribute to "revPatientDetails" div
-	if($this->baGallery['ba_set'][$this->revStart]['details']){
-			
-			if(isset($this->setDetails) && $this->setDetails != ""){
-					$detailsToUse = 'details'.$this->setDetails;
-					if(isset($this->baGallery['ba_set'][$this->revStart][$detailsToUse]) && $this->baGallery['ba_set'][$this->revStart][$detailsToUse] != ""){
-					$revPatientInfoOutput .=  $this->baGallery['ba_set'][$this->revStart][$detailsToUse];
-					}else{
-					$revPatientInfoOutput .=  $this->baGallery['ba_set'][$this->revStart]['details'];
+	
+		// Check if 'details' key exists in the ba_set array
+		if (isset($this->baGallery['ba_set'][$this->revStart]['details']) && $this->baGallery['ba_set'][$this->revStart]['details'] !== '') {
+			// Use custom details if set
+			if (isset($this->setDetails) && $this->setDetails !== '') {
+				$detailsToUse = 'details' . $this->setDetails;
+	
+				if (isset($this->baGallery['ba_set'][$this->revStart][$detailsToUse]) && $this->baGallery['ba_set'][$this->revStart][$detailsToUse] !== '') {
+					$revPatientInfoOutput .= $this->baGallery['ba_set'][$this->revStart][$detailsToUse];
+				} else {
+					$revPatientInfoOutput .= $this->baGallery['ba_set'][$this->revStart]['details'];
 				}
 			} else {
-			if(isset($this->detailsLimit) && $this->detailsLimit != ""){
-				
-				$str = $this->baGallery['ba_set'][$this->revStart]['details'];
-				$regex = '#\<div id="'.$this->detailsLimit.'"\>(.+?)\<\/div\>#s';
-				preg_match($regex, $str, $matches);
-
-				$details = $matches[0];
-				if($details){
-					$revPatientInfoOutput .=   $details;
+				// Limit details using regex if $detailsLimit is set
+				if (isset($this->detailsLimit) && $this->detailsLimit !== '') {
+					$str = $this->baGallery['ba_set'][$this->revStart]['details'];
+					$regex = '#\<div id="' . preg_quote($this->detailsLimit, '#') . '"\>(.+?)\<\/div\>#s';
+	
+					if (preg_match($regex, $str, $matches)) {
+						$revPatientInfoOutput .= $matches[0]; // Use matched details
+					}
+				} else {
+					// Use full details if no limit is set
+					$revPatientInfoOutput .= $this->baGallery['ba_set'][$this->revStart]['details'];
 				}
-			} else {
-				
-				$revPatientInfoOutput .=  $this->baGallery['ba_set'][$this->revStart]['details'];
 			}
-			}
-		}	 
-		 return $revPatientInfoOutput;
+		}
+	
+		// Return the output
+		return $revPatientInfoOutput;
 	}
+
 	
 	//create list of patient details
 	function revPatientInfo($revID){
-		$revPatientInfoOutput;
+		$revPatientInfoOutput = '';
 		$this->revGetStart($revID);
 		
 		//write contents of details attribute to "revPatientDetails" div
@@ -1940,6 +1835,7 @@ $string = strtr( $string, $unwanted_array );
 	
 	//create a list of thumbnails
 	function revThumbnails($revCatname, $thumbStart){
+		
 		$revCatname = $this->cleanCat($revCatname);
 		
 		$revThumbnailsOutput;

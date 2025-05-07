@@ -3,7 +3,7 @@
 Plugin Name: BRAG book Gallery
 Plugin URI: https://github.com/bragbook/BRAGbook/releases/latest
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.5
+Version: 1.6
 Author: Candace Crowe Design
 Author URI: https://www.candacecrowe.com/
 License: A "Slug" license name e.g. GPL2
@@ -81,7 +81,7 @@ function add_query_vars($new_var) {
 add_filter('query_vars', 'add_query_vars');
  
 function add_rewrite_rules($rules) {
-              $new_rules = array('^'.get_option( 'revBaseUrl', 'gallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl', 'gallery' ).'?pagename='.get_option( 'revBaseUrl', 'gallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl', 'gallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl', 'gallery' ).'?pagename='.get_option( 'revBaseUrl', 'gallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl2', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl2', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl2', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl2', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl2', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl2', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl3', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl3', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl3', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl3', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl3', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl3', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl4', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl4', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl4', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl4', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl4', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl4', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl5', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl5', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl5', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl5', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl5', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl5', 'revgallery' ).'&revCatname=$matches[1]');
+              $new_rules = array('^'.get_option( 'revBaseUrl', 'gallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl', 'gallery' ).'?pagename='.get_option( 'revBaseUrl', 'gallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl', 'gallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl', 'gallery' ).'?pagename='.get_option( 'revBaseUrl', 'gallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl2', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl2', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl2', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl2', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl2', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl2', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl3', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl3', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl3', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl3', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl3', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl3', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl4', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl4', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl4', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl4', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl4', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl4', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl5', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl5', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl5', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl5', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl5', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl5', 'revgallery' ).'&revCatname=$matches[1]', '^'.get_option( 'revBaseUrl6', 'revgallery' ).'/([^/]*)/([^/]*)/?' => ''.get_option( 'revBaseUrl6', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl6', 'revgallery' ).'&revCatname=$matches[1]&revStart=$matches[2]','^'.get_option( 'revBaseUrl6', 'revgallery' ).'/([^/]*)/?' => ''.get_option( 'revBaseUrl6', 'revgallery' ).'?pagename='.get_option( 'revBaseUrl6', 'revgallery' ).'&revCatname=$matches[1]');
               $rules = $new_rules + $rules;
               return $rules;
 }
@@ -233,12 +233,18 @@ function register_mysettings() {
               register_setting( 'bragbook-settings-group', 'revBaseUrl5' );
               register_setting( 'bragbook-settings-group', 'revPageId5' );
         
+        register_setting( 'bragbook-settings-group', 'revSecretKey6' );
+              register_setting( 'bragbook-settings-group', 'revClientId6' );
+              register_setting( 'bragbook-settings-group', 'revBaseUrl6' );
+              register_setting( 'bragbook-settings-group', 'revPageId6' );
+        
               register_setting( 'bragbook-settings-group', 'revUrlRewrite' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription2' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription3' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription4' );
               register_setting( 'bragbook-settings-group', 'revDefaultDescription5' );
+              register_setting( 'bragbook-settings-group', 'revDefaultDescription6' );
               register_setting( 'bragbook-settings-group', 'revNotFound' );
               register_setting( 'bragbook-settings-group', 'revThumbLimit' );
               register_setting( 'bragbook-settings-group', 'revLandingHeadline' );
@@ -254,6 +260,7 @@ function register_mysettings() {
               register_setting( 'bragbook-settings-group', 'revLandingTitle3' );
               register_setting( 'bragbook-settings-group', 'revLandingTitle4' );
               register_setting( 'bragbook-settings-group', 'revLandingTitle5' );
+              register_setting( 'bragbook-settings-group', 'revLandingTitle6' );
               register_setting( 'bragbook-settings-group', 'revRevisionActive' );
         register_setting( 'bragbook-settings-group', 'revMenActive' );
         register_setting( 'bragbook-settings-group', 'revShowCatSetDetails' );  
@@ -271,12 +278,12 @@ function register_mysettings() {
  
 
  
-  register_setting( 'bragbook-settings-group', 'revFourCol' );
+ register_setting( 'bragbook-settings-group', 'revFourCol' );
  register_setting( 'bragbook-settings-group', 'revFaceMenuImage' );
  register_setting( 'bragbook-settings-group', 'revBreastMenuImage' );
  register_setting( 'bragbook-settings-group', 'revBodyMenuImage' );
  register_setting( 'bragbook-settings-group', 'revSkinMenuImage' );
-   register_setting( 'bragbook-settings-group', 'revFaceMenuImageAlt' );
+ register_setting( 'bragbook-settings-group', 'revFaceMenuImageAlt' );
  register_setting( 'bragbook-settings-group', 'revBreastMenuImageAlt' );
  register_setting( 'bragbook-settings-group', 'revBodyMenuImageAlt' );
  register_setting( 'bragbook-settings-group', 'revSkinMenuImageAlt' );
@@ -315,7 +322,13 @@ function register_mysettings() {
  register_setting( 'bragbook-settings-group', 'revCategoryLandingTitle5' );
  register_setting( 'bragbook-settings-group', 'revCategoryLandingDescription5' );
  
-//Advanced Settings
+ register_setting( 'bragbook-settings-group', 'revLandingIntro6' );
+ register_setting( 'bragbook-settings-group', 'revLandingDescription6' );
+ register_setting( 'bragbook-settings-group', 'revCategoryLandingPageIntro6' );
+ register_setting( 'bragbook-settings-group', 'revCategoryLandingTitle6' );
+ register_setting( 'bragbook-settings-group', 'revCategoryLandingDescription6' );
+
+////Advanced Settings
 register_setting( 'bragbook-settings-group', 'revFaceMenuLabel');
 register_setting( 'bragbook-settings-group', 'revBreastMenuLabel');
 register_setting( 'bragbook-settings-group', 'revBodyMenuLabel');
@@ -340,6 +353,11 @@ register_setting( 'bragbook-settings-group', 'revFaceMenuLabel5');
 register_setting( 'bragbook-settings-group', 'revBreastMenuLabel5');
 register_setting( 'bragbook-settings-group', 'revBodyMenuLabel5');
 register_setting( 'bragbook-settings-group', 'revSkinMenuLabel5');
+ 
+register_setting( 'bragbook-settings-group', 'revFaceMenuLabel6');
+register_setting( 'bragbook-settings-group', 'revBreastMenuLabel6');
+register_setting( 'bragbook-settings-group', 'revBodyMenuLabel6');
+register_setting( 'bragbook-settings-group', 'revSkinMenuLabel6');
  
               register_setting( 'bragbook-settings-group', 'revImageSetWrapOpen');
               register_setting( 'bragbook-settings-group', 'revImageSetWrapClose');
@@ -428,7 +446,9 @@ function bragbook_start(){
     $galNum = "4";
   }else if(get_option( 'revBaseUrl5', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5'))) {
     $galNum = "5";
-  
+  }else if(get_option( 'revBaseUrl6', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl6', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl6', 'gallery' ) || $curPageid == get_option( 'revPageId6'))) {
+    $galNum = "6";
+
   } else{
     $galNum = "";
   }
@@ -679,6 +699,8 @@ function bragbook_ajax_start(){
     $galNum = "4";
   }else if(get_option( 'revBaseUrl5', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5'))) {
     $galNum = "5";
+  }else if(get_option( 'revBaseUrl6', '' ) != "" && ($curURL1 == get_option( 'revBaseUrl6', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl6', 'gallery' ) || $curPageid == get_option( 'revPageId6'))) {
+    $galNum = "6";
   
   } else{
     $galNum = "";
@@ -1262,7 +1284,7 @@ function create_bragbook_sitemap(){
   if(get_option( 'revClientId', 'demo' ) != "" && get_option( 'revBaseUrl', 'demo' ) != ""){
     $bbGalleryList[] = array(get_option( 'revClientId', 'demo' ), get_option( 'revBaseUrl', 'demo' ));
   }
-  for($x = 2; $x <= 5; $x++) {
+  for($x = 2; $x <= 6; $x++) {
     if(get_option( 'revClientId'.$x, 'demo' ) != "" && get_option( 'revBaseUrl'.$x, 'demo' ) != ""){
       $bbGalleryList[] = array(get_option( 'revClientId'.$x, 'demo' ), get_option( 'revBaseUrl'.$x, 'demo' ));
     }
@@ -1495,7 +1517,7 @@ function plugin_is_page() {
              
               if(isset($curURL[1])  && $curURL[1] != ""){$curURL1 = $curURL[1];} else {$curURL1 = "revnone";}
               if(isset($curURL[2])  && $curURL[2] != ""){$curURL2 = $curURL[2];} else {$curURL2 = "revnone";}
-    if ($curURL1 == get_option( 'revBaseUrl', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl', 'gallery' ) || $curPageid == get_option( 'revPageId')|| $curURL1 == get_option( 'revBaseUrl2', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl2', 'gallery' ) || $curPageid == get_option( 'revPageId2') ||  $curURL1 == get_option( 'revBaseUrl3', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl3', 'gallery' ) || $curPageid == get_option( 'revPageId3') || $curURL1 == get_option( 'revBaseUrl4', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl4', 'gallery' ) || $curPageid == get_option( 'revPageId4') || $curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5')) {
+    if ($curURL1 == get_option( 'revBaseUrl', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl', 'gallery' ) || $curPageid == get_option( 'revPageId')|| $curURL1 == get_option( 'revBaseUrl2', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl2', 'gallery' ) || $curPageid == get_option( 'revPageId2') ||  $curURL1 == get_option( 'revBaseUrl3', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl3', 'gallery' ) || $curPageid == get_option( 'revPageId3') || $curURL1 == get_option( 'revBaseUrl4', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl4', 'gallery' ) || $curPageid == get_option( 'revPageId4') || $curURL1 == get_option( 'revBaseUrl5', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl5', 'gallery' ) || $curPageid == get_option( 'revPageId5') || $curURL1 == get_option( 'revBaseUrl6', 'gallery' ) || $curURL2 == get_option( 'revBaseUrl6', 'gallery' ) || $curPageid == get_option( 'revPageId6')) {
              add_action('wp', 'bragbook_start');
         add_action('wp_loaded', 'bragbook_SEO');
     

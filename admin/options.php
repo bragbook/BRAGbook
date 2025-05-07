@@ -189,6 +189,7 @@ jQuery(document).ready(function($){
                       <option value="2" <?php if(get_option('revSetDetails') == "2"){ echo 'selected="selected"'; } ?>>Website 3</option>
                       <option value="3" <?php if(get_option('revSetDetails') == "3"){ echo 'selected="selected"'; } ?>>Website 4</option>
                       <option value="4" <?php if(get_option('revSetDetails') == "4"){ echo 'selected="selected"'; } ?>>Website 5</option>
+                      <option value="4" <?php if(get_option('revSetDetails') == "5"){ echo 'selected="selected"'; } ?>>Website 6</option>
                     </select></td>
                 </tr>
                 <tr valign="top">
@@ -305,6 +306,27 @@ jQuery(document).ready(function($){
                 <tr valign="top">
                   <th scope="row">Gallery Page ID Number</th>
                   <td><input type="text" name="revPageId5" value="<?php echo get_option('revPageId5'); ?>"  style="width:100%;" /></td>
+                </tr>
+              </table>
+              <hr />
+              <h3>Gallery 6</h3>
+              <hr />
+              <table class="form-table">
+                <tr valign="top">
+                  <th scope="row">API Key</th>
+                  <td><input type="text" name="revSecretKey6" value="<?php echo get_option('revSecretKey6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Client ID</th>
+                  <td><input type="text" name="revClientId6" value="<?php echo get_option('revClientId6'); ?>" style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Gallery Page Name</th>
+                  <td><input type="text" name="revBaseUrl6" value="<?php echo get_option('revBaseUrl6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Gallery Page ID Number</th>
+                  <td><input type="text" name="revPageId6" value="<?php echo get_option('revPageId6'); ?>"  style="width:100%;" /></td>
                 </tr>
               </table>
             </div>
@@ -532,6 +554,38 @@ jQuery(document).ready(function($){
                   <td><input type="text" name="revSkinMenuLabel5" value="<?php echo get_option('revSkinMenuLabel5'); ?>"  style="width:100%;" /></td>
                 </tr>
               </table>
+              <hr />
+              <h3>Gallery 6</h3>
+              <hr />
+              <table class="form-table">
+                <tr valign="top">
+                  <th scope="row">Gallery Home Page Intro Text</th>
+                  <td><?php wp_editor( get_option('revLandingIntro6'), 'revLandingIntro6' ); ?></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Category Landing Page Intro Text</th>
+                  <?php if(get_option('revCategoryLandingPageIntro6')){$catLandingPageIntro6 = get_option('revCategoryLandingPageIntro6');} else{$catLandingPageIntro6 = '<p>Click on the before and after sets below to get more details on each case.</p>';} ?>
+                  <td><?php wp_editor($catLandingPageIntro6 , 'revCategoryLandingPageIntro6' ); ?></td>
+                </tr>
+              </table>
+              <table class="form-table">
+                <tr valign="top">
+                  <th scope="row">Face Menu Label</th>
+                  <td><input type="text" name="revFaceMenuLabel6" value="<?php echo get_option('revFaceMenuLabel6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Breast Menu Label</th>
+                  <td><input type="text" name="revBreastMenuLabel6" value="<?php echo get_option('revBreastMenuLabel6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Body Menu Label</th>
+                  <td><input type="text" name="revBodyMenuLabel6" value="<?php echo get_option('revBodyMenuLabel6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Non-Surgical Menu Label</th>
+                  <td><input type="text" name="revSkinMenuLabel6" value="<?php echo get_option('revSkinMenuLabel6'); ?>"  style="width:100%;" /></td>
+                </tr>
+              </table>
             </div>
           </div>
           <div class="postbox closed" id="test2">
@@ -687,6 +741,31 @@ jQuery(document).ready(function($){
                 <tr valign="top">
                   <th scope="row">Category Landing Page Description Tag</th>
                   <td><input type="text" name="revCategoryLandingDescription5" value="<?php echo get_option('revCategoryLandingDescription5'); ?>"  style="width:100%;" /></td>
+                </tr>
+              </table>
+              <hr />
+              <h3>Gallery 6</h3>
+              <hr />
+              <table class="form-table">
+                <tr valign="top">
+                  <th scope="row">Default Description Tag</th>
+                  <td><input type="text" name="revDefaultDescription6" value="<?php echo get_option('revDefaultDescription6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Gallery Landing Page Title Tag</th>
+                  <td><input type="text" name="revLandingTitle6" value="<?php echo get_option('revLandingTitle6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Gallery Landing Page Description Tag</th>
+                  <td><input type="text" name="revLandingDescription6" value="<?php echo get_option('revLandingDescription6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Category Landing Page Title Tag</th>
+                  <td><input type="text" name="revCategoryLandingTitle6" value="<?php echo get_option('revCategoryLandingTitle6'); ?>"  style="width:100%;" /></td>
+                </tr>
+                <tr valign="top">
+                  <th scope="row">Category Landing Page Description Tag</th>
+                  <td><input type="text" name="revCategoryLandingDescription6" value="<?php echo get_option('revCategoryLandingDescription6'); ?>"  style="width:100%;" /></td>
                 </tr>
               </table>
             </div>

@@ -75,18 +75,22 @@ class Bragbook_Updater {
 
 	public function modify_transient( $transient ) {
 
-		if( property_exists( $transient, 'checked') ) { // Check if transient has a checked property
+		if( property_exists( $transient, 'checked') ) {
 
-			if( $checked = $transient->checked ) { // Did Wordpress check for updates?
-				$this->get_repository_info(); // Get the repo info
+			if( $checked = $transient->checked ) { 
+				$this->get_repository_info();
 
-				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' ); // Check if we're out of date
+				if ( is_array($checked) && isset($checked[ $this->basename ]) && is_string($checked[ $this->basename ]) ) {
+						$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' );
+					} else {
+						$out_of_date = false;
+					}
 
 				if( $out_of_date ) {
 
-					$new_files = $this->github_response['zipball_url']; // Get the ZIP
+					$new_files = $this->github_response['zipball_url']; 
 
-					$slug = current( explode('/', $this->basename ) ); // Create valid slug
+					$slug = current( explode('/', $this->basename ) );
 
 					$plugin = array( // setup our plugin info
 						'url' => $this->plugin["PluginURI"],
@@ -100,9 +104,8 @@ class Bragbook_Updater {
 			}
 		}
 
-		return $transient; // Return filtered transient
+		return $transient;
 	}
-
 	public function plugin_popup( $result, $action, $args ) {
 
 		if( ! empty( $args->slug ) ) { // If there is a slug

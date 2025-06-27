@@ -73,39 +73,44 @@ class Bragbook_Updater {
 		add_filter( 'upgrader_post_install', array( $this, 'after_install' ), 10, 3 );
 	}
 
-	public function modify_transient( $transient ) {
+public function modify_transient( $transient ) {
 
-		if( property_exists( $transient, 'checked') ) {
+	if ( property_exists( $transient, 'checked' ) ) {
 
-			if( $checked = $transient->checked ) { 
-				$this->get_repository_info();
+		if ( $checked = $transient->checked ) {
+			$this->get_repository_info();
 
-				if ( is_array($checked) && isset($checked[ $this->basename ]) && is_string($checked[ $this->basename ]) ) {
-						$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' );
-					} else {
-						$out_of_date = false;
-					}
+			if (
+				is_array( $checked ) &&
+				isset( $checked[ $this->basename ] ) &&
+				is_string( $checked[ $this->basename ] ) &&
+				isset( $this->github_response['tag_name'] ) &&
+				is_string( $this->github_response['tag_name'] )
+			) {
+				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' );
+			} else {
+				$out_of_date = false;
+			}
 
-				if( $out_of_date ) {
+			if ( $out_of_date ) {
+				$new_files = $this->github_response['zipball_url'];
+				$slug = current( explode( '/', $this->basename ) );
 
-					$new_files = $this->github_response['zipball_url']; 
+				$plugin = array(
+					'url'         => $this->plugin["PluginURI"],
+					'slug'        => $slug,
+					'package'     => $new_files,
+					'new_version' => $this->github_response['tag_name']
+				);
 
-					$slug = current( explode('/', $this->basename ) );
-
-					$plugin = array( // setup our plugin info
-						'url' => $this->plugin["PluginURI"],
-						'slug' => $slug,
-						'package' => $new_files,
-						'new_version' => $this->github_response['tag_name']
-					);
-
-					$transient->response[$this->basename] = (object) $plugin; // Return it in response
-				}
+				$transient->response[ $this->basename ] = (object) $plugin;
 			}
 		}
-
-		return $transient;
 	}
+
+	return $transient;
+}
+	
 	public function plugin_popup( $result, $action, $args ) {
 
 		if( ! empty( $args->slug ) ) { // If there is a slug

@@ -3,7 +3,7 @@
 Plugin Name: BRAG book Gallery
 Plugin URI: https://github.com/bragbook/BRAGbook/releases/latest
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.7.3
+Version: 1.7.4
 Author: Candace Crowe Design
 Author URI: https://www.candacecrowe.com/
 License: GPL2
@@ -11,9 +11,7 @@ License: GPL2
  
 //SETUP
 function bragbook_plugin_install(){
-    //Do some installation work
-             
-              
+    //Do some installation work        
 }
 register_activation_hook(__FILE__,'bragbook_plugin_install');
  
@@ -30,13 +28,8 @@ function bragbook_plugin_styles(){
   }
      wp_register_style('bragbook_plugin_style',plugin_dir_url( __FILE__ ).'assets/BRAGbook.min.css');
      wp_enqueue_style('bragbook_plugin_style');
-  
-      
-  
 }
 add_action('wp_footer','bragbook_plugin_styles');
-
-
 
 function bragbook_plugin_scripts(){
    
@@ -155,8 +148,6 @@ function bragbook_upgrade() {
 }
 add_action('upgrader_process_complete', 'bragbook_upgrade', 10, 2);
 
-
-
 function bragbook_deactivate() {
   global $wp_rewrite;
   
@@ -267,8 +258,6 @@ function register_mysettings() {
         register_setting( 'bragbook-settings-group', 'revHideJumpMenu' );
           register_setting( 'bragbook-settings-group', 'revHideMainMenu' );
  
-
- 
  register_setting( 'bragbook-settings-group', 'revFourCol' );
  register_setting( 'bragbook-settings-group', 'revFaceMenuImage' );
  register_setting( 'bragbook-settings-group', 'revBreastMenuImage' );
@@ -350,9 +339,9 @@ register_setting( 'bragbook-settings-group', 'revBreastMenuLabel6');
 register_setting( 'bragbook-settings-group', 'revBodyMenuLabel6');
 register_setting( 'bragbook-settings-group', 'revSkinMenuLabel6');
  
-              register_setting( 'bragbook-settings-group', 'revImageSetWrapOpen');
-              register_setting( 'bragbook-settings-group', 'revImageSetWrapClose');
-              register_setting( 'bragbook-settings-group', 'revLandingMenuWrapOpen');
+register_setting( 'bragbook-settings-group', 'revImageSetWrapOpen');
+register_setting( 'bragbook-settings-group', 'revImageSetWrapClose');
+register_setting( 'bragbook-settings-group', 'revLandingMenuWrapOpen');
               register_setting( 'bragbook-settings-group', 'revLandingMenuWrapClose');
               register_setting( 'bragbook-settings-group', 'revFaceMenuWrapOpen');
               register_setting( 'bragbook-settings-group', 'revFaceMenuWrapClose');

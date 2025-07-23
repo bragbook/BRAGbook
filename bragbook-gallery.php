@@ -3,10 +3,10 @@
 Plugin Name: BRAG book Gallery
 Plugin URI: https://github.com/bragbook/BRAGbook/releases/latest
 Description: Installs necessary components to allow for easy implementation of the BRAG book before and after gallery from Candace Crowe Design.
-Version: 1.7.3
+Version: 1.7.3.1
 Author: Candace Crowe Design
 Author URI: https://www.candacecrowe.com/
-License: A "Slug" license name e.g. GPL2
+License: GPL2
 */
  
 //SETUP
@@ -61,15 +61,12 @@ function bragbook_plugin_scripts(){
   
 }
 
-
-
 //add color picker scripts
 function wpse_80236_Colorpicker(){
   wp_enqueue_style( 'wp-color-picker');
   wp_enqueue_script( 'wp-color-picker');
 }
 add_action('admin_enqueue_scripts', 'wpse_80236_Colorpicker');
-
 
 //Add query variables
 function add_query_vars($new_var) {
@@ -86,15 +83,11 @@ function add_rewrite_rules($rules) {
               return $rules;
 }
 add_filter('rewrite_rules_array', 'add_rewrite_rules');
-
-
  
 function flush_rewrites(){
               global $wp_rewrite;
               $wp_rewrite->flush_rules();
 }
- 
- 
  
 //HOOKS
 add_action('init','bragbook_plugin_init');
@@ -107,8 +100,6 @@ function bragbook_plugin_init(){
              if (class_exists('revGallery')) {} else{
         include('assets/BRAGbook.php');
         }
-  
-
 }
  
  function bragbook_activate() {

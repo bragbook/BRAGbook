@@ -68,10 +68,10 @@ class Bragbook_Updater {
 	}
 
 	public function initialize() {
-		add_filter('pre_set_site_transient_update_plugins', [$this, 'modify_transient']);
-		add_filter('plugins_api', [$this, 'plugin_popup'], 10, 3);
-		add_filter('upgrader_post_install', [$this, 'after_install'], 10, 3);
-	}
+    add_filter('pre_set_site_transient_update_plugins', [$this, 'modify_transient']);
+    add_filter('plugins_api', [$this, 'plugin_popup'], 10, 3);
+    add_filter('upgrader_post_install', [$this, 'after_install'], 10, 3);
+}
 
 	public function modify_transient($transient) {
 		if (!property_exists($transient, 'checked')) return $transient;
@@ -123,24 +123,43 @@ class Bragbook_Updater {
 	}
 
 	public function after_install($response, $hook_extra, $result) {
-		global $wp_filesystem;
+    // Only handle installs/updates for THIS plugin
+    if (
+        empty($hook_extra['plugin']) ||
+        $hook_extra['plugin'] !== $this->basename
+    ) {
+        return $response; // do nothing for other plugins
+    }
 
-		$install_directory = plugin_dir_path($this->file);
+    global $wp_filesystem;
+    if ( ! $wp_filesystem ) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        WP_Filesystem();
+    }
 
-		// Delete old files first to avoid merge conflict from GitHub archive structure
-		$wp_filesystem->delete($install_directory, true);
+    $install_directory = plugin_dir_path($this->file);
 
-		if (! $wp_filesystem->move($result['destination'], $install_directory)) {
-			error_log('GitHub Updater Error: Failed to move plugin to install directory.');
-			return $result;
-		}
+    if (empty($result['destination']) || !is_dir($result['destination'])) {
+        error_log('GitHub Updater Error: Invalid destination in upgrader result.');
+        return $response;
+    }
 
-		$result['destination'] = $install_directory;
+    $wp_filesystem->delete($install_directory, true);
 
-		if ($this->active) {
-			activate_plugin($this->basename);
-		}
+    $moved = $wp_filesystem->move($result['destination'], $install_directory, true);
+    if ( ! $moved ) {
+        $copied = copy_dir($result['destination'], $install_directory);
+        if ( is_wp_error($copied) ) {
+            error_log('GitHub Updater Error: Failed to move/copy plugin to install directory: ' . $copied->get_error_message());
+            return $response;
+        }
+        $wp_filesystem->delete($result['destination'], true);
+    }
 
-		return $result;
-	}
+     if ($this->active) {
+        activate_plugin($this->basename);
+    }
+    
+    return $response;
+}
 }
